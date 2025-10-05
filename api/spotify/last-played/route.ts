@@ -7,10 +7,16 @@ export async function GET(request: NextRequest) {
   const response = await lastPlayedSong(request);
 
   if (response.status > 400) {
-    return new NextResponse(null, {
-      status: response.status,
-      headers: response.headers,
-    });
+    return NextResponse.json(
+      {
+        error: `Spotify API returned status ${response.status}`,
+        now: Date.now(),
+      },
+      {
+        status: response.status,
+        headers: response.headers,
+      },
+    );
   }
 
   const data = await response.json();

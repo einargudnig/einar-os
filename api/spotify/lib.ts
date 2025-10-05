@@ -9,6 +9,12 @@ const client_id = process.env.SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 const refresh_token = process.env.SPOTIFY_REFRESH_TOKEN;
 
+// Debug logging for environment variable loading
+console.log("Spotify API Environment Check:");
+console.log("- SPOTIFY_CLIENT_ID exists:", !!client_id);
+console.log("- SPOTIFY_CLIENT_SECRET exists:", !!client_secret);
+console.log("- SPOTIFY_REFRESH_TOKEN exists:", !!refresh_token);
+
 // We encode our client_id and client_secret again to send with the POST request.
 // This is a part of the authorization header
 const basic: string = Buffer.from(`${client_id}:${client_secret}`).toString(
