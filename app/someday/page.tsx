@@ -1,3 +1,6 @@
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+
 export default function Page() {
   return (
     <section className="mx-auto w-full max-w-2xl space-y-8 print:space-y-6 mb-8">
@@ -41,6 +44,11 @@ export default function Page() {
           come way, but I want to be in the situation where I can choose where
           and if I work because I want to, not because I have to.
         </p>
+      </div>
+      <div className="flex justify-start">
+        <Link href="/" className="mr-2 p-2 -m-2">
+          <ArrowLeft className="text-neutral-500" />
+        </Link>
       </div>
     </section>
   );

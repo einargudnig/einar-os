@@ -1,29 +1,33 @@
 import { posts } from "../../.velite";
 import Link from "next/link";
+import { formatBlogDate } from "@/lib/utils";
 
 export default function Page() {
   console.log("blog route", posts);
 
   return (
-    <div className="container py-8">
-      <h1 className="text-3xl font-bold mb-6">Blog</h1>
-      <div className="grid gap-4">
+    <section className="mx-auto w-full max-w-2xl space-y-8 print:space-y-6 mb-8">
+      <h1 className="font-bold text-2xl font-serif mb-5">Blog</h1>
+
+      <div className="grid">
         {posts.map((post) => (
-          <div
-            key={post.slug}
-            className="p-4 border rounded-lg hover:bg-gray-50"
-          >
-            <h2 className="text-xl font-semibold mb-2">
+          <div key={post.slug} className="p-2">
+            <h2 className="text-lg">
               <Link
                 href={`/blog/${post.slug}`}
-                className="text-blue-600 hover:underline"
+                className="text-neutral-500 hover:text-neutral-400"
               >
-                {post.title}
+                <div className="flex items-center justify-between">
+                  <p className="hover:underline mr-1">{post.title}</p>
+                  <p className="ml-1 text-sm text-neutral-600">
+                    {formatBlogDate(post.date)}
+                  </p>
+                </div>
               </Link>
             </h2>
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }

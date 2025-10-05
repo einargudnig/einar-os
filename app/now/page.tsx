@@ -1,10 +1,15 @@
 import { ExternalLink } from "@/components/external-link";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function Page() {
   return (
     <section className="mx-auto w-full max-w-2xl space-y-8 print:space-y-6 mb-8">
       <div className="flex flex-col">
-        <h1 className="font-semibold text-2xl font-serif mb-5">Now</h1>
+        <div className="flex items-center mb-5">
+          <h1 className="font-semibold text-2xl font-serif">Now</h1>
+        </div>
+
         <p className="-mt-4 text-neutral-500">Updated 27. jan, 2025</p>
       </div>
       <div className="prose prose-neutral dark:prose-invert text-neutral-200">
@@ -49,6 +54,11 @@ export default function Page() {
           </ExternalLink>{" "}
           saga, by Pierce Brown, and I am obsessed! I love it!
         </p>
+      </div>
+      <div className="flex justify-start">
+        <Link href="/" className="mr-2 p-2 -m-2">
+          <ArrowLeft className="text-neutral-500" />
+        </Link>
       </div>
     </section>
   );

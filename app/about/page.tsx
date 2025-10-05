@@ -1,5 +1,6 @@
 import { ExternalLink } from "@/components/external-link";
 import { Separator } from "@/components/ui/separator";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 export default function Page() {
@@ -72,6 +73,11 @@ export default function Page() {
           My current inspiration is minimalistic and simple design, well crafted
           software that makes sense to use.
         </p>
+      </div>
+      <div className="flex justify-start">
+        <Link href="/" className="mr-2 p-2 -m-2">
+          <ArrowLeft className="text-neutral-500" />
+        </Link>
       </div>
     </section>
   );

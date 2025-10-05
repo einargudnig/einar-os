@@ -1,5 +1,6 @@
 import { posts } from "@/.velite";
 import { MDXContent } from "@/components/mdx-content";
+import { formatBlogDate } from "@/lib/utils";
 import { notFound } from "next/navigation";
 
 interface BlogPostParams {
@@ -20,6 +21,7 @@ export default async function BlogPost({ params }: BlogPostParams) {
   return (
     <article className="container py-8">
       <h1 className="text-3xl font-bold mb-6">{post.title}</h1>
+      <p className="text-neutral-600 mb-4">{formatBlogDate(post.date)}</p>
       <div className="prose prose-lg max-w-none">
         <MDXContent code={post.code} />
       </div>
