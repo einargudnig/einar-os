@@ -11,26 +11,44 @@ export async function GET(request: NextRequest) {
 
   // Here we handle the request from the API
   if (response.status === 204) {
-    return new NextResponse(null, {
-      status: 404,
-      headers: response.headers,
-    });
+    return NextResponse.json(
+      {
+        error: "No song currently playing",
+        now: Date.now(),
+      },
+      {
+        status: 204,
+        headers: response.headers,
+      },
+    );
   }
 
   if (response.status > 400) {
-    return new NextResponse(null, {
-      status: response.status,
-      headers: response.headers,
-    });
+    return NextResponse.json(
+      {
+        error: `Spotify API returned status ${response.status}`,
+        now: Date.now(),
+      },
+      {
+        status: response.status,
+        headers: response.headers,
+      },
+    );
   }
 
   const song: Song = await response.json();
 
   if (song.item === null) {
-    return new NextResponse(null, {
-      status: 404,
-      headers: response.headers,
-    });
+    return NextResponse.json(
+      {
+        error: "No song currently playing",
+        now: Date.now(),
+      },
+      {
+        status: 404,
+        headers: response.headers,
+      },
+    );
   }
 
   const isPlaying: boolean = song?.is_playing ?? false;
@@ -46,10 +64,16 @@ export async function GET(request: NextRequest) {
   const songUrl: string = song?.item?.external_urls?.spotify ?? "No song url";
 
   if (title === "No song playing") {
-    return new NextResponse(null, {
-      status: 404,
-      headers: response.headers,
-    });
+    return NextResponse.json(
+      {
+        error: "No song currently playing",
+        now: Date.now(),
+      },
+      {
+        status: 204, // Using 204 to be consistent with Spotify API
+        headers: response.headers,
+      },
+    );
   }
 
   const data = {

@@ -23,6 +23,14 @@ const TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
 
 // This function gets the access token so that we can access the API
 const getAccessToken = async (): Promise<SpotifyAccessToken> => {
+  // Check if credentials are available
+  if (!client_id || !client_secret || !refresh_token) {
+    console.error(
+      "Spotify credentials missing. Check your environment variables.",
+    );
+    return { access_token: "NO ACCESS", error: "Missing credentials" };
+  }
+
   const request: NextRequest = new NextRequest(TOKEN_ENDPOINT, {
     method: "POST",
     headers: {
@@ -37,10 +45,22 @@ const getAccessToken = async (): Promise<SpotifyAccessToken> => {
 
   try {
     const response: Response = await fetch(request);
-    return await response.json();
+    const data = await response.json();
+
+    // Check if the response contains an error
+    if (data.error) {
+      console.error("Spotify API error:", data.error, data.error_description);
+      return {
+        access_token: "NO ACCESS",
+        error: data.error,
+        error_description: data.error_description,
+      };
+    }
+
+    return data;
   } catch (error) {
-    console.error(error);
-    return { access_token: "NO ACCESS" };
+    console.error("Failed to get Spotify access token:", error);
+    return { access_token: "NO ACCESS", error: "Request failed" };
   }
 };
 
@@ -103,11 +123,23 @@ export const topArtists = async (): Promise<IArtistsAPIResponse[]> => {
 /**
  * Makes a request to the Spotify API to retrieve the currently playing song for the user.
  */
-export const currentlyPlayingSong = async (initialRequest: NextRequest) => {
+export const currentlyPlayingSong = async (_initialRequest: NextRequest) => {
   const f = "currentlyPlayingSong";
   console.log({ f });
   // Obtain an access token
-  const { access_token } = await getAccessToken();
+  const { access_token, error } = await getAccessToken();
+
+  // If there was an error getting the access token, return early
+  if (error || access_token === "NO ACCESS") {
+    console.error(
+      "Error getting Spotify access token:",
+      error || "Token not obtained",
+    );
+    const response: NextResponse = new NextResponse(null, {
+      status: 500,
+    });
+    return response;
+  }
 
   const request = new NextRequest(NOW_PLAYING_ENDPOINT, {
     headers: {
@@ -117,24 +149,47 @@ export const currentlyPlayingSong = async (initialRequest: NextRequest) => {
   });
 
   try {
+    console.log("Fetching currently playing from Spotify API...");
     const response: Response = await fetch(request);
+
+    if (!response.ok && response.status !== 204) {
+      console.error("Spotify API error:", response.status, response.statusText);
+    } else {
+      console.log("Spotify API response status:", response.status);
+    }
 
     return response;
   } catch (error) {
+    console.error("Error fetching from Spotify API:", error);
     const response: NextResponse = new NextResponse(null, {
-      status: 404,
+      status: 500,
     });
     return response;
   }
 };
 
-export const lastPlayedSong = async (initialRequest: NextRequest) => {
+export const lastPlayedSong = async (_initialRequest: NextRequest) => {
   const f = "lastPlayedSong";
   console.log({ f });
   // Obtain an access token
-  const { access_token } = await getAccessToken();
+  const { access_token, error } = await getAccessToken();
 
-  const request = new NextRequest(LAST_PLAYED_ENDPOINT, {
+  // If there was an error getting the access token, return early
+  if (error || access_token === "NO ACCESS") {
+    console.error(
+      "Error getting Spotify access token:",
+      error || "Token not obtained",
+    );
+    const response: NextResponse = new NextResponse(null, {
+      status: 500,
+    });
+    return response;
+  }
+
+  // Update the endpoint with a limit parameter
+  const lastPlayedEndpoint = `${LAST_PLAYED_ENDPOINT}?limit=1`;
+
+  const request = new NextRequest(lastPlayedEndpoint, {
     headers: {
       // Set the Authorization header with the access token
       Authorization: `Bearer ${access_token}`,
@@ -142,14 +197,28 @@ export const lastPlayedSong = async (initialRequest: NextRequest) => {
   });
 
   try {
+    console.log("Fetching last played from Spotify API...");
     const response: Response = await fetch(request);
+
+    if (!response.ok) {
+      console.error(
+        "Spotify API error (last played):",
+        response.status,
+        response.statusText,
+      );
+    } else {
+      console.log(
+        "Spotify API response status (last played):",
+        response.status,
+      );
+    }
 
     return response;
   } catch (error) {
+    console.error("Error fetching from Spotify API (last played):", error);
     const response: NextResponse = new NextResponse(null, {
-      status: 404,
+      status: 500,
     });
     return response;
   }
-  // Make a request to the Spotify API to retrieve the currently playing song for the user
 };

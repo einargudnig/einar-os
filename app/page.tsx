@@ -174,7 +174,7 @@ export default function Home() {
               <CardFooter>
                 <div className="mt-2 flex flex-wrap gap-1">
                   {work.stack.map((tag) => (
-                    <Badge variant="outline" className="mr-1">
+                    <Badge key={tag} variant="outline" className="mr-1">
                       {tag}
                     </Badge>
                   ))}
