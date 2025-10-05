@@ -3,13 +3,14 @@ import { MDXContent } from "@/components/mdx-content";
 import { notFound } from "next/navigation";
 
 interface BlogPostParams {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default async function BlogPost({ params }: BlogPostParams) {
-  const post = posts.find((post) => post.slug === params.slug);
+  const { slug } = await params;
+  const post = posts.find((post) => post.slug === slug);
   // console.log("in slug route", post);
 
   if (!post) {
