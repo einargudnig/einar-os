@@ -1,5 +1,5 @@
-import { posts } from "../../../.velite";
-import { MDXContent } from "../../../components/mdx-content";
+import { posts } from "@/.velite";
+import { MDXContent } from "@/components/mdx-content";
 import { notFound } from "next/navigation";
 
 interface BlogPostParams {
