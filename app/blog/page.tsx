@@ -1,6 +1,8 @@
 import { posts } from "../../.velite";
 import Link from "next/link";
 import { formatBlogDate } from "@/lib/utils";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { PencilLine, Terminal } from "lucide-react";
 
 export default function Page() {
   console.log("blog route", posts);
@@ -27,6 +29,14 @@ export default function Page() {
             </h2>
           </div>
         ))}
+        <Alert variant="default" className="mt-4">
+          <PencilLine />
+          <AlertTitle>Heads up!</AlertTitle>
+          <AlertDescription>
+            I have written more posts over the years, I'm in the process of
+            migrating them to this new page.
+          </AlertDescription>
+        </Alert>
       </div>
     </section>
   );

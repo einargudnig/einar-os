@@ -2,6 +2,7 @@ import { posts } from "@/.velite";
 import { MDXContent } from "@/components/mdx-content";
 import { formatBlogDate } from "@/lib/utils";
 import { notFound } from "next/navigation";
+import Balancer from "react-wrap-balancer";
 
 interface BlogPostParams {
   params: Promise<{
@@ -19,13 +20,20 @@ export default async function BlogPost({ params }: BlogPostParams) {
   }
 
   return (
-    <article className="container py-8">
-      <h1 className="text-3xl font-bold mb-6">{post.title}</h1>
-      <p className="text-neutral-600 mb-4">{formatBlogDate(post.date)}</p>
-      <div className="prose prose-lg max-w-none">
-        <MDXContent code={post.code} />
+    <section className="mx-auto w-full max-w-2xl space-y-8 print:space-y-6">
+      <h1 className="font-bold text-3xl font-serif max-w-[650px]">
+        <Balancer>{post.title}</Balancer>
+      </h1>
+      <div className="grid grid-cols-[auto_1fr_auto] items-center mt-4 mb-8 font-mono text-sm max-w-[650px]">
+        <div className="bg-neutral-800 rounded-md px-2 py-1 tracking-tighter">
+          {formatBlogDate(post.date)}
+        </div>
+        <div className="h-[0.2em] bg-neutral-800 mx-2" />
       </div>
-    </article>
+      <article className="prose prose-invert">
+        <MDXContent code={post.code} />
+      </article>
+    </section>
   );
 }
 
