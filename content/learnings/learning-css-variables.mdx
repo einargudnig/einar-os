@@ -1,0 +1,22 @@
+---
+title: "CSS variables tricks I keep forgetting"
+date: 2025-09-20
+topic: CSS
+tags: [css, theming]
+---
+
+## Useful patterns
+
+- Use fallback values for robust theming: `var(--color, #fff)`
+- Scope variables to components for better isolation
+- Prefer `:where()` to reduce specificity fights
+
+```css
+:root {
+  --brand: oklch(70% 0.2 260);
+}
+
+.button {
+  background: var(--brand);
+}
+```

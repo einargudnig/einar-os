@@ -2,17 +2,20 @@ import { posts } from "../../.velite";
 import Link from "next/link";
 import { formatBlogDate } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { PencilLine, Terminal } from "lucide-react";
+import { PencilLine } from "lucide-react";
 
 export default function Page() {
-  console.log("blog route", posts);
+  // Sort posts by date (newest first)
+  const sortedPosts = [...posts].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
 
   return (
     <section className="mx-auto w-full max-w-2xl space-y-8 print:space-y-6 mb-8">
       <h1 className="font-bold text-2xl font-serif mb-5">Blog</h1>
 
       <div className="grid">
-        {posts.map((post) => (
+        {sortedPosts.map((post) => (
           <div key={post.slug} className="p-2">
             <h2 className="text-lg">
               <Link

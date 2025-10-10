@@ -15,13 +15,27 @@ export default defineConfig({
           image: s.image().optional(),
           date: s.isodate(), // input Date-like string, output ISO Date string.
           // cover: s.image().optional(), // input image relative path, output image object with blurImage.
-          // video: s.file().optional(), // input file relative path, output file public path.
           metadata: s.metadata(), // extract markdown reading-time, word-count, etc.
           // excerpt: s.excerpt(), // excerpt of markdown content
-          // content: s.markdown(), // transform markdown to html
           code: s.mdx(), // compile mdx to js code
         })
         .transform((data) => ({ ...data, permalink: `/blog/${data.slug}` })),
+    },
+    // collection for learnings
+    learnings: {
+      name: "Learning",
+      pattern: "learnings/**/*.{md,mdx}",
+      schema: s
+        .object({
+          title: s.string().max(99),
+          date: s.isodate(),
+          topic: s.string().max(50),
+          link: s.string().optional(),
+          tags: s.array(s.string()).optional(),
+          code: s.mdx(),
+          metadata: s.metadata(),
+        })
+        .transform((data) => ({ ...data })),
     },
   },
 });

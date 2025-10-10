@@ -1,4 +1,4 @@
-import { ExternalLink } from "@/components/external-link";
+import { ExternalLink } from "@/components/blog/external-link";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
