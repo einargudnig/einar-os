@@ -32,10 +32,31 @@ export default defineConfig({
           topic: s.string().max(50),
           link: s.string().optional(),
           tags: s.array(s.string()).optional(),
+          deepDiveSlug: s.slug().optional(),
           code: s.mdx(),
           metadata: s.metadata(),
         })
         .transform((data) => ({ ...data })),
+    },
+
+    // collection for deep dives
+    deepDives: {
+      name: "DeepDive",
+      pattern: "deep-dives/**/*.{md,mdx}",
+      schema: s
+        .object({
+          title: s.string().max(120),
+          slug: s.slug("deep-dives"),
+          date: s.isodate(),
+          topic: s.string().max(50).optional(),
+          tags: s.array(s.string()).optional(),
+          metadata: s.metadata(),
+          code: s.mdx(),
+        })
+        .transform((data) => ({
+          ...data,
+          permalink: `/deep-dive/${data.slug}`,
+        })),
     },
   },
 });

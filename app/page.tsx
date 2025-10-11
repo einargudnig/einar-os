@@ -58,8 +58,8 @@ export default function Home() {
         <div className="flex-1 space-y-1.5">
           <h1 className="md:text-3xl font-bold">Einar Gudni</h1>
           <p className="flex max-w-md text-md text-foreground ">
-            <p className="italics font-bold">Curious</p>, Tinkerer, Late bloomer
-            & Nerd
+            <span className="italics font-bold">Curious</span>, Tinkerer, Late
+            bloomer & Nerd
           </p>
           <p className="max-w-md items-center text-pretty font-mono text-xs text-muted-foreground">
             <a

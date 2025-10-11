@@ -1,4 +1,5 @@
 import * as runtime from "react/jsx-runtime";
+import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink } from "./blog/external-link";
@@ -175,7 +176,8 @@ const sharedComponents = {
 // Parse the Velite generated MDX code into a React component function
 const useMDXComponent = (code: string) => {
   const fn = new Function(code);
-  return fn({ ...runtime }).default;
+  // Provide both jsx runtime and React for components using hooks/state
+  return fn({ ...runtime, React }).default;
 };
 
 interface MDXProps {

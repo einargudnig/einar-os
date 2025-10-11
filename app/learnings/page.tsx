@@ -1,6 +1,8 @@
+import Link from "next/link";
 import { learnings } from "@/.velite";
 import { MDXContent } from "@/components/mdx-content";
 import { formatBlogDate } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   const sorted = [...learnings].sort(
@@ -19,10 +21,20 @@ export default function Page() {
           >
             <header className="mb-4">
               <h2 className="text-xl font-semibold">{item.title}</h2>
-              <div className="text-sm text-neutral-500">
+              <div className="text-sm text-neutral-500 flex items-center gap-2">
                 <span>{item.topic}</span>
                 <span className="mx-2">·</span>
                 <time dateTime={item.date}>{formatBlogDate(item.date)}</time>
+                {item.deepDiveSlug && (
+                  <Link
+                    href={`/deep-dive/${item.deepDiveSlug}`}
+                    className="no-underline"
+                  >
+                    <Button size="sm" variant="outline">
+                      Deep Dive
+                    </Button>
+                  </Link>
+                )}
               </div>
             </header>
             {"code" in item ? (
