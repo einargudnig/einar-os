@@ -1,5 +1,7 @@
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
+import { ChefHat } from "lucide-react";
 import Link from "next/link";
 
 export default function UsesLayout({
@@ -13,6 +15,13 @@ export default function UsesLayout({
       <div className="flex-col items-center justify-center">
         <UsesNav />
         <div className="mt-8">{children}</div>
+        <Alert variant="default" className="mt-4">
+          <ChefHat />
+          <AlertTitle>Heads up!</AlertTitle>
+          <AlertDescription>
+            This is in progress, just sit tight
+          </AlertDescription>
+        </Alert>
       </div>
     </section>
   );
