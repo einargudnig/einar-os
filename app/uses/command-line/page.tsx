@@ -18,6 +18,7 @@ export default function CommandLinePage() {
         <li>ripgrep</li>
         <li>fd</li>
         <li>btop</li>
+        <li>jq</li>
       </ul>
     </div>
   );

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { NowPlaying } from "./now-playing";
 
 const navItems = {
   "/": {
@@ -42,11 +41,6 @@ export function Navbar() {
                 {/* <div className="md:hidden"> */}
                 {/* 	<MobileNav /> */}
                 {/* </div> */}
-              </div>
-              <div className="justify-end">
-                <div className="flex items-center">
-                  <NowPlaying />
-                </div>
               </div>
             </div>
           </nav>
