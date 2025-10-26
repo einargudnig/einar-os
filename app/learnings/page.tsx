@@ -17,7 +17,7 @@ export default function Page() {
       <div className="space-y-16">
         {sorted.map((item) => (
           <div key={`${item.topic}-${item.date}`}>
-            <article className="prose prose-invert">
+            <article className="prose prose-invert mb-3">
               <header className="mb-4">
                 <h2 className="text-xl font-semibold">{item.title}</h2>
                 <div className="text-sm text-neutral-500 flex items-center gap-2">
