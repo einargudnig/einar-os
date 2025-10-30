@@ -12,7 +12,7 @@ export default function Page() {
 
   return (
     <section className="mx-auto w-full max-w-2xl space-y-10 print:space-y-8 mb-8">
-      <h1 className="font-bold text-2xl font-serif mb-5">Learnings</h1>
+      <h1 className="font-bold text-2xl font-serif mb-5">Notes</h1>
 
       <div className="space-y-16">
         {sorted.map((item) => (

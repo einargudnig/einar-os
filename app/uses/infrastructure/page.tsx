@@ -2,6 +2,9 @@ export default function InfraPage() {
   return (
     <div>
       <ul>
+        <li>wezterm</li>
+        <li>ghostty</li>
+        <li>zsh</li>
         <li>Raycast</li>
         <li>Obsidian</li>
         <li>Things 3</li>
