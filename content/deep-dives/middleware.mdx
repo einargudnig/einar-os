@@ -1,0 +1,54 @@
+---
+title: "Middleware - React router"
+slug: middleware-rr7
+date: 2025-10-29
+topic: React
+tags: [react, react-router, middleware]
+---
+
+<Subheading>Middleware in general</Subheading>
+
+<Spacer size="small" />
+
+Middleware is a pattern that acts a layer between different parts of an application, processing requests and responses as they flow through the system.
+
+<Spacer size="small" />
+
+Middleware typically has access to the <strong>request</strong> and <strong>response</strong> objects as long as the <strong>next</strong> function.
+
+<Spacer size="small" />
+
+Each middleware can exacute code, modify request/response objects, end the request-response cycle or call the next middleware.
+
+Common use cases for middleware: Authentication, logging, error handling, CORS, validation and more.
+<Spacer size="small" />
+
+<strong>Key advantage is you can use middleware, remove, or reorder them without modifying the core logic.</strong>
+
+<Spacer size="small" />
+
+<Subheading>React router middleware</Subheading>
+
+Middleware runs in a nested chain, executing from parent to child routes on the way "down" to your route handlers, then from your child routes back to parent routes on the way "up" after a response is generated.
+
+Server middleware runs in the server in framework mode for HTML Document requests and `.data` requests for subsequent navigations and fetcher calls.
+
+```tsx
+async function serverMiddleware({ request }, next) {
+  console.log(request.method, request.url);
+  let response = await next();
+  console.log(response.status, request.method, request.url);
+  return response;
+}
+
+// Framework mode only
+export const middleware: Route.MiddlewareFunction[] = [
+  serverMiddleware,
+];
+```
+
+Client middleware runs in the browser in framework mode and data mode for client-side navigations and fetcher calls. Client middleware differs from server middleware because there's no HTTP requests, so it doesn't have a response bubbling up.
+
+<Subheading>Server side middleware</Subheading>
+
+<Subheading>Client side middleware</Subheading>
