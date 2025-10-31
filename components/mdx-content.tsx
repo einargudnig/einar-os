@@ -55,34 +55,29 @@ const sharedComponents = {
     className,
     ...props
   }: { children: ReactNode; className?: string } & Record<string, any>) => {
-    // Extract language from className (usually in format "language-js")
-    const languageClass = className || "";
-    const language = languageClass.replace(/language-/, "");
-
-    // Extract code content safely
+    // Extract language and code content from code element
+    let language = "";
     let codeContent = "";
 
-    // Handle string children directly
-    if (typeof children === "string") {
-      codeContent = children;
-    }
-    // Otherwise, try to extract from code element child
-    else if (children) {
-      // Get string content from child elements if possible
-      const getStringContent = (child: any): string => {
-        if (typeof child === "string") return child;
-        if (!child || typeof child !== "object") return "";
+    // Check if children is a code element with className
+    if (children && typeof children === "object" && "props" in children) {
+      const codeProps = children.props;
 
-        // If it has props.children, try to get content from there
-        if ("props" in child && child.props && child.props.children) {
-          if (typeof child.props.children === "string") {
-            return child.props.children;
-          }
+      // Extract language from code element's className (format: "language-js")
+      if (codeProps.className) {
+        const match = codeProps.className.match(/language-(\w+)/);
+        if (match) {
+          language = match[1];
         }
-        return "";
-      };
+      }
 
-      codeContent = getStringContent(children);
+      // Extract code content
+      if (typeof codeProps.children === "string") {
+        codeContent = codeProps.children;
+      }
+    } else if (typeof children === "string") {
+      // Fallback for direct string children
+      codeContent = children;
     }
 
     return (

@@ -2,7 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import { CheckIcon, ClipboardIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { codeToHtml } from "shiki";
 
 interface CodeBlockProps {
   children: string;
@@ -15,11 +16,44 @@ interface CodeBlockProps {
 export function CodeBlock({
   children,
   className,
-  language,
+  language = "text",
   filename,
   showLineNumbers = false,
 }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
+  const [highlightedCode, setHighlightedCode] = useState<string>("");
+
+  useEffect(() => {
+    const highlightCode = async () => {
+      try {
+        const html = await codeToHtml(children, {
+          lang: language,
+          theme: "catppuccin-mocha",
+          transformers: showLineNumbers
+            ? [
+                {
+                  line(node, line) {
+                    node.properties["data-line"] = line;
+                    this.addClassToHast(node, "line");
+                  },
+                  pre(node) {
+                    // Preserve existing background and add counter-reset
+                    const existingStyle = node.properties.style || "";
+                    node.properties.style = `${existingStyle}${existingStyle ? ';' : ''} counter-reset: line;`;
+                  },
+                },
+              ]
+            : [],
+        });
+        setHighlightedCode(html);
+      } catch (error) {
+        console.error("Failed to highlight code:", error);
+        setHighlightedCode(`<pre><code>${children}</code></pre>`);
+      }
+    };
+
+    highlightCode();
+  }, [children, language, showLineNumbers]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(children);
@@ -28,41 +62,53 @@ export function CodeBlock({
   };
 
   return (
-    <div className="relative my-6 overflow-hidden rounded-lg border">
+    <div className="relative my-6 overflow-hidden rounded-lg border border-[#313244]">
       {filename && (
-        <div className="border-b bg-muted px-4 py-2 text-sm font-medium">
+        <div className="border-b border-[#313244] bg-[#1e1e2e] px-4 py-2 text-sm font-medium text-[#cdd6f4]">
           {filename}
         </div>
       )}
       <div className="relative">
-        <pre
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            .code-with-lines .line {
+              display: inline-block;
+              width: 100%;
+            }
+            .code-with-lines .line::before {
+              counter-increment: line;
+              content: counter(line);
+              display: inline-block;
+              width: 2.5rem;
+              margin-right: 1.5rem;
+              text-align: right;
+              color: rgba(127, 132, 156, 0.6);
+              user-select: none;
+              border-right: 1px solid rgba(127, 132, 156, 0.3);
+              padding-right: 0.75rem;
+            }
+          `
+        }} />
+        <div
           className={cn(
-            "overflow-x-auto p-4 text-sm",
-            showLineNumbers && "pl-12",
+            "overflow-x-auto text-sm [&_pre]:p-4 [&_pre]:m-0",
+            showLineNumbers && "code-with-lines",
             className,
           )}
-        >
-          <code>{children}</code>
-        </pre>
-        {showLineNumbers && (
-          <div className="absolute left-0 top-0 w-8 select-none border-r bg-muted/50 p-4 text-right text-xs text-muted-foreground">
-            {children.split("\n").map((_, i) => (
-              <div key={i}>{i + 1}</div>
-            ))}
-          </div>
-        )}
+          dangerouslySetInnerHTML={{ __html: highlightedCode }}
+        />
         {language && (
-          <div className="absolute right-2 top-2 text-xs font-medium text-muted-foreground">
+          <div className="absolute right-2 top-2 text-xs font-medium text-[#7f849c]">
             {language.toUpperCase()}
           </div>
         )}
         <button
           onClick={copyToClipboard}
-          className="absolute bottom-2 right-2 rounded bg-muted p-1 text-muted-foreground hover:bg-muted/80"
+          className="absolute bottom-2 right-2 rounded bg-[#313244] p-1 text-[#cdd6f4] hover:bg-[#45475a]"
           aria-label="Copy code to clipboard"
         >
           {copied ? (
-            <CheckIcon className="h-4 w-4 text-green-500" />
+            <CheckIcon className="h-4 w-4 text-[#a6e3a1]" />
           ) : (
             <ClipboardIcon className="h-4 w-4" />
           )}
