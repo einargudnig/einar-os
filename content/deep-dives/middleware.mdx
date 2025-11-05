@@ -4,34 +4,102 @@ slug: middleware-rr7
 date: 2025-10-29
 topic: React
 tags: [react, react-router, middleware]
+draft: true
 ---
 
 <Subheading>Middleware in general</Subheading>
 
 <Spacer size="small" />
 
-Middleware is a pattern that acts a layer between different parts of an application, processing requests and responses as they flow through the system.
+Middleware is a pattern that acts a layer between different parts of an
+application, processing requests and responses as they flow through the system.
 
 <Spacer size="small" />
 
-Middleware typically has access to the <strong>request</strong> and <strong>response</strong> objects as long as the <strong>next</strong> function.
+Middleware typically has access to the <strong>request</strong>
+and <strong>response</strong> objects as long as the <strong>next</strong> function.
 
 <Spacer size="small" />
 
-Each middleware can exacute code, modify request/response objects, end the request-response cycle or call the next middleware.
+Each middleware can exacute code, modify request/response objects, end the
+request-response cycle or call the next middleware.
 
-Common use cases for middleware: Authentication, logging, error handling, CORS, validation and more.
+Common use cases for middleware: Authentication, logging, error handling,
+CORS, validation and more.
+
 <Spacer size="small" />
 
-<strong>Key advantage is you can use middleware, remove, or reorder them without modifying the core logic.</strong>
+<strong>
+  Key advantage is you can use middleware, remove, or reorder them without
+  modifying the core logic.
+</strong>
 
 <Spacer size="small" />
 
 <Subheading>React router middleware</Subheading>
 
-Middleware runs in a nested chain, executing from parent to child routes on the way "down" to your route handlers, then from your child routes back to parent routes on the way "up" after a response is generated.
+Middleware runs in a nested chain, executing from parent to child routes on the
+way "down" to your route handlers, then from your child routes back to parent
+routes on the way "up" after a response is generated.
 
-Server middleware runs in the server in framework mode for HTML Document requests and `.data` requests for subsequent navigations and fetcher calls.
+It's very important to understand when your middleware will run to make sure
+your application is behaving as you intended.
+
+<Spacer size="small" />
+
+The steps needed to create a middleware in Framework mode:
+
+<Spacer size="small" />
+
+<strong>1. Create a Context</strong>
+
+<Spacer size="small" />
+
+Middleware uses a a `context` provider instance to provide data down the middleware
+chain. You can create a type-safe context objects using `createContext`
+
+<Spacer size="small" />
+
+```tsx
+import { createContext } from "react-router";
+import type { User } from "~/types";
+
+export const userContext = createContext<User | null>(null);
+```
+
+<Spacer size="small" />
+
+<strong>2. Export middleware from your routes</strong>
+<Spacer size="small" />
+
+```tsx
+import { redirect } from "react-router";
+import { userContext } from "~/context";
+
+// Server-side Authentication Middleware
+async function authMiddleware({ request, context }) {
+  const user = await getUserFromSession(request);
+  if (!user) {
+    throw redirect("/login");
+  }
+  context.set(userContext, user);
+}
+```
+
+<Spacer size="small" />
+
+<strong>3. Update `getLoadContext` function </strong>
+<Spacer size="small" />
+
+If you're using a custom server and a getLoadContext function, you will need
+to update your implementation to return an instance of RouterContextProvider,
+instead of a JavaScript object.
+
+<Subheading>Server side middleware</Subheading>
+<Spacer size="small" />
+
+Server middleware runs in the server in framework mode for HTML Document requests
+and `.data` requests for subsequent navigations and fetcher calls.
 
 ```tsx
 async function serverMiddleware({ request }, next) {
@@ -42,13 +110,41 @@ async function serverMiddleware({ request }, next) {
 }
 
 // Framework mode only
-export const middleware: Route.MiddlewareFunction[] = [
-  serverMiddleware,
-];
+export const middleware: Route.MiddlewareFunction[] = [serverMiddleware];
 ```
 
-Client middleware runs in the browser in framework mode and data mode for client-side navigations and fetcher calls. Client middleware differs from server middleware because there's no HTTP requests, so it doesn't have a response bubbling up.
-
-<Subheading>Server side middleware</Subheading>
+In a hydrated Framework Mode app, server middlware is designed in such that it
+prioritizes SPA behaviour and does not create a new network activity by default.
 
 <Subheading>Client side middleware</Subheading>
+<Spacer size="small" />
+
+Client middleware runs in the browser in framework mode and data mode for
+client-side navigations and fetcher calls. Client middleware differs from server
+middleware because there's no HTTP requests,
+so it doesn't have a response bubbling up.
+
+```tsx
+async function clientMiddleware({ request }, next) {
+  console.log(request.method, request.url);
+  await next();
+  console.log(response.status, request.method, request.url);
+}
+
+// Framework mode
+export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
+  clientMiddleware,
+];
+
+// Or, Data mode
+const route = {
+  path: "/",
+  middleware: [clientMiddleware],
+  loader: rootLoader,
+  Component: Root,
+};
+```
+
+Client middleware is simpler because since we are already on the client and are
+always making a "request" to the router when navigating. Client middleware will
+run on every client navigation, regardless of whether there are `loader`s to run.
