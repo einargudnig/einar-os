@@ -18,25 +18,47 @@ import { ColorSwatch } from "./blog/color-swatch";
 import { FileTree } from "./blog/file-tree";
 import { Timeline } from "./blog/timeline";
 import { Heading, Subheading } from "./blog/heading";
-import type { ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ComponentType, ReactNode } from "react";
 
-const sharedComponents = {
+// A minimal type describing the MDX component we render
+type MDXComponent = ComponentType<{ components?: Record<string, unknown> }>;
+
+const sharedComponents: Record<string, ComponentType<any>> = {
   // Basic Next.js components
   Image,
   Link,
   img: ({
-    src,
+    src: rawSrc,
     alt,
-    ...props
-  }: { src?: string; alt?: string } & Record<string, any>) => {
+    width,
+    height,
+    className,
+  }: ComponentPropsWithoutRef<"img">) => {
+    const src = typeof rawSrc === "string" ? rawSrc : undefined;
     if (!src) return null;
-    return <CaptionedImage src={src} alt={alt || ""} {...props} />;
+    const w =
+      typeof width === "number"
+        ? width
+        : typeof width === "string"
+          ? parseInt(width, 10)
+          : undefined;
+    const h =
+      typeof height === "number"
+        ? height
+        : typeof height === "string"
+          ? parseInt(height, 10)
+          : undefined;
+    return (
+      <CaptionedImage
+        src={src}
+        alt={alt ?? ""}
+        width={w}
+        height={h}
+        className={className}
+      />
+    );
   },
-  a: ({
-    href,
-    children,
-    ...props
-  }: { href?: string; children: ReactNode } & Record<string, any>) => {
+  a: ({ href, children, ...props }: ComponentPropsWithoutRef<"a">) => {
     if (href && (href.startsWith("http") || href.startsWith("mailto:"))) {
       return <ExternalLink href={href}>{children}</ExternalLink>;
     }
@@ -50,21 +72,20 @@ const sharedComponents = {
   },
 
   // Code components
-  pre: ({
-    children,
-    className,
-    ...props
-  }: { children: ReactNode; className?: string } & Record<string, any>) => {
+  pre: ({ children, className, ...props }: ComponentPropsWithoutRef<"pre">) => {
     // Extract language and code content from code element
     let language = "";
     let codeContent = "";
 
     // Check if children is a code element with className
-    if (children && typeof children === "object" && "props" in children) {
-      const codeProps = children.props;
+    if (React.isValidElement(children)) {
+      const codeProps = children.props as {
+        className?: string;
+        children?: ReactNode;
+      };
 
       // Extract language from code element's className (format: "language-js")
-      if (codeProps.className) {
+      if (typeof codeProps.className === "string") {
         const match = codeProps.className.match(/language-(\w+)/);
         if (match) {
           language = match[1];
@@ -92,7 +113,7 @@ const sharedComponents = {
     );
   },
 
-  code: (props: Record<string, any>) => (
+  code: (props: ComponentPropsWithoutRef<"code">) => (
     <code className="bg-muted px-1.5 py-0.5 rounded text-sm" {...props} />
   ),
 
@@ -100,35 +121,31 @@ const sharedComponents = {
   blockquote: ({
     children,
     ...props
-  }: { children: ReactNode } & Record<string, any>) => (
+  }: ComponentPropsWithoutRef<"blockquote">) => (
     <Blockquote {...props}>{children}</Blockquote>
   ),
 
   // Custom list components
-  ul: ({
-    children,
-    ...props
-  }: { children: ReactNode } & Record<string, any>) => (
+  ul: ({ children, ...props }: ComponentPropsWithoutRef<"ul">) => (
     <StylishList type="disc" {...props}>
       {children}
     </StylishList>
   ),
 
-  li: ({
-    children,
-    ...props
-  }: { children: ReactNode } & Record<string, any>) => (
+  li: ({ children, ...props }: ComponentPropsWithoutRef<"li">) => (
     <StylishListItem {...props}>{children}</StylishListItem>
   ),
 
-  ol: ({
-    children,
-    ...props
-  }: { children: ReactNode } & Record<string, any>) => (
-    <StylishList type="number" {...props}>
-      {children}
-    </StylishList>
-  ),
+  ol: (props: ComponentPropsWithoutRef<"ol">) => {
+    const { children, ...rest } = props;
+    // Remove native <ol> type attribute to avoid conflict with StylishList's type prop
+    const { type: _olType, ...clean } = rest as any;
+    return (
+      <StylishList type="number" {...(clean as any)}>
+        {children}
+      </StylishList>
+    );
+  },
 
   // Custom quote components
   Blockquote,
@@ -169,15 +186,18 @@ const sharedComponents = {
 };
 
 // Parse the Velite generated MDX code into a React component function
-const useMDXComponent = (code: string) => {
-  const fn = new Function(code);
+const useMDXComponent = (code: string): MDXComponent => {
+  const fn = new Function(code) as (args: any) => {
+    default: ComponentType<any>;
+  };
   // Provide both jsx runtime and React for components using hooks/state
-  return fn({ ...runtime, React }).default;
+  const mod = fn({ ...runtime, React });
+  return mod.default as MDXComponent;
 };
 
 interface MDXProps {
   code: string;
-  components?: Record<string, any>;
+  components?: Record<string, unknown>;
   enableTableOfContents?: boolean;
 }
 
