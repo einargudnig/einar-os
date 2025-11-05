@@ -18,6 +18,7 @@ import { ColorSwatch } from "./blog/color-swatch";
 import { FileTree } from "./blog/file-tree";
 import { Timeline } from "./blog/timeline";
 import { Heading, Subheading } from "./blog/heading";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import type { ComponentPropsWithoutRef, ComponentType, ReactNode } from "react";
 
 // A minimal type describing the MDX component we render
@@ -199,6 +200,7 @@ interface MDXProps {
   code: string;
   components?: Record<string, unknown>;
   enableTableOfContents?: boolean;
+  draft?: boolean;
 }
 
 // MDXContent component
@@ -206,11 +208,20 @@ export const MDXContent = ({
   code,
   components,
   enableTableOfContents = true,
+  draft = false,
 }: MDXProps) => {
   const Component = useMDXComponent(code);
   return (
     <>
       {enableTableOfContents && <TableOfContents />}
+      {draft && (
+        <div className="mb-6">
+          <Alert>
+            <AlertTitle>🚧 Under construction 🚧</AlertTitle>
+            <AlertDescription>This post is not finished!</AlertDescription>
+          </Alert>
+        </div>
+      )}
       <article className="mdx-content">
         <Component components={{ ...sharedComponents, ...components }} />
       </article>

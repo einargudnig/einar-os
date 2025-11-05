@@ -17,6 +17,7 @@ export default defineConfig({
           // cover: s.image().optional(), // input image relative path, output image object with blurImage.
           metadata: s.metadata(), // extract markdown reading-time, word-count, etc.
           // excerpt: s.excerpt(), // excerpt of markdown content
+          draft: s.boolean().optional().default(false),
           code: s.mdx(), // compile mdx to js code
         })
         .transform((data) => ({ ...data, permalink: `/blog/${data.slug}` })),
@@ -51,6 +52,7 @@ export default defineConfig({
           topic: s.string().max(50).optional(),
           tags: s.array(s.string()).optional(),
           metadata: s.metadata(),
+          draft: s.boolean().optional().default(false),
           code: s.mdx(),
         })
         .transform((data) => ({

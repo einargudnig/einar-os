@@ -28,7 +28,7 @@ export default async function DeepDive({ params }: DeepDiveParams) {
         <div className="h-[0.2em] bg-neutral-800 mx-2" />
       </div>
       <article className="prose prose-invert">
-        <MDXContent code={dive.code} />
+        <MDXContent code={dive.code} draft={dive.draft} />
       </article>
     </section>
   );
