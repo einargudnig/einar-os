@@ -26,9 +26,6 @@ export default function Page() {
           trained football and handball when growing up, and I have been doing
           CrossFit for the last 9 years. &quot;If you don&#39;t use it, you lose
           it.&quot; So I try to use it as much I can.{" "}
-          <Link href="../../weeks">
-            I plan on to live to at least 100 years old!
-          </Link>
         </p>
       </div>
       <Separator />
