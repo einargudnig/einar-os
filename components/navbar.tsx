@@ -1,3 +1,4 @@
+import { Github, Twitter } from "lucide-react";
 import Link from "next/link";
 
 const navItems = {
@@ -36,11 +37,20 @@ export function Navbar() {
                     );
                   })}
                 </div>
-
-                {/* Mobile Navbar */}
-                {/* <div className="md:hidden"> */}
-                {/* 	<MobileNav /> */}
-                {/* </div> */}
+              </div>
+              <div className="flex items-center gap-x-3">
+                <Link
+                  href="https://github.com/einargudnig"
+                  className="text-neutral-500 hover:text-neutral-400"
+                >
+                  <Github size={20} />
+                </Link>
+                <Link
+                  href="https://x.com/einargudni"
+                  className="text-neutral-500 hover:text-neutral-400"
+                >
+                  <Twitter size={20} />
+                </Link>
               </div>
             </div>
           </nav>
