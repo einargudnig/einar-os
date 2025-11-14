@@ -1,3 +1,3 @@
 export default function KeyboardPage() {
-  return <div>Keyboard Uses</div>;
+  return <div>Keyboard uses</div>;
 }
