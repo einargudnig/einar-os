@@ -42,6 +42,16 @@ Middleware runs in a nested chain, executing from parent to child routes on the
 way "down" to your route handlers, then from your child routes back to parent
 routes on the way "up" after a response is generated.
 
+```
+- Root middleware start
+  - Parent middleware start
+    - Child middleware start
+      - Run loaders, generate HTML Response
+    - Child middleware end
+  - Parent middleware end
+- Root middleware end
+```
+
 It's very important to understand when your middleware will run to make sure
 your application is behaving as you intended.
 
@@ -91,8 +101,8 @@ async function authMiddleware({ request, context }) {
 <strong>3. Update `getLoadContext` function </strong>
 <Spacer size="small" />
 
-If you're using a custom server and a getLoadContext function, you will need
-to update your implementation to return an instance of RouterContextProvider,
+If you're using a custom server and a `getLoadContext` function, you will need
+to update your implementation to return an instance of `RouterContextProvider`,
 instead of a JavaScript object.
 
 <Subheading>Server side middleware</Subheading>
