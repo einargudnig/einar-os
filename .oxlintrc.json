@@ -1,0 +1,19 @@
+{
+  "$schema": "https://oxc.rs/schema/.oxlintrc.json",
+  "plugins": [
+    "react",
+    "nextjs",
+    "typescript",
+    "import"
+  ],
+  "rules": {
+    "correctness": "warn",
+    "suspicious": "warn",
+    "perf": "warn"
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2024": true
+  }
+}

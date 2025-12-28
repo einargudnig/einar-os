@@ -18,10 +18,10 @@ npm run build
 # Start production server
 npm start
 
-# Lint code with Biome
+# Lint code with oxlint
 npm run lint
 
-# Format code with Biome
+# Format code with oxfmt
 npm run format
 ```
 
@@ -59,7 +59,7 @@ The project uses **Velite** as a content processing pipeline that transforms Mar
 
 ### Code Quality
 
-- **Biome** for linting and formatting (replaces ESLint + Prettier)
+- **oxlint** for linting and **oxfmt** for formatting (from the oxc project)
 - **TypeScript** with strict mode enabled
 - Path alias `@/*` maps to project root
 
