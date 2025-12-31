@@ -6,6 +6,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { Map } from "@/components/ui/map";
 import { Badge } from "@/components/ui/badge";
 import { GlobeIcon } from "lucide-react";
 import Link from "next/link";
@@ -75,6 +76,9 @@ export default function Home() {
         </div>
       </div>
       <Section className="mt-4">
+        {/* <Card className="h-[300px] p-0 overflow-hidden"> */}
+        {/*   <Map center={[64.9631, -19.0208]} zoom={1}></Map> */}
+        {/* </Card> */}
         <div className="flex items-center justify-between">
           <div className="group">
             <Link href="/about" className="group-hover:underline text-lg">

@@ -16,10 +16,29 @@ export default function ResolutionsPage() {
             <Checkbox disabled />
             <p className="">sub 75 minute pro single HYROX </p>
           </li>
-
           <li className="flex items-center gap-2">
             <Checkbox disabled />
             <p className="">Create a native app</p>
+          </li>
+          <li className="flex items-center gap-2">
+            <Checkbox disabled />
+            <p className="">Publish an app (app store, play store)</p>
+          </li>
+          <li className="flex items-center gap-2">
+            <Checkbox disabled />
+            <p className="">Create a web simple web service in two hono</p>
+          </li>
+          <li className="flex items-center gap-2">
+            <Checkbox disabled />
+            <p className="">Re-write the simple web service in effect</p>
+          </li>
+          <li className="flex items-center gap-2">
+            <Checkbox disabled />
+            <p className="">Finish Total TypeScript Pro courses</p>
+          </li>
+          <li className="flex items-center gap-2">
+            <Checkbox disabled />
+            <p className="">Finish the uses page</p>
           </li>
         </ul>
       </div>
