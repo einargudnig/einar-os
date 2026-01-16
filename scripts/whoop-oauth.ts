@@ -18,6 +18,9 @@ if (!WHOOP_CLIENT_ID || !WHOOP_CLIENT_SECRET) {
   process.exit(1);
 }
 
+const clientId: string = WHOOP_CLIENT_ID;
+const clientSecret: string = WHOOP_CLIENT_SECRET;
+
 const SCOPES = [
   'read:recovery',
   'read:cycles',
@@ -31,7 +34,7 @@ const SCOPES = [
 const state = crypto.randomUUID();
 
 const authUrl = new URL('https://api.prod.whoop.com/oauth/oauth2/auth');
-authUrl.searchParams.append('client_id', WHOOP_CLIENT_ID);
+authUrl.searchParams.append('client_id', clientId);
 authUrl.searchParams.append('redirect_uri', REDIRECT_URI);
 authUrl.searchParams.append('response_type', 'code');
 authUrl.searchParams.append('scope', SCOPES);
@@ -56,8 +59,8 @@ async function exchangeCodeForTokens(code: string) {
         grant_type: 'authorization_code',
         code: code.trim(),
         redirect_uri: REDIRECT_URI,
-        client_id: WHOOP_CLIENT_ID,
-        client_secret: WHOOP_CLIENT_SECRET,
+        client_id: clientId,
+        client_secret: clientSecret,
       }),
     });
 
