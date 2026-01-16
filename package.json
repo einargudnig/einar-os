@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "oxlint",
     "format": "oxfmt --write .",
-    "format:check": "oxfmt --check ."
+    "format:check": "oxfmt --check .",
+    "whoop:auth": "bun scripts/whoop-oauth.ts",
+    "whoop:fetch": "bun lib/whoop/cron.ts --once",
+    "whoop:cron": "bun lib/whoop/cron.ts"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.3",

@@ -42,3 +42,7 @@ next-env.d.ts
 
 # velite
 .velite
+
+# whoop
+.whoop-tokens.json
+/data/whoop
