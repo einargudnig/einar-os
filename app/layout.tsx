@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ConvexClientProvider } from "@/components/convex-provider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -32,12 +33,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased mb-10 lg:mx-auto`}
       >
         <ThemeProvider attribute="class" defaultTheme="dark">
-          <main className="container relative mx-auto mt-8 overflow-auto">
-            <Navbar />
-            {children}
-            <Analytics />
-            <SpeedInsights />
-          </main>
+          <ConvexClientProvider>
+            <main className="container relative mx-auto mt-8 overflow-auto">
+              <Navbar />
+              {children}
+              <Analytics />
+              <SpeedInsights />
+            </main>
+          </ConvexClientProvider>
         </ThemeProvider>
       </body>
     </html>
