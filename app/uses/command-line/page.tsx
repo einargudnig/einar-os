@@ -2,23 +2,20 @@ export default function CommandLinePage() {
   return (
     <div>
       <ul>
-        <li>Wezterm</li>
-        <li>Ghostty</li>
-        <li>Tmux</li>
-        <li>Neovim</li>
-        <li>Zsh</li>
-        <li>Lazygit</li>
-        <li>fzf</li>
-        <li>eza</li>
-        <li>zoxide</li>
-        <li>yazi</li>
-        <li>atuin</li>
-        <li>homebrew</li>
-        <li>bat</li>
-        <li>ripgrep</li>
-        <li>fd</li>
-        <li>btop</li>
-        <li>jq</li>
+        <li>&#9657; Tmux</li>
+        <li>&#9657; Neovim</li>
+        <li>&#9657; Lazygit</li>
+        <li>&#9657; fzf</li>
+        <li>&#9657; eza</li>
+        <li>&#9657; zoxide</li>
+        <li>&#9657; yazi</li>
+        <li>&#9657; atuin</li>
+        <li>&#9657; homebrew</li>
+        <li>&#9657; bat</li>
+        <li>&#9657; ripgrep</li>
+        <li>&#9657; fd</li>
+        <li>&#9657; btop</li>
+        <li>&#9657; jq</li>
       </ul>
     </div>
   );
