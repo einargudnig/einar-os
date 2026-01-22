@@ -342,25 +342,6 @@ export default function BabyPage() {
             )}
           </CardContent>
         </Card>
-
-        {/* About */}
-        <Card>
-          <CardHeader>
-            <CardTitle>About</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3 text-sm text-neutral-600 dark:text-neutral-400">
-              <p>
-                This prediction market is powered by Convex, providing real-time
-                updates as people cast their votes.
-              </p>
-              <p>
-                Cast your predictions on three questions about the upcoming
-                arrival!
-              </p>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </section>
   );
