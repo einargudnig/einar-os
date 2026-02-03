@@ -60,5 +60,19 @@ export default defineConfig({
           permalink: `/deep-dive/${data.slug}`,
         })),
     },
+
+    // collection for quotes
+    quotes: {
+      name: "Quote",
+      pattern: "quotes/**/*.{md,mdx}",
+      schema: s.object({
+        text: s.string().max(500),
+        author: s.string().max(100),
+        source: s.string().optional(),
+        date: s.isodate(),
+        code: s.mdx(),
+        metadata: s.metadata(),
+      }),
+    },
   },
 });

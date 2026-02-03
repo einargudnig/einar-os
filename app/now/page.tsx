@@ -8,25 +8,23 @@ export default function Page() {
     <section className="mx-auto w-full max-w-2xl space-y-8 print:space-y-6 mb-8">
       <h1 className="font-semibold text-2xl font-serif">Now</h1>
       <div className="flex flex-col">
-        <p className="-mt-4 text-neutral-500">Updated 08. Nov, 2025</p>
+        <p className="-mt-4 text-neutral-500">Updated 12. Jan, 2026</p>
       </div>
       <div className="prose prose-neutral dark:prose-invert text-neutral-200">
-        <p className="text-neutral-500 text-lg font-mono">Writing</p>
+        <p className="text-neutral-500 text-lg font-mono">Baby</p>
         <p>
-          I made some updates to my homepage. Simplified it a lot. I had set up
-          a specific project on Astro to handle my writings. It was a fun
-          experiment but I didn&apos;t like having separate projects. Now I have
-          moved everything back and I will continue to add things here.
+          Expecting our first baby this June! Super exciting and scary at the
+          same time. One of things you can't get a lot of practice with
+          beforehand.
         </p>
       </div>
       <Separator />
       <div className="prose prose-neutral dark:prose-invert text-neutral-200">
-        <p className="text-neutral-500 text-lg font-mono">Fundamentals</p>
+        <p className="text-neutral-500 text-lg font-mono">HYROX</p>
         <p>
-          I feel like I have some holes in the fundamentals when I am writing
-          code, it slows my annoyingly down. I will spend time on this to
-          improve. This is super important to me. I feel like I&apos;ve made
-          some progress here, recently I have been diving into TypeScript.
+          Back training for a HYROX competition in March 2026. This time it will
+          be Pro Singles. The goal is to finish under 1:15:00. We just started a
+          six weeks peak training block.
         </p>
       </div>
       <Separator />
@@ -34,11 +32,10 @@ export default function Page() {
         <p className="text-neutral-500 text-lg font-mono">Reading</p>
         <p>
           I am listening to{" "}
-          <ExternalLink href="https://www.goodreads.com/book/show/17994.The_Code_Book">
-            The Code Book: Science of Secrecy from Ancient Egypt to Quantum
-            Cryptography
+          <ExternalLink href="https://www.goodreads.com/book/show/204567.The_Expectant_Father?from_search=true&from_srp=true&qid=mAwSnMYB4F&rank=1">
+            The Expectant Father: Facts, Tips and Advices for Dads-to-be
           </ExternalLink>{" "}
-          I just started but it seems super interesting so far!
+          It's time to prepare!
         </p>
       </div>
       <div className="flex justify-start">

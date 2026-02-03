@@ -13,7 +13,8 @@
     "convex:dev": "convex dev",
     "whoop:auth": "bun scripts/whoop-oauth.ts",
     "whoop:fetch": "bun lib/whoop/cron.ts --once",
-    "whoop:cron": "bun lib/whoop/cron.ts"
+    "whoop:cron": "bun lib/whoop/cron.ts",
+    "quotes": "cd tools/quotes-tui && npm run start"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.3",
