@@ -26,7 +26,7 @@ export default function ResolutionsPage() {
           </li>
           <li className="flex items-center gap-2">
             <Checkbox disabled />
-            <p className="">Create a web simple web service in two hono</p>
+            <p className="">Create a simple web service in hono</p>
           </li>
           <li className="flex items-center gap-2">
             <Checkbox disabled />
