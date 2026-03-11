@@ -1,11 +1,21 @@
 import { ExternalLink } from "@/components/blog/external-link";
 import { ArrowLeft } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Page() {
   return (
     <section className="mx-auto w-full max-w-2xl space-y-8 print:space-y-6 mb-8">
-      <h1 className="font-bold text-3xl tracking-tight mb-5">About</h1>
+      <div className="flex items-start justify-between gap-6">
+        <h1 className="font-bold text-3xl tracking-tight">About</h1>
+        <Image
+          src="/images/avatar.jpeg"
+          alt="Einar Gudni"
+          width={96}
+          height={96}
+          className="rounded-full grayscale hover:grayscale-0 transition-all duration-500 shrink-0"
+        />
+      </div>
       <div className="prose prose-neutral dark:prose-invert">
         <p className="text-brand text-lg font-mono">Who</p>
         <p className="leading-relaxed max-w-[65ch]">

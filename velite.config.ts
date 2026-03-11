@@ -16,7 +16,7 @@ export default defineConfig({
           date: s.isodate(), // input Date-like string, output ISO Date string.
           // cover: s.image().optional(), // input image relative path, output image object with blurImage.
           metadata: s.metadata(), // extract markdown reading-time, word-count, etc.
-          // excerpt: s.excerpt(), // excerpt of markdown content
+          excerpt: s.excerpt(), // excerpt of markdown content
           draft: s.boolean().optional().default(false),
           code: s.mdx(), // compile mdx to js code
         })

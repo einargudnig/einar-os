@@ -4,6 +4,8 @@ import { ProjectCard } from "@/components/project-card";
 import { GitHubContributions } from "@/components/github-contributions";
 import { GlobeIcon } from "lucide-react";
 import Link from "next/link";
+import { posts } from "@/.velite";
+import { formatBlogDate } from "@/lib/utils";
 
 const projects = [
   {
@@ -34,6 +36,21 @@ const projects = [
       "This site. Built with Next.js 16, Velite for MDX content, and Tailwind v4. Deployed on Vercel.",
     href: "https://github.com/einargudnig/einar-os",
     tags: ["Next.js", "MDX", "Tailwind"],
+  },
+  {
+    title: "todo-system",
+    description:
+      "A CLI-powered task management system with Taskwarrior, syncing to Things 3 and Asana.",
+    href: "https://github.com/einargudnig/todo-system",
+    tags: ["CLI", "Taskwarrior", "Productivity"],
+  },
+  {
+    title: "baby",
+    description:
+      "A countdown and tracker for the newest member of the family.",
+    href: "/baby",
+    tags: ["Next.js", "Fun"],
+    external: false,
   },
 ];
 
@@ -137,21 +154,29 @@ export default function Home() {
             all writing &rarr;
           </Link>
         </div>
-        <Link href="/blog/keyboard" className="group block border-t border-border/50 pt-4">
-          <div className="flex justify-between items-start">
-            <div className="space-y-1.5">
-              <p className="font-semibold text-lg group-hover:text-brand transition-colors">keyboard</p>
-              <p className="text-muted-foreground leading-relaxed max-w-[65ch]">
-                I like writing on a good keyboard! This is a post about my daily
-                driver that I have at home! I have made some updates and even
-                though I say it myself it looks and feels great!
-              </p>
-            </div>
-            <p className="font-mono text-sm tabular-nums text-muted-foreground shrink-0 ml-4">
-              08 june 2025
-            </p>
-          </div>
-        </Link>
+        {(() => {
+          const latest = posts
+            .filter((p) => !p.draft)
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+          if (!latest) return null;
+          return (
+            <Link href={latest.permalink} className="group block border-t border-border/50 pt-4">
+              <div className="flex justify-between items-start">
+                <div className="space-y-1.5">
+                  <p className="font-semibold text-lg group-hover:text-brand transition-colors">{latest.title}</p>
+                  {latest.excerpt && (
+                    <p className="text-muted-foreground leading-relaxed max-w-[65ch]">
+                      {latest.excerpt}
+                    </p>
+                  )}
+                </div>
+                <p className="font-mono text-sm tabular-nums text-muted-foreground shrink-0 ml-4">
+                  {formatBlogDate(latest.date)}
+                </p>
+              </div>
+            </Link>
+          );
+        })()}
       </Section>
 
       <Section className="mt-4">

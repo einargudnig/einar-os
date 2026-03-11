@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Baby, TrendingUp, Loader2, Calendar, Scale } from "lucide-react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type VotingState = {
   gender: boolean;
@@ -14,7 +14,32 @@ type VotingState = {
   weight: boolean;
 };
 
+const DUE_DATE = new Date("2026-06-21T00:00:00");
+
+function useCountdown() {
+  const [now, setNow] = useState<Date | null>(null);
+
+  useEffect(() => {
+    setNow(new Date());
+    const interval = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!now) return null;
+
+  const diff = DUE_DATE.getTime() - now.getTime();
+  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0, arrived: true };
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  return { days, hours, minutes, seconds, arrived: false };
+}
+
 export default function BabyPage() {
+  const countdown = useCountdown();
   const [isVoting, setIsVoting] = useState<VotingState>({
     gender: false,
     arrival: false,
@@ -113,6 +138,39 @@ export default function BabyPage() {
           Baby Prediction Market
         </h1>
       </div>
+
+      {/* Countdown */}
+      <Card>
+        <CardContent className="py-6">
+          {!countdown ? (
+            <div className="flex justify-center py-4">
+              <Loader2 className="size-6 animate-spin text-muted-foreground" />
+            </div>
+          ) : countdown.arrived ? (
+            <p className="text-center text-2xl font-bold tracking-tight">
+              The baby is here!
+            </p>
+          ) : (
+            <div className="flex justify-around text-center">
+              {[
+                { value: countdown.days, label: "days" },
+                { value: countdown.hours, label: "hours" },
+                { value: countdown.minutes, label: "min" },
+                { value: countdown.seconds, label: "sec" },
+              ].map(({ value, label }) => (
+                <div key={label} className="space-y-1">
+                  <div className="text-4xl font-bold font-mono tabular-nums tracking-tight">
+                    {String(value).padStart(2, "0")}
+                  </div>
+                  <div className="text-xs text-muted-foreground uppercase tracking-wider">
+                    {label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       <div className="space-y-6">
         {/* Gender Prediction */}
