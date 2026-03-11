@@ -10,7 +10,7 @@ export default function UsesLayout({
   return (
     <section className="mx-auto w-full max-w-2xl space-y-8 print:space-y-6 mb-8">
       <Link href="/uses">
-        <h1 className="font-bold text-2xl font-serif mb-5">Uses</h1>
+        <h1 className="font-bold text-3xl tracking-tight mb-5">Uses</h1>
       </Link>
       <div className="flex-col items-center justify-center">
         <UsesNav />

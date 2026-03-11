@@ -1,36 +1,36 @@
+import { UsesItem, UsesList } from "@/components/uses-item";
+
 export default function DeskPage() {
   return (
     <div>
-      <ul>
-        <li>&#9657; Xiaomi Curved 34" screen</li>
-        <li>&#9657; Ikea Bekant standing desk</li>
-        <li>&#9657; Ikea Styrspel chair</li>
-        <li>&#9657; Monitor stand, I think it's Ikea</li>
-        <li>&#9657; Apple Magic track pad</li>
-        <li>&#9657; Xiaomi desk lamp</li>
-        <li>&#9657; Yeelight LED strip</li>
-        <li>&#9657; Xiaomi wireless charging pad</li>
-        <li>&#9657; Anker prime USB hub</li>
-        <li>&#9657; Obsbot meet 2 webcam</li>
-        <li>&#9657; No name vertical laptop stand from amazon</li>
-        <li>&#9657; Logitech speakers</li>
-        <li>&#9657; Seagate 4TB hard drive</li>
-      </ul>
-      <div className="mt-3 text-neutral-500">
+      <UsesList>
+        <UsesItem name="Xiaomi Curved 34&quot; screen" description="Ultrawide monitor" />
+        <UsesItem name="Ikea Bekant" href="https://www.ikea.com/us/en/cat/bekant-system-18702/" description="Standing desk" />
+        <UsesItem name="Ikea Styrspel" href="https://www.ikea.com/us/en/p/styrspel-gaming-chair-dark-gray-gray-20508089/" description="Chair" />
+        <UsesItem name="Apple Magic Trackpad" href="https://www.apple.com/shop/product/MK2C3LL/A/magic-trackpad-black-multi-touch-surface" />
+        <UsesItem name="Xiaomi desk lamp" />
+        <UsesItem name="Yeelight LED strip" href="https://www.yeelight.com" description="Ambient lighting" />
+        <UsesItem name="Xiaomi wireless charging pad" />
+        <UsesItem name="Anker Prime USB hub" href="https://www.anker.com/products/anker-prime" description="The heart of the setup" />
+        <UsesItem name="Obsbot Meet 2" href="https://www.obsbot.com/obsbot-meet-2" description="Webcam" />
+        <UsesItem name="Vertical laptop stand" description="No name, from Amazon" />
+        <UsesItem name="Logitech speakers" />
+        <UsesItem name="Seagate 4TB hard drive" href="https://www.seagate.com" description="External storage" />
+      </UsesList>
+      <div className="mt-6 text-muted-foreground space-y-2 text-sm leading-relaxed">
         <p>
           This is most of the stuff that I have always on my desk. I'm pretty
           happy with the setup.
         </p>
         <p>
-          I like to use only one screen and the 32" curved one has been working
+          I like to use only one screen and the 34&quot; curved one has been working
           well!
         </p>
         <p>
-          The Anker prime usb hub is the heart of it, it powers my laptop, it
-          provides sound to the speakers, it's connected to the webcam, and I
-          use it charge my stuff.
+          The Anker Prime USB hub is the heart of it — it powers my laptop,
+          provides sound to the speakers, connects to the webcam, and I
+          use it to charge my stuff.
         </p>
-        <p>However, I think the desk is a bit too big 🤷🏼‍♂️. </p>
       </div>
     </div>
   );

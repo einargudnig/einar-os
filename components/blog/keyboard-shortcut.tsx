@@ -17,7 +17,7 @@ export function KeyboardShortcut({
       <div className="flex items-center gap-1">
         {keys.map((key, index) => (
           <React.Fragment key={index}>
-            <kbd className="px-2 py-1 font-mono text-xs font-semibold text-neutral-900 bg-neutral-100 border border-neutral-200 rounded shadow-sm dark:bg-neutral-800 dark:text-neutral-100 dark:border-neutral-700">
+            <kbd className="px-2 py-1 font-mono text-xs font-semibold text-foreground bg-muted border border-border rounded shadow-sm">
               {key}
             </kbd>
             {index < keys.length - 1 && <span className="mx-1">+</span>}
@@ -25,7 +25,7 @@ export function KeyboardShortcut({
         ))}
       </div>
       {description && (
-        <span className="ml-3 text-neutral-400">{description}</span>
+        <span className="ml-3 text-muted-foreground">{description}</span>
       )}
     </div>
   );

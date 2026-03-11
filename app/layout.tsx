@@ -34,7 +34,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="dark">
           <ConvexClientProvider>
-            <main className="container relative mx-auto mt-8 overflow-auto p-2">
+            <main className="relative mx-auto mt-8 max-w-4xl overflow-auto px-6 md:px-8">
               <Navbar />
               {children}
               <Analytics />

@@ -52,23 +52,23 @@ export function FileTree({
         <div
           className={cn(
             "flex items-center py-1",
-            isFolder && "cursor-pointer hover:bg-neutral-900/20 rounded",
+            isFolder && "cursor-pointer hover:bg-muted/50 rounded",
           )}
           onClick={() => isFolder && toggleItem(currentPath)}
         >
           {isFolder ? (
             <>
               {isExpanded ? (
-                <ChevronDown className="h-4 w-4 mr-1 text-neutral-400" />
+                <ChevronDown className="h-4 w-4 mr-1 text-muted-foreground" />
               ) : (
-                <ChevronRight className="h-4 w-4 mr-1 text-neutral-400" />
+                <ChevronRight className="h-4 w-4 mr-1 text-muted-foreground" />
               )}
-              <Folder className="h-4 w-4 mr-2 text-blue-500" />
+              <Folder className="h-4 w-4 mr-2 text-brand" />
             </>
           ) : (
             <>
               <span className="w-4 mr-1" />
-              <File className="h-4 w-4 mr-2 text-neutral-400" />
+              <File className="h-4 w-4 mr-2 text-muted-foreground" />
             </>
           )}
           <span className="text-sm">{item.name}</span>
@@ -88,7 +88,7 @@ export function FileTree({
   return (
     <div
       className={cn(
-        "my-4 p-3 bg-neutral-900/30 rounded-md border border-neutral-800",
+        "my-4 p-3 bg-muted/30 rounded-md border border-border",
         className,
       )}
     >

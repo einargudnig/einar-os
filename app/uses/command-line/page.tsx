@@ -1,22 +1,22 @@
+import { UsesItem, UsesList } from "@/components/uses-item";
+
 export default function CommandLinePage() {
   return (
-    <div>
-      <ul>
-        <li>&#9657; Tmux</li>
-        <li>&#9657; Neovim</li>
-        <li>&#9657; Lazygit</li>
-        <li>&#9657; fzf</li>
-        <li>&#9657; eza</li>
-        <li>&#9657; zoxide</li>
-        <li>&#9657; yazi</li>
-        <li>&#9657; atuin</li>
-        <li>&#9657; homebrew</li>
-        <li>&#9657; bat</li>
-        <li>&#9657; ripgrep</li>
-        <li>&#9657; fd</li>
-        <li>&#9657; btop</li>
-        <li>&#9657; jq</li>
-      </ul>
-    </div>
+    <UsesList>
+      <UsesItem name="Tmux" href="https://github.com/tmux/tmux" description="Terminal multiplexer" />
+      <UsesItem name="Neovim" href="https://neovim.io" description="Hyperextensible text editor" />
+      <UsesItem name="Lazygit" href="https://github.com/jesseduffield/lazygit" description="Terminal UI for git" />
+      <UsesItem name="fzf" href="https://github.com/junegunn/fzf" description="Fuzzy finder" />
+      <UsesItem name="eza" href="https://github.com/eza-community/eza" description="Modern ls replacement" />
+      <UsesItem name="zoxide" href="https://github.com/ajeetdsouza/zoxide" description="Smarter cd" />
+      <UsesItem name="yazi" href="https://github.com/sxyazi/yazi" description="Terminal file manager" />
+      <UsesItem name="atuin" href="https://atuin.sh" description="Shell history sync" />
+      <UsesItem name="homebrew" href="https://brew.sh" description="Package manager for macOS" />
+      <UsesItem name="bat" href="https://github.com/sharkdp/bat" description="cat with syntax highlighting" />
+      <UsesItem name="ripgrep" href="https://github.com/BurntSushi/ripgrep" description="Fast search tool" />
+      <UsesItem name="fd" href="https://github.com/sharkdp/fd" description="Fast find alternative" />
+      <UsesItem name="btop" href="https://github.com/aristocratos/btop" description="Resource monitor" />
+      <UsesItem name="jq" href="https://jqlang.github.io/jq/" description="JSON processor" />
+    </UsesList>
   );
 }

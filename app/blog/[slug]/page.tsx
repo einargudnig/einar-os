@@ -21,16 +21,18 @@ export default async function BlogPost({ params }: BlogPostParams) {
 
   return (
     <section className="mx-auto w-full max-w-2xl space-y-8 print:space-y-6">
-      <h1 className="font-bold text-3xl font-serif max-w-[650px]">
-        <Balancer>{post.title}</Balancer>
-      </h1>
-      <div className="grid grid-cols-[auto_1fr_auto] items-center mt-4 mb-8 font-mono text-sm max-w-[650px]">
-        <div className="bg-neutral-800 rounded-md px-2 py-1 tracking-tighter">
-          {formatBlogDate(post.date)}
+      <div>
+        <h1 className="font-bold text-3xl md:text-4xl tracking-tight max-w-[650px] leading-tight">
+          <Balancer>{post.title}</Balancer>
+        </h1>
+        <div className="flex items-center gap-3 mt-4 mb-8">
+          <div className="font-mono text-sm text-muted-foreground tabular-nums tracking-tighter">
+            {formatBlogDate(post.date)}
+          </div>
+          <div className="h-px flex-1 bg-border/50" />
         </div>
-        <div className="h-[0.2em] bg-neutral-800 mx-2" />
       </div>
-      <article className="prose prose-invert">
+      <article className="prose dark:prose-invert max-w-[65ch] leading-relaxed">
         <MDXContent code={post.code} draft={post.draft} />
       </article>
     </section>

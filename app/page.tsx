@@ -1,14 +1,41 @@
 import { Section } from "@/components/section";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ProjectCard } from "@/components/project-card";
+import { GitHubContributions } from "@/components/github-contributions";
 import { GlobeIcon } from "lucide-react";
 import Link from "next/link";
+
+const projects = [
+  {
+    title: "jstop",
+    description:
+      "A terminal-based system monitor built in JavaScript. Like htop, but for your Node.js toolkit.",
+    href: "https://github.com/einargudnig/jstop",
+    tags: ["Node.js", "CLI", "Terminal"],
+  },
+  {
+    title: "ts-mini",
+    description:
+      "Interactive visualization of the TypeScript compiler pipeline. Explore how code gets scanned, parsed, and emitted.",
+    href: "/ts-mini",
+    tags: ["TypeScript", "React", "Shiki"],
+    external: false,
+  },
+  {
+    title: "dotfiles",
+    description:
+      "My personal development environment. Neovim, tmux, zsh, and macOS configuration managed with care.",
+    href: "https://github.com/einargudnig/dotfiles",
+    tags: ["Neovim", "Zsh", "macOS"],
+  },
+  {
+    title: "einar-os",
+    description:
+      "This site. Built with Next.js 16, Velite for MDX content, and Tailwind v4. Deployed on Vercel.",
+    href: "https://github.com/einargudnig/einar-os",
+    tags: ["Next.js", "MDX", "Tailwind"],
+  },
+];
 
 export default function Home() {
   const work = [
@@ -53,17 +80,17 @@ export default function Home() {
   ];
 
   return (
-    <section className="mx-auto w-full max-w-2xl spacy-y-8">
-      <div className="flex items-center justify-between">
-        <div className="flex-1 space-y-1.5">
-          <h1 className="md:text-3xl font-bold">Einar Gudni</h1>
-          <p className="flex max-w-md text-md text-foreground ">
-            <span className="italics font-bold">Curious</span>, Tinkerer, Late
+    <section className="mx-auto w-full space-y-8">
+      <div className="grid md:grid-cols-[2fr_1fr] gap-8 items-end">
+        <div className="space-y-3 stagger-list">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tighter leading-none">Einar Gudni</h1>
+          <p className="max-w-[65ch] text-lg text-muted-foreground leading-relaxed">
+            <span className="italic font-semibold text-foreground">Curious</span>, Tinkerer, Late
             bloomer & Nerd
           </p>
-          <p className="max-w-md items-center text-pretty font-mono text-xs text-muted-foreground">
+          <p className="items-center text-pretty font-mono text-xs text-muted-foreground">
             <a
-              className="inline-flex gap-x-1.5 align-baseline leading-none hover:underline"
+              className="inline-flex gap-x-1.5 align-baseline leading-none hover:text-brand transition-colors"
               href="https://www.google.com/maps/place/Reykjavík"
               target="_blank"
               rel="noreferrer"
@@ -76,113 +103,106 @@ export default function Home() {
       </div>
       <Section className="mt-4">
         <div className="flex items-center justify-between">
-          <div className="group">
-            <Link href="/about" className="group-hover:underline text-lg">
+          <Link href="/about" className="group rounded-md px-4 py-3 -mx-4 transition-colors hover:bg-muted/50">
+            <p className="text-lg font-medium group-hover:text-brand transition-colors">
               About
-            </Link>
-            <p className="text-muted-foreground group-hover:underline">
+            </p>
+            <p className="text-sm text-muted-foreground">
               Who, What, Why
             </p>
-          </div>
-          <div className="group">
-            <Link href="/now" className="group-hover:underline text-lg">
+          </Link>
+          <Link href="/now" className="group rounded-md px-4 py-3 -mx-4 transition-colors hover:bg-muted/50">
+            <p className="text-lg font-medium group-hover:text-brand transition-colors">
               Now
-            </Link>
-            <p className="text-muted-foreground group-hover:underline">
+            </p>
+            <p className="text-sm text-muted-foreground">
               Short-term focus
             </p>
-          </div>
-          <div className="group">
-            <Link href="/someday" className="group-hover:underline text-lg">
+          </Link>
+          <Link href="/someday" className="group rounded-md px-4 py-3 -mx-4 transition-colors hover:bg-muted/50">
+            <p className="text-lg font-medium group-hover:text-brand transition-colors">
               Someday
-            </Link>
-            <p className="text-muted-foreground group-hover:underline">
+            </p>
+            <p className="text-sm text-muted-foreground">
               Long-term focus
             </p>
-          </div>
+          </Link>
         </div>
       </Section>
 
       <Section className="mt-4">
-        <div className="flex items-baseline">
+        <div className="flex items-baseline justify-between">
           <h2 className="text-xl font-bold">Newest Writing</h2>
-          <p className="ml-2">
-            -&gt;{" "}
-            <Link href="/blog" className="hover:underline">
-              all writing
-            </Link>
-          </p>
+          <Link href="/blog" className="text-sm text-muted-foreground hover:text-brand transition-colors">
+            all writing &rarr;
+          </Link>
         </div>
-        <Card>
-          <CardHeader>
-            <div className="flex justify-between items-center">
-              <p className="font-semibold text-lg">keyboard</p>
-              <p className="font-mono text-sm text-muted-foreground">
-                08 june 2025
+        <Link href="/blog/keyboard" className="group block border-t border-border/50 pt-4">
+          <div className="flex justify-between items-start">
+            <div className="space-y-1.5">
+              <p className="font-semibold text-lg group-hover:text-brand transition-colors">keyboard</p>
+              <p className="text-muted-foreground leading-relaxed max-w-[65ch]">
+                I like writing on a good keyboard! This is a post about my daily
+                driver that I have at home! I have made some updates and even
+                though I say it myself it looks and feels great!
               </p>
             </div>
-          </CardHeader>
-          <CardContent>
-            <p className="mb-4">
-              I like writing on a good keyboard! This is a post about my daily
-              driver that I have at home! I have made some updates and even
-              though I say it myself it looks and feels great! Check out the
-              updates, the photos and the image
+            <p className="font-mono text-sm tabular-nums text-muted-foreground shrink-0 ml-4">
+              08 june 2025
             </p>
-          </CardContent>
-          <CardFooter>
-            <div className="flex justify-end">
-              <Link href="/blog/keyboard">
-                <Button variant="outline">Read post</Button>
-              </Link>
-            </div>
-          </CardFooter>
-        </Card>
+          </div>
+        </Link>
+      </Section>
+
+      <Section className="mt-4">
+        <h2 className="text-xl font-bold">Projects</h2>
+        <div className="grid md:grid-cols-2 gap-3 stagger-list">
+          {projects.map((project) => (
+            <ProjectCard key={project.title} {...project} />
+          ))}
+        </div>
+      </Section>
+
+      <Section className="mt-4">
+        <h2 className="text-xl font-bold">Activity</h2>
+        <GitHubContributions username="einargudnig" />
       </Section>
 
       <Section className="mt-4">
         <h2 className="text-xl font-bold">Work Experience</h2>
-        {work.map((work) => {
-          return (
-            <Card key={work.company}>
-              <CardHeader>
-                <div className="flex items-center justify-between gap-x-2 text-base">
-                  <h3 className="inline-flex items-center justify-center gap-x-1 font-semibold leading-none">
-                    <a className="hover:underline" href={work.link}>
-                      {work.company}
-                    </a>
-
-                    <span className="inline-flex gap-x-1">
-                      {work.badges.map((badge) => (
-                        <Badge
-                          variant="secondary"
-                          className="align-middle text-xs"
-                          key={badge}
-                        >
-                          {badge}
-                        </Badge>
-                      ))}
-                    </span>
-                  </h3>
-                  <div className="text-sm tabular-nums text-muted-foreground">
-                    {work.start} - {work.end}
-                  </div>
-                </div>
-
-                <h4 className="font-mono text-sm leading-none">{work.title}</h4>
-              </CardHeader>
-              <CardFooter>
-                <div className="mt-2 flex flex-wrap gap-1">
-                  {work.stack.map((tag) => (
-                    <Badge key={tag} variant="outline" className="mr-1">
-                      {tag}
+        <div className="divide-y divide-border/50 stagger-list">
+          {work.map((job) => (
+            <div key={job.company} className="py-4 first:pt-0">
+              <div className="flex items-center justify-between gap-x-2 text-base">
+                <h3 className="inline-flex items-center gap-x-2 font-semibold leading-none">
+                  <a className="hover:text-brand transition-colors" href={job.link}>
+                    {job.company}
+                  </a>
+                  {job.badges.map((badge) => (
+                    <Badge
+                      variant="secondary"
+                      className="text-xs"
+                      key={badge}
+                    >
+                      {badge}
                     </Badge>
                   ))}
+                </h3>
+                <div className="text-sm font-mono tabular-nums text-muted-foreground">
+                  {job.start} - {job.end}
                 </div>
-              </CardFooter>
-            </Card>
-          );
-        })}
+              </div>
+              <p className="font-mono text-sm text-muted-foreground mt-1">{job.title}</p>
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {job.stack.map((tag) => (
+                  <Badge key={tag} variant="outline">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </Section>
     </section>
   );

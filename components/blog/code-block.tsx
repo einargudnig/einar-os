@@ -62,9 +62,9 @@ export function CodeBlock({
   };
 
   return (
-    <div className="relative my-6 overflow-hidden rounded-lg border border-[#313244]">
+    <div className="relative my-6 overflow-hidden rounded-lg border border-border bg-muted/30">
       {filename && (
-        <div className="border-b border-[#313244] bg-[#1e1e2e] px-4 py-2 text-sm font-medium text-[#cdd6f4]">
+        <div className="border-b border-border bg-muted px-4 py-2 text-sm font-medium text-muted-foreground">
           {filename}
         </div>
       )}
@@ -98,17 +98,17 @@ export function CodeBlock({
           dangerouslySetInnerHTML={{ __html: highlightedCode }}
         />
         {language && (
-          <div className="absolute right-2 top-2 text-xs font-medium text-[#7f849c]">
+          <div className="absolute right-2 top-2 text-xs font-medium text-muted-foreground/60">
             {language.toUpperCase()}
           </div>
         )}
         <button
           onClick={copyToClipboard}
-          className="absolute bottom-2 right-2 rounded bg-[#313244] p-1 text-[#cdd6f4] hover:bg-[#45475a]"
+          className="absolute bottom-2 right-2 rounded bg-muted p-1.5 text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-colors active:scale-[0.95]"
           aria-label="Copy code to clipboard"
         >
           {copied ? (
-            <CheckIcon className="h-4 w-4 text-[#a6e3a1]" />
+            <CheckIcon className="h-4 w-4 text-brand" />
           ) : (
             <ClipboardIcon className="h-4 w-4" />
           )}

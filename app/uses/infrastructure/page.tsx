@@ -1,28 +1,28 @@
+import { UsesItem, UsesList } from "@/components/uses-item";
+
 export default function InfraPage() {
   return (
-    <div>
-      <ul>
-        <li>&#9657; wezterm</li>
-        <li>&#9657; ghostty</li>
-        <li>&#9657; zsh</li>
-        <li>&#9657; Raycast</li>
-        <li>&#9657; Obsidian</li>
-        <li>&#9657; Things 3</li>
-        <li>&#9657; Spark</li>
-        <li>&#9657; Arc</li>
-        <li>&#9657; Notion Calendar</li>
-        <li>&#9657; Cursor</li>
-        <li>&#9657; Bruno</li>
-        <li>&#9657; Insomnia</li>
-        <li>&#9657; 1Password</li>
-        <li>&#9657; CleanshotX</li>
-        <li>&#9657; Rectangle pro</li>
-        <li>&#9657; homerow.app</li>
-        <li>&#9657; Vimium</li>
-        <li>&#9657; karabiner</li>
-        <li>&#9657; cold turkey</li>
-        <li>&#9657; Toggl</li>
-      </ul>
-    </div>
+    <UsesList>
+      <UsesItem name="Ghostty" href="https://ghostty.org" description="GPU-accelerated terminal" />
+      <UsesItem name="WezTerm" href="https://wezfurlong.org/wezterm/" description="Terminal emulator" />
+      <UsesItem name="Zsh" href="https://www.zsh.org" description="Shell" />
+      <UsesItem name="Raycast" href="https://raycast.com" description="Launcher and productivity tool" />
+      <UsesItem name="Obsidian" href="https://obsidian.md" description="Knowledge base and notes" />
+      <UsesItem name="Things 3" href="https://culturedcode.com/things/" description="Task manager" />
+      <UsesItem name="Spark" href="https://sparkmailapp.com" description="Email client" />
+      <UsesItem name="Arc" href="https://arc.net" description="Browser" />
+      <UsesItem name="Notion Calendar" href="https://www.notion.so/product/calendar" description="Calendar" />
+      <UsesItem name="Cursor" href="https://cursor.com" description="AI code editor" />
+      <UsesItem name="Bruno" href="https://www.usebruno.com" description="API client" />
+      <UsesItem name="Insomnia" href="https://insomnia.rest" description="API client" />
+      <UsesItem name="1Password" href="https://1password.com" description="Password manager" />
+      <UsesItem name="CleanShot X" href="https://cleanshot.com" description="Screenshot tool" />
+      <UsesItem name="Rectangle Pro" href="https://rectangleapp.com/pro" description="Window management" />
+      <UsesItem name="Homerow" href="https://www.homerow.app" description="Keyboard navigation for macOS" />
+      <UsesItem name="Vimium" href="https://vimium.github.io" description="Vim keybindings for the browser" />
+      <UsesItem name="Karabiner-Elements" href="https://karabiner-elements.pqrs.org" description="Keyboard customizer" />
+      <UsesItem name="Cold Turkey" href="https://getcoldturkey.com" description="Website blocker" />
+      <UsesItem name="Toggl" href="https://toggl.com" description="Time tracking" />
+    </UsesList>
   );
 }

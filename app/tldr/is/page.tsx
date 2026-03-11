@@ -6,7 +6,7 @@ export default function IsPage() {
   return (
     <section className="mx-auto w-full max-w-2xl space-y-8 print:space-y-6 mb-8">
       <div className="flex items-center justify-between">
-        <h1 className="font-semibold text-2xl font-serif">Hæhæ!</h1>
+        <h1 className="font-semibold text-2xl tracking-tight">Hæhæ!</h1>
         <Image
           src={avatar}
           alt="Einar Gudni"

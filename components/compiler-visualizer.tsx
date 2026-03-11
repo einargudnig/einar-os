@@ -295,9 +295,9 @@ export function CompilerVisualizer() {
       </div>
 
       {/* Stage Description */}
-      <div className="rounded-lg border border-neutral-800 bg-neutral-900/50 p-6">
+      <div className="rounded-lg border border-border bg-muted/30 p-6">
         <h3 className="font-bold text-xl mb-2">{stage.name}</h3>
-        <p className="text-neutral-300">{stage.description}</p>
+        <p className="text-muted-foreground">{stage.description}</p>
       </div>
 
       {/* Code Display */}
@@ -390,7 +390,7 @@ export function CompilerVisualizer() {
           </Button>
         </div>
 
-        <div className="text-sm text-neutral-400">
+        <div className="text-sm text-muted-foreground">
           Stage {currentStage + 1} of {stages.length}
         </div>
       </div>

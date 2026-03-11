@@ -5,15 +5,15 @@ export default function TypeScriptMiniPage() {
   return (
     <section className="mx-auto w-full max-w-4xl space-y-8 print:space-y-6">
       <div className="space-y-4">
-        <h1 className="font-bold text-3xl font-serif">
+        <h1 className="font-bold text-3xl tracking-tight">
           <Balancer>How the TypeScript Compiler Works</Balancer>
         </h1>
-        <p className="text-neutral-400 text-lg">
+        <p className="text-muted-foreground text-lg">
           An interactive exploration of the TypeScript compilation pipeline,
           inspired by{" "}
           <a
             href="https://github.com/sandersn/mini-typescript"
-            className="text-blue-400 hover:text-blue-300 underline"
+            className="text-brand hover:text-brand/80 underline underline-offset-2"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -23,7 +23,7 @@ export default function TypeScriptMiniPage() {
         </p>
       </div>
 
-      <div className="prose prose-invert max-w-none">
+      <div className="prose dark:prose-invert max-w-none">
         <p>
           The TypeScript compiler is a sophisticated piece of software that
           transforms TypeScript code into JavaScript while checking for type
@@ -39,7 +39,7 @@ export default function TypeScriptMiniPage() {
 
       <CompilerVisualizer />
 
-      <div className="prose prose-invert max-w-none">
+      <div className="prose dark:prose-invert max-w-none">
         <h2>The Compilation Pipeline</h2>
 
         <h3>1. Scanner (Lexical Analysis)</h3>

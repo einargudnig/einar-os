@@ -11,23 +11,27 @@ export default function Page() {
   );
 
   return (
-    <section className="mx-auto w-full max-w-2xl space-y-8 print:space-y-6 mb-8">
-      <h1 className="font-bold text-2xl font-serif mb-5">Blog</h1>
+    <section className="mx-auto w-full space-y-8 print:space-y-6 mb-8">
+      <h1 className="font-bold text-3xl tracking-tight mb-5">Blog</h1>
 
-      <div className="grid">
+      <div className="grid stagger-list">
+        {sortedPosts.length === 0 && (
+          <div className="py-16 text-center">
+            <p className="text-lg text-muted-foreground">No posts yet.</p>
+            <p className="text-sm text-muted-foreground/60 mt-1">Check back soon.</p>
+          </div>
+        )}
         {sortedPosts.map((post) => (
-          <div key={post.slug} className="p-2">
+          <div key={post.slug} className="group border-b border-border/50 last:border-b-0">
             <h2 className="text-lg">
               <Link
                 href={`/blog/${post.slug}`}
-                className="text-neutral-500 hover:text-neutral-400"
+                className="flex items-center justify-between py-3 px-2 -mx-2 rounded-md transition-colors hover:bg-muted/50"
               >
-                <div className="flex items-center justify-between">
-                  <p className="hover:underline mr-1">{post.title}</p>
-                  <p className="ml-1 text-sm text-neutral-600">
-                    {formatBlogDate(post.date)}
-                  </p>
-                </div>
+                <p className="text-foreground group-hover:text-brand transition-colors mr-1">{post.title}</p>
+                <p className="ml-1 text-sm font-mono tabular-nums text-muted-foreground shrink-0">
+                  {formatBlogDate(post.date)}
+                </p>
               </Link>
             </h2>
           </div>

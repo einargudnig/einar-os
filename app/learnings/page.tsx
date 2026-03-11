@@ -3,7 +3,6 @@ import { learnings } from "@/.velite";
 import { MDXContent } from "@/components/mdx-content";
 import { formatBlogDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 
 export default function Page() {
   const sorted = [...learnings].sort(
@@ -12,18 +11,18 @@ export default function Page() {
 
   return (
     <section className="mx-auto w-full max-w-2xl space-y-10 print:space-y-8 mb-8">
-      <h1 className="font-bold text-2xl font-serif mb-5">Notes</h1>
+      <h1 className="font-bold text-3xl tracking-tight mb-5">Notes</h1>
 
-      <div className="space-y-16">
+      <div className="divide-y divide-border/50 stagger-list">
         {sorted.map((item) => (
-          <div key={`${item.topic}-${item.date}`}>
-            <article className="prose prose-invert mb-3">
+          <div key={`${item.topic}-${item.date}`} className="py-8 first:pt-0">
+            <article className="prose dark:prose-invert mb-3">
               <header className="mb-4">
                 <h2 className="text-xl font-semibold">{item.title}</h2>
-                <div className="text-sm text-neutral-500 flex items-center gap-2">
-                  <span>{item.topic}</span>
-                  <span className="mx-2">·</span>
-                  <time dateTime={item.date}>{formatBlogDate(item.date)}</time>
+                <div className="text-sm text-muted-foreground flex items-center gap-2">
+                  <span className="text-brand font-mono">{item.topic}</span>
+                  <span>·</span>
+                  <time className="font-mono tabular-nums" dateTime={item.date}>{formatBlogDate(item.date)}</time>
                   {item.deepDiveSlug && (
                     <Link
                       href={`/deep-dive/${item.deepDiveSlug}`}
@@ -40,7 +39,6 @@ export default function Page() {
                 <MDXContent code={item.code} enableTableOfContents={false} />
               ) : null}
             </article>
-            <Separator />
           </div>
         ))}
       </div>

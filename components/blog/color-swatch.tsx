@@ -28,7 +28,7 @@ export function ColorSwatch({
         <div key={index} className="flex flex-col items-center">
           <div
             className={cn(
-              "rounded-md shadow-md border border-neutral-200 dark:border-neutral-800",
+              "rounded-md shadow-md border border-border",
               sizeClasses[size],
             )}
             style={{ backgroundColor: color.color }}
@@ -38,7 +38,7 @@ export function ColorSwatch({
             <div className="mt-2 text-xs text-center">
               {color.label && <div className="font-medium">{color.label}</div>}
               {color.value && (
-                <div className="text-neutral-500 dark:text-neutral-400">
+                <div className="text-muted-foreground">
                   {color.value}
                 </div>
               )}

@@ -3,10 +3,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 export default function ResolutionsPage() {
   return (
     <section className="mx-auto w-full max-w-2xl space-y-8 print:space-y-6 mb-8">
-      <h1 className="font-semibold text-2xl font-serif">Resolutions</h1>
+      <h1 className="font-semibold text-2xl tracking-tight">Resolutions</h1>
 
-      <div className="prose prose-neutral dark:prose-invert text-neutral-200">
-        <p className="text-neutral-500 text-lg font-mono">2026</p>
+      <div className="prose prose-neutral dark:prose-invert">
+        <p className="text-brand text-lg font-mono">2026</p>
         <ul className="mt-4">
           <li className="flex items-center gap-2">
             <Checkbox disabled />

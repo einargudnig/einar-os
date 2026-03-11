@@ -9,6 +9,7 @@ import { Callout } from "./blog/callout";
 import { TableOfContents } from "./blog/table-of-contents";
 import { CardLink, ReadMoreLink, ResourceLink } from "./blog/link-components";
 import { VideoEmbed } from "./blog/video-embed";
+import { YouTubeEmbed } from "./blog/youtube-embed";
 import { Accordion, AccordionItem, Tabs } from "./blog/interactive-elements";
 import { StylishList, StylishListItem } from "./blog/stylish-list";
 import { CaptionedImage } from "./blog/captioned-image";
@@ -165,6 +166,7 @@ const sharedComponents: Record<string, ComponentType<any>> = {
 
   // Media components
   VideoEmbed,
+  YouTubeEmbed,
   CaptionedImage,
 
   // Interactive components
@@ -217,7 +219,7 @@ export const MDXContent = ({
       {draft && (
         <div className="mb-6">
           <Alert>
-            <AlertTitle>🚧 Under construction 🚧</AlertTitle>
+            <AlertTitle>Under construction</AlertTitle>
             <AlertDescription>This post is not finished!</AlertDescription>
           </Alert>
         </div>

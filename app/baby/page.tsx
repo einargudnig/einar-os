@@ -108,8 +108,8 @@ export default function BabyPage() {
   return (
     <section className="mx-auto w-full max-w-2xl space-y-8 mb-8">
       <div className="flex items-center gap-3">
-        <Baby className="size-8 text-neutral-400" />
-        <h1 className="font-semibold text-2xl font-serif">
+        <Baby className="size-8 text-muted-foreground" />
+        <h1 className="font-semibold text-2xl tracking-tight">
           Baby Prediction Market
         </h1>
       </div>
@@ -132,7 +132,7 @@ export default function BabyPage() {
           <CardContent className="space-y-4">
             {isLoading ? (
               <div className="flex justify-center py-8">
-                <Loader2 className="size-8 animate-spin text-neutral-400" />
+                <Loader2 className="size-8 animate-spin text-muted-foreground" />
               </div>
             ) : (
               <>
@@ -141,8 +141,8 @@ export default function BabyPage() {
                     <div className="text-4xl font-bold text-blue-500">
                       {boyPercentage}%
                     </div>
-                    <div className="text-sm text-neutral-500">Boy</div>
-                    <div className="text-xs text-neutral-600">
+                    <div className="text-sm text-muted-foreground">Boy</div>
+                    <div className="text-xs text-muted-foreground/60">
                       {genderTotals?.boy || 0} votes
                     </div>
                   </div>
@@ -150,8 +150,8 @@ export default function BabyPage() {
                     <div className="text-4xl font-bold text-pink-500">
                       {girlPercentage}%
                     </div>
-                    <div className="text-sm text-neutral-500">Girl</div>
-                    <div className="text-xs text-neutral-600">
+                    <div className="text-sm text-muted-foreground">Girl</div>
+                    <div className="text-xs text-muted-foreground/60">
                       {genderTotals?.girl || 0} votes
                     </div>
                   </div>
@@ -207,7 +207,7 @@ export default function BabyPage() {
           <CardContent className="space-y-4">
             {isLoading ? (
               <div className="flex justify-center py-8">
-                <Loader2 className="size-8 animate-spin text-neutral-400" />
+                <Loader2 className="size-8 animate-spin text-muted-foreground" />
               </div>
             ) : (
               <>
@@ -216,8 +216,8 @@ export default function BabyPage() {
                     <div className="text-4xl font-bold text-amber-500">
                       {beforePercentage}%
                     </div>
-                    <div className="text-sm text-neutral-500">Before</div>
-                    <div className="text-xs text-neutral-600">
+                    <div className="text-sm text-muted-foreground">Before</div>
+                    <div className="text-xs text-muted-foreground/60">
                       {arrivalTotals?.before || 0} votes
                     </div>
                   </div>
@@ -225,8 +225,8 @@ export default function BabyPage() {
                     <div className="text-4xl font-bold text-emerald-500">
                       {afterPercentage}%
                     </div>
-                    <div className="text-sm text-neutral-500">After</div>
-                    <div className="text-xs text-neutral-600">
+                    <div className="text-sm text-muted-foreground">After</div>
+                    <div className="text-xs text-muted-foreground/60">
                       {arrivalTotals?.after || 0} votes
                     </div>
                   </div>
@@ -282,11 +282,11 @@ export default function BabyPage() {
           <CardContent className="space-y-4">
             {isLoading ? (
               <div className="flex justify-center py-8">
-                <Loader2 className="size-8 animate-spin text-neutral-400" />
+                <Loader2 className="size-8 animate-spin text-muted-foreground" />
               </div>
             ) : (
               <>
-                <p className="text-xs text-neutral-500 text-center">
+                <p className="text-xs text-muted-foreground text-center">
                   Average newborn weight: ~3.5 kg (7.7 lbs)
                 </p>
                 <div className="flex justify-around text-center">
@@ -294,8 +294,8 @@ export default function BabyPage() {
                     <div className="text-4xl font-bold text-violet-500">
                       {overPercentage}%
                     </div>
-                    <div className="text-sm text-neutral-500">Over</div>
-                    <div className="text-xs text-neutral-600">
+                    <div className="text-sm text-muted-foreground">Over</div>
+                    <div className="text-xs text-muted-foreground/60">
                       {weightTotals?.over || 0} votes
                     </div>
                   </div>
@@ -303,8 +303,8 @@ export default function BabyPage() {
                     <div className="text-4xl font-bold text-orange-500">
                       {underPercentage}%
                     </div>
-                    <div className="text-sm text-neutral-500">Under</div>
-                    <div className="text-xs text-neutral-600">
+                    <div className="text-sm text-muted-foreground">Under</div>
+                    <div className="text-xs text-muted-foreground/60">
                       {weightTotals?.under || 0} votes
                     </div>
                   </div>

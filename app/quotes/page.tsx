@@ -1,7 +1,6 @@
 import { quotes } from "@/.velite";
 import { MDXContent } from "@/components/mdx-content";
 import { formatBlogDate } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
 
 export default function Page() {
   const sorted = [...quotes].sort(
@@ -10,17 +9,17 @@ export default function Page() {
 
   return (
     <section className="mx-auto w-full max-w-2xl space-y-10 print:space-y-8 mb-8">
-      <h1 className="font-bold text-2xl font-serif mb-5">Quotes</h1>
+      <h1 className="font-bold text-3xl tracking-tight mb-5">Quotes</h1>
 
-      <div className="space-y-12">
+      <div className="divide-y divide-border/50 stagger-list">
         {sorted.map((quote, index) => (
-          <div key={`${quote.author}-${quote.date}-${index}`}>
-            <article className="prose prose-invert">
-              <blockquote className="border-l-4 border-neutral-600 pl-4 italic text-lg">
-                "{quote.text}"
+          <div key={`${quote.author}-${quote.date}-${index}`} className="py-8 first:pt-0 last:pb-0">
+            <article>
+              <blockquote className="border-l-2 border-brand pl-4 italic text-lg leading-relaxed max-w-[65ch]">
+                &ldquo;{quote.text}&rdquo;
               </blockquote>
-              <div className="text-sm text-neutral-500 mt-3 flex items-center gap-2">
-                <span className="font-medium text-neutral-400">
+              <div className="text-sm text-muted-foreground mt-3 flex items-center gap-2">
+                <span className="font-medium text-foreground">
                   {quote.author}
                 </span>
                 {quote.source && (
@@ -30,15 +29,14 @@ export default function Page() {
                   </>
                 )}
                 <span className="mx-1">·</span>
-                <time dateTime={quote.date}>{formatBlogDate(quote.date)}</time>
+                <time className="font-mono tabular-nums" dateTime={quote.date}>{formatBlogDate(quote.date)}</time>
               </div>
               {"code" in quote && quote.code ? (
-                <div className="mt-4 text-sm text-neutral-400">
+                <div className="mt-4 text-sm text-muted-foreground">
                   <MDXContent code={quote.code} enableTableOfContents={false} />
                 </div>
               ) : null}
             </article>
-            {index < sorted.length - 1 && <Separator className="mt-8" />}
           </div>
         ))}
       </div>
