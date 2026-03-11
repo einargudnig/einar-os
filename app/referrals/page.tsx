@@ -8,6 +8,12 @@ const referrals = [
     description: "The best macOS productivity app.",
     url: "https://raycast.com/?via=einar",
   },
+  {
+    name: "WHOOP",
+    description:
+      "Get a free WHOOP and one month free when you join with my link.",
+    url: "https://join.whoop.com/11514F27",
+  },
 ];
 
 export default function Page() {
