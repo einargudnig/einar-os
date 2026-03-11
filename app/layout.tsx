@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ConvexClientProvider } from "@/components/convex-provider";
+import { KeyboardNav } from "@/components/keyboard-nav";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -37,6 +38,7 @@ export default function RootLayout({
             <main className="relative mx-auto mt-8 max-w-4xl overflow-auto px-6 md:px-8">
               <Navbar />
               {children}
+              <KeyboardNav />
               <Analytics />
               <SpeedInsights />
             </main>

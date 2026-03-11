@@ -4,6 +4,7 @@ import { Github, Twitter } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { KeyboardHint } from "@/components/keyboard-hint";
 
 const navItems = {
   "/": {
@@ -55,17 +56,18 @@ export function Navbar() {
                 </div>
               </div>
               <div className="flex items-center gap-x-3">
+                <KeyboardHint />
                 <Link
                   href="https://github.com/einargudnig"
                   className="text-muted-foreground hover:text-brand transition-colors"
                 >
-                  <Github size={20} />
+                  <Github size={20} strokeWidth={1.5} />
                 </Link>
                 <Link
                   href="https://x.com/einargudni"
                   className="text-muted-foreground hover:text-brand transition-colors"
                 >
-                  <Twitter size={20} />
+                  <Twitter size={20} strokeWidth={1.5} />
                 </Link>
               </div>
             </div>
