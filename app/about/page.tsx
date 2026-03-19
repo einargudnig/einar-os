@@ -13,7 +13,7 @@ export default function Page() {
           alt="Einar Gudni"
           width={96}
           height={96}
-          className="rounded-full grayscale hover:grayscale-0 transition-all duration-500 shrink-0"
+          className="rounded-full grayscale hover:grayscale-0 transition-[filter] duration-500 ease-[var(--ease-in-out)] shrink-0"
         />
       </div>
       <div className="prose prose-neutral dark:prose-invert">

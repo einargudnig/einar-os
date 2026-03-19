@@ -43,13 +43,16 @@ export function Navbar() {
                         key={path}
                         href={path}
                         className={cn(
-                          "transition-colors flex align-middle relative py-1 px-2 rounded-md",
+                          "transition-colors duration-200 flex align-middle relative py-1 px-2 rounded-md",
                           isActive
                             ? "text-foreground"
                             : "text-muted-foreground hover:text-brand hover:bg-muted/50",
                         )}
                       >
                         {name}
+                        {isActive && (
+                          <span className="absolute bottom-0 left-2 right-2 h-px bg-foreground/60" />
+                        )}
                       </Link>
                     );
                   })}

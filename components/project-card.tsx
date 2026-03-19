@@ -19,14 +19,14 @@ export function ProjectCard({ title, description, href, tags, external = true }:
   return (
     <Wrapper
       {...linkProps}
-      className="group relative flex flex-col justify-between rounded-lg border border-border/50 p-5 transition-all hover:border-brand/30 hover:bg-muted/30"
+      className="group relative flex flex-col justify-between rounded-lg border border-border/50 p-5 transition-[border-color,background-color,transform] duration-200 ease-[var(--ease-out)] hover:border-brand/30 hover:bg-muted/30 hover-lift"
     >
       <div>
         <div className="flex items-center justify-between">
           <h3 className="font-semibold group-hover:text-brand transition-colors">
             {title}
           </h3>
-          <ArrowTopRightIcon className="h-4 w-4 text-muted-foreground opacity-0 -translate-y-0.5 translate-x-0.5 transition-all group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0" />
+          <ArrowTopRightIcon className="h-4 w-4 text-muted-foreground opacity-0 -translate-y-0.5 translate-x-0.5 transition-[opacity,transform] duration-200 ease-[var(--ease-out)] group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0" />
         </div>
         <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
           {description}

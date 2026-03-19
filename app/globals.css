@@ -46,6 +46,11 @@
 }
 
 :root {
+  /* Custom easing curves (Emil Kowalski's design engineering principles) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -164,6 +169,20 @@
   .animate-fade-in-up,
   .stagger-list > * {
     animation: none;
+    opacity: 1;
+  }
+
+  /* Keep opacity transitions (they aid comprehension), remove motion */
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Gate hover transforms behind pointer capability */
+@media (hover: hover) and (pointer: fine) {
+  .hover-lift:hover {
+    transform: translateY(-1px);
   }
 }
 
