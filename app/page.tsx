@@ -11,9 +11,9 @@ const projects = [
   {
     title: "jstop",
     description:
-      "A terminal-based system monitor built in JavaScript. Like htop, but for your Node.js toolkit.",
+      "A macOs menu bar app that monitors node processes. Like htop, but for your Node.js toolkit.",
     href: "https://github.com/einargudnig/jstop",
-    tags: ["Node.js", "CLI", "Terminal"],
+    tags: ["Swift", "macOs"],
   },
   {
     title: "ts-mini",
@@ -46,10 +46,9 @@ const projects = [
   },
   {
     title: "baby",
-    description:
-      "A countdown and tracker for the newest member of the family.",
+    description: "A countdown and tracker for the newest member of the family.",
     href: "/baby",
-    tags: ["Next.js", "Fun"],
+    tags: ["convex"],
     external: false,
   },
 ];
@@ -100,10 +99,14 @@ export default function Home() {
     <section className="mx-auto w-full space-y-8">
       <div className="grid md:grid-cols-[2fr_1fr] gap-8 items-end">
         <div className="space-y-3">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tighter leading-none">Einar Gudni</h1>
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tighter leading-none">
+            Einar Gudni
+          </h1>
           <p className="max-w-[65ch] text-lg text-muted-foreground leading-relaxed">
-            <span className="italic font-semibold text-foreground">Curious</span>, Tinkerer, Late
-            bloomer & Nerd
+            <span className="italic font-semibold text-foreground">
+              Curious
+            </span>
+            , Tinkerer, Late bloomer & Nerd
           </p>
           <p className="items-center text-pretty font-mono text-xs text-muted-foreground">
             <a
@@ -120,29 +123,32 @@ export default function Home() {
       </div>
       <Section className="mt-4">
         <div className="flex items-center justify-between">
-          <Link href="/about" className="group rounded-md px-4 py-3 -mx-4 transition-colors hover:bg-muted/50">
+          <Link
+            href="/about"
+            className="group rounded-md px-4 py-3 -mx-4 transition-colors hover:bg-muted/50"
+          >
             <p className="text-lg font-medium group-hover:text-brand transition-colors">
               About
             </p>
-            <p className="text-sm text-muted-foreground">
-              Who, What, Why
-            </p>
+            <p className="text-sm text-muted-foreground">Who, What, Why</p>
           </Link>
-          <Link href="/now" className="group rounded-md px-4 py-3 -mx-4 transition-colors hover:bg-muted/50">
+          <Link
+            href="/now"
+            className="group rounded-md px-4 py-3 -mx-4 transition-colors hover:bg-muted/50"
+          >
             <p className="text-lg font-medium group-hover:text-brand transition-colors">
               Now
             </p>
-            <p className="text-sm text-muted-foreground">
-              Short-term focus
-            </p>
+            <p className="text-sm text-muted-foreground">Short-term focus</p>
           </Link>
-          <Link href="/someday" className="group rounded-md px-4 py-3 -mx-4 transition-colors hover:bg-muted/50">
+          <Link
+            href="/someday"
+            className="group rounded-md px-4 py-3 -mx-4 transition-colors hover:bg-muted/50"
+          >
             <p className="text-lg font-medium group-hover:text-brand transition-colors">
               Someday
             </p>
-            <p className="text-sm text-muted-foreground">
-              Long-term focus
-            </p>
+            <p className="text-sm text-muted-foreground">Long-term focus</p>
           </Link>
         </div>
       </Section>
@@ -150,20 +156,30 @@ export default function Home() {
       <Section className="mt-4">
         <div className="flex items-baseline justify-between">
           <h2 className="text-xl font-bold">Newest Writing</h2>
-          <Link href="/blog" className="text-sm text-muted-foreground hover:text-brand transition-colors">
+          <Link
+            href="/blog"
+            className="text-sm text-muted-foreground hover:text-brand transition-colors"
+          >
             all writing &rarr;
           </Link>
         </div>
         {(() => {
           const latest = posts
             .filter((p) => !p.draft)
-            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+            .sort(
+              (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+            )[0];
           if (!latest) return null;
           return (
-            <Link href={latest.permalink} className="group block border-t border-border/50 pt-4">
+            <Link
+              href={latest.permalink}
+              className="group block border-t border-border/50 pt-4"
+            >
               <div className="flex justify-between items-start">
                 <div className="space-y-1.5">
-                  <p className="font-semibold text-lg group-hover:text-brand transition-colors">{latest.title}</p>
+                  <p className="font-semibold text-lg group-hover:text-brand transition-colors">
+                    {latest.title}
+                  </p>
                   {latest.excerpt && (
                     <p className="text-muted-foreground leading-relaxed max-w-[65ch]">
                       {latest.excerpt}
@@ -200,15 +216,14 @@ export default function Home() {
             <div key={job.company} className="py-4 first:pt-0">
               <div className="flex items-center justify-between gap-x-2 text-base">
                 <h3 className="inline-flex items-center gap-x-2 font-semibold leading-none">
-                  <a className="hover:text-brand transition-colors" href={job.link}>
+                  <a
+                    className="hover:text-brand transition-colors"
+                    href={job.link}
+                  >
                     {job.company}
                   </a>
                   {job.badges.map((badge) => (
-                    <Badge
-                      variant="secondary"
-                      className="text-xs"
-                      key={badge}
-                    >
+                    <Badge variant="secondary" className="text-xs" key={badge}>
                       {badge}
                     </Badge>
                   ))}
@@ -217,7 +232,9 @@ export default function Home() {
                   {job.start} - {job.end}
                 </div>
               </div>
-              <p className="font-mono text-sm text-muted-foreground mt-1">{job.title}</p>
+              <p className="font-mono text-sm text-muted-foreground mt-1">
+                {job.title}
+              </p>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {job.stack.map((tag) => (
                   <Badge key={tag} variant="outline">

@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { projectIcons } from "@/components/project-icons";
 import { ArrowTopRightIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 
@@ -16,6 +17,8 @@ export function ProjectCard({ title, description, href, tags, external = true }:
     ? { href, target: "_blank" as const, rel: "noopener noreferrer" }
     : { href };
 
+  const Icon = projectIcons[title];
+
   return (
     <Wrapper
       {...linkProps}
@@ -23,9 +26,12 @@ export function ProjectCard({ title, description, href, tags, external = true }:
     >
       <div>
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold group-hover:text-brand transition-colors">
-            {title}
-          </h3>
+          <div className="flex items-center gap-2.5">
+            {Icon && <Icon />}
+            <h3 className="font-semibold group-hover:text-brand transition-colors">
+              {title}
+            </h3>
+          </div>
           <ArrowTopRightIcon className="h-4 w-4 text-muted-foreground opacity-0 -translate-y-0.5 translate-x-0.5 transition-[opacity,transform] duration-200 ease-[var(--ease-out)] group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0" />
         </div>
         <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
