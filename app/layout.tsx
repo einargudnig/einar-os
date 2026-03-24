@@ -41,7 +41,7 @@ export default function RootLayout({
               <Navbar />
               {children}
               <footer className="mt-16 mb-8 border-t border-border/50 pt-6 flex items-center justify-between text-xs text-muted-foreground font-mono">
-                <span>einar</span>
+                <span>don't half ass it</span>
                 <span className="tabular-nums">{new Date().getFullYear()}</span>
               </footer>
               <KeyboardNav />
