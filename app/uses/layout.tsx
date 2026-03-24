@@ -24,20 +24,20 @@ function UsesNav() {
   return (
     <div className="flex items-center justify-center">
       <ButtonGroup>
-        <Button variant="outline">
-          <Link href="../uses/desk">Desk</Link>
+        <Button variant="outline" asChild>
+          <Link href="/uses/desk">Desk</Link>
         </Button>
-        <Button variant="outline">
-          <Link href="../uses/devices">Devices</Link>
+        <Button variant="outline" asChild>
+          <Link href="/uses/devices">Devices</Link>
         </Button>
-        <Button variant="outline">
-          <Link href="../uses/keyboard">Keyboard</Link>
+        <Button variant="outline" asChild>
+          <Link href="/uses/keyboard">Keyboard</Link>
         </Button>
-        <Button variant="outline">
-          <Link href="../uses/command-line">Command line</Link>
+        <Button variant="outline" asChild>
+          <Link href="/uses/command-line">Command line</Link>
         </Button>
-        <Button variant="outline">
-          <Link href="../uses/infrastructure">Infrastructure</Link>
+        <Button variant="outline" asChild>
+          <Link href="/uses/infrastructure">Infrastructure</Link>
         </Button>
       </ButtonGroup>
     </div>

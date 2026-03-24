@@ -16,7 +16,7 @@ export default function Page() {
           className="rounded-full grayscale hover:grayscale-0 transition-[filter] duration-500 ease-[var(--ease-in-out)] shrink-0"
         />
       </div>
-      <div className="prose prose-neutral dark:prose-invert">
+      <div className="prose prose-neutral dark:prose-invert text-pretty">
         <p className="text-brand text-lg font-mono">Who</p>
         <p className="leading-relaxed max-w-[65ch]">
           I am Einar Gudni, usually called Einar, a software developer born and
@@ -38,7 +38,7 @@ export default function Page() {
         </p>
       </div>
       <div className="h-px bg-border/50" />
-      <div className="prose prose-neutral dark:prose-invert">
+      <div className="prose prose-neutral dark:prose-invert text-pretty">
         <p className="text-brand text-lg font-mono">What</p>
         <p className="leading-relaxed max-w-[65ch]">
           I love to wander around the web and see what other people are building
@@ -60,7 +60,7 @@ export default function Page() {
         </p>
       </div>
       <div className="h-px bg-border/50" />
-      <div className="prose prose-neutral dark:prose-invert">
+      <div className="prose prose-neutral dark:prose-invert text-pretty">
         <p className="text-brand text-lg font-mono">Why</p>
         <p className="leading-relaxed max-w-[65ch]">
           I remember that I loved building LEGO when I was small, at some point

@@ -9,7 +9,7 @@ export default function Page() {
         <h1 className="font-semibold text-3xl tracking-tight">Now</h1>
         <p className="mt-1 text-sm font-mono text-muted-foreground">Updated 12. Jan, 2026</p>
       </div>
-      <div className="prose prose-neutral dark:prose-invert">
+      <div className="prose prose-neutral dark:prose-invert text-pretty">
         <p className="text-brand text-lg font-mono">Baby</p>
         <p className="leading-relaxed max-w-[65ch]">
           Expecting our first baby this June! Super exciting and scary at the
@@ -18,7 +18,7 @@ export default function Page() {
         </p>
       </div>
       <div className="h-px bg-border/50" />
-      <div className="prose prose-neutral dark:prose-invert">
+      <div className="prose prose-neutral dark:prose-invert text-pretty">
         <p className="text-brand text-lg font-mono">HYROX</p>
         <p className="leading-relaxed max-w-[65ch]">
           Back training for a HYROX competition in March 2026. This time it will
@@ -27,7 +27,7 @@ export default function Page() {
         </p>
       </div>
       <div className="h-px bg-border/50" />
-      <div className="prose prose-neutral dark:prose-invert">
+      <div className="prose prose-neutral dark:prose-invert text-pretty">
         <p className="text-brand text-lg font-mono">Reading</p>
         <p className="leading-relaxed max-w-[65ch]">
           I am listening to{" "}

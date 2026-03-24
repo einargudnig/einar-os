@@ -43,16 +43,14 @@ export function Navbar() {
                         key={path}
                         href={path}
                         className={cn(
-                          "transition-colors duration-200 flex align-middle relative py-1 px-2 rounded-md",
+                          "transition-colors duration-200 flex align-middle relative py-2 px-3 rounded-md",
+                          "after:absolute after:bottom-0 after:left-3 after:right-3 after:h-px",
                           isActive
-                            ? "text-foreground"
-                            : "text-muted-foreground hover:text-brand hover:bg-muted/50",
+                            ? "text-foreground after:bg-foreground/60"
+                            : "text-muted-foreground hover:text-brand hover:bg-muted/50 after:bg-transparent",
                         )}
                       >
                         {name}
-                        {isActive && (
-                          <span className="absolute bottom-0 left-2 right-2 h-px bg-foreground/60" />
-                        )}
                       </Link>
                     );
                   })}
@@ -62,13 +60,13 @@ export function Navbar() {
                 <KeyboardHint />
                 <Link
                   href="https://github.com/einargudnig"
-                  className="text-muted-foreground hover:text-brand transition-colors"
+                  className="text-muted-foreground hover:text-brand transition-colors p-2 -m-1"
                 >
                   <Github size={20} strokeWidth={1.5} />
                 </Link>
                 <Link
                   href="https://x.com/einargudni"
-                  className="text-muted-foreground hover:text-brand transition-colors"
+                  className="text-muted-foreground hover:text-brand transition-colors p-2 -m-1"
                 >
                   <Twitter size={20} strokeWidth={1.5} />
                 </Link>

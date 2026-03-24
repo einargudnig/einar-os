@@ -99,7 +99,7 @@ export default function Home() {
   return (
     <section className="mx-auto w-full space-y-8">
       <div className="grid md:grid-cols-[2fr_1fr] gap-8 items-end">
-        <div className="space-y-3 stagger-list">
+        <div className="space-y-3">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tighter leading-none">Einar Gudni</h1>
           <p className="max-w-[65ch] text-lg text-muted-foreground leading-relaxed">
             <span className="italic font-semibold text-foreground">Curious</span>, Tinkerer, Late
@@ -193,9 +193,9 @@ export default function Home() {
         <GitHubContributions username="einargudnig" />
       </Section>
 
-      <Section className="mt-4">
+      <Section className="mt-4" id="work">
         <h2 className="text-xl font-bold">Work Experience</h2>
-        <div className="divide-y divide-border/50 stagger-list">
+        <div className="divide-y divide-border/50">
           {work.map((job) => (
             <div key={job.company} className="py-4 first:pt-0">
               <div className="flex items-center justify-between gap-x-2 text-base">

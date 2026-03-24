@@ -105,12 +105,12 @@ export async function GitHubContributions({
         </div>
       </div>
 
-      <div className="w-full">
+      <div className="w-full overflow-x-auto">
         {/* Month labels */}
         <div
           className="grid text-xs text-muted-foreground mb-1.5"
           style={{
-            gridTemplateColumns: `repeat(${totalWeeks}, 1fr)`,
+            gridTemplateColumns: `repeat(${totalWeeks}, minmax(10px, 1fr))`,
             gap: "2px",
           }}
         >
@@ -129,7 +129,7 @@ export async function GitHubContributions({
           <div
             className="grid w-full"
             style={{
-              gridTemplateColumns: `repeat(${totalWeeks}, 1fr)`,
+              gridTemplateColumns: `repeat(${totalWeeks}, minmax(10px, 1fr))`,
               gap: "2px",
             }}
           >

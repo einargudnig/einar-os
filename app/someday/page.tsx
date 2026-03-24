@@ -10,7 +10,7 @@ export default function Page() {
           <p className="text-brand text-lg font-mono mb-3">
             Someday, I want to work at my dream company
           </p>
-          <p className="leading-relaxed max-w-[65ch] text-muted-foreground">
+          <p className="leading-relaxed max-w-[65ch] text-muted-foreground text-pretty">
             I really don&apos;t know what my dream company is, but I want to work
             at a place where I can learn a lot, have fun and be surrounded by
             great people. I want to be in a place where I can grow and be
@@ -23,7 +23,7 @@ export default function Page() {
           <p className="text-brand text-lg font-mono mb-3">
             Someday, I want to live abroad
           </p>
-          <p className="leading-relaxed max-w-[65ch] text-muted-foreground">
+          <p className="leading-relaxed max-w-[65ch] text-muted-foreground text-pretty">
             Iceland is great, has it pros and it&apos;s cons, like all places. But
             I would like to try to live abroad sometime, preferably somewhere
             warmer
@@ -33,7 +33,7 @@ export default function Page() {
           <p className="text-brand text-lg font-mono mb-3">
             Someday, I want to speak a tech conference
           </p>
-          <p className="leading-relaxed max-w-[65ch] text-muted-foreground">
+          <p className="leading-relaxed max-w-[65ch] text-muted-foreground text-pretty">
             I have been to a few conferences, and I think it would be fun
             challenge to speak at one. I have to prepare, practice and do
             uncomfortable things to get there. It also means I need to know the
@@ -44,7 +44,7 @@ export default function Page() {
           <p className="text-brand text-lg font-mono mb-3">
             Someday, I want to learn to fly
           </p>
-          <p className="leading-relaxed max-w-[65ch] text-muted-foreground">
+          <p className="leading-relaxed max-w-[65ch] text-muted-foreground text-pretty">
             Not that I want to become a pilot and work as one. Airplanes, flight
             and the sky has always fascinated me. I think it would be fun to learn
             to fly.
@@ -54,7 +54,7 @@ export default function Page() {
           <p className="text-brand text-lg font-mono mb-3">
             Someday, I want to work because I want to
           </p>
-          <p className="leading-relaxed max-w-[65ch] text-muted-foreground">
+          <p className="leading-relaxed max-w-[65ch] text-muted-foreground text-pretty">
             I want to be at the place where I work because I do it for fun, not
             because it pays the salary. Of course the &quot;salary&quot; has to
             come way, but I want to be in the situation where I can choose where

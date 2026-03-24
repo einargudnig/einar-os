@@ -40,6 +40,7 @@ export function BirthdayConfetti() {
 
   useEffect(() => {
     if (!isBirthday()) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     // Check if already dismissed this session
     const key = `birthday-confetti-${new Date().getFullYear()}`;

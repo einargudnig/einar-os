@@ -40,6 +40,10 @@ export default function RootLayout({
             <main className="relative mx-auto mt-8 max-w-4xl overflow-auto px-6 md:px-8">
               <Navbar />
               {children}
+              <footer className="mt-16 mb-8 border-t border-border/50 pt-6 flex items-center justify-between text-xs text-muted-foreground font-mono">
+                <span>einar</span>
+                <span className="tabular-nums">{new Date().getFullYear()}</span>
+              </footer>
               <KeyboardNav />
               <Analytics />
               <SpeedInsights />

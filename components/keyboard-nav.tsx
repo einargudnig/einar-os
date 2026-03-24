@@ -49,19 +49,19 @@ export function KeyboardNav() {
 
         switch (e.key) {
           case "j":
-            window.scrollBy({ top: scrollAmount, behavior: "smooth" });
+            window.scrollBy({ top: scrollAmount });
             return;
           case "k":
-            window.scrollBy({ top: -scrollAmount, behavior: "smooth" });
+            window.scrollBy({ top: -scrollAmount });
             return;
           case "d":
-            window.scrollBy({ top: halfPage, behavior: "smooth" });
+            window.scrollBy({ top: halfPage });
             return;
           case "u":
-            window.scrollBy({ top: -halfPage, behavior: "smooth" });
+            window.scrollBy({ top: -halfPage });
             return;
           case "G":
-            window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+            window.scrollTo({ top: document.body.scrollHeight });
             return;
         }
       }
@@ -85,7 +85,7 @@ export function KeyboardNav() {
         // gg → scroll to top
         if (e.key === "g") {
           e.preventDefault();
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.scrollTo({ top: 0 });
           setDisplay("idle");
           return;
         }
