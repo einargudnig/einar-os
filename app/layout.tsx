@@ -8,6 +8,7 @@ import { KeyboardNav } from "@/components/keyboard-nav";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { BirthdayConfetti } from "@/components/birthday-confetti";
+import { WebMCP } from "@/components/web-mcp";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased mb-10 lg:mx-auto`}
       >
         <ThemeProvider attribute="class" defaultTheme="dark">
+          <WebMCP />
           <BirthdayConfetti />
           <ConvexClientProvider>
             <main className="relative mx-auto mt-8 max-w-4xl overflow-auto px-6 md:px-8">

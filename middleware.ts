@@ -10,6 +10,12 @@ export function middleware(req: NextRequest) {
 
   const { pathname } = req.nextUrl;
 
+  if (pathname === "/") {
+    const url = req.nextUrl.clone();
+    url.pathname = "/api/md-root";
+    return NextResponse.rewrite(url);
+  }
+
   if (MARKDOWN_ROUTES.some((re) => re.test(pathname))) {
     const url = req.nextUrl.clone();
     url.pathname = `/api/md${pathname}`;
@@ -22,5 +28,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/blog/:path*", "/deep-dive/:path*"],
+  matcher: ["/", "/blog/:path*", "/deep-dive/:path*"],
 };
