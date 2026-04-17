@@ -16,22 +16,8 @@ export function middleware(req: NextRequest) {
     return NextResponse.rewrite(url);
   }
 
-  // TODO 1 — fallback for routes without a markdown source.
-  //   The request asked for markdown, but this URL (e.g. "/", "/uses",
-  //   "/about") has no .mdx body to serve. Three coherent stances:
-  //
-  //   (a) Stay quiet — fall through to HTML. Lenient. Browsers and
-  //       agents both get something useful. Picked by default below.
-  //
-  //   (b) Strict 406 Not Acceptable. RFC-correct: the Accept header
-  //       is unsatisfiable, so refuse. Tell agents "no markdown here,"
-  //       which is honest but unfriendly.
-  //         return new NextResponse(null, { status: 406 });
-  //
-  //   (c) Convert HTML to markdown at runtime. Heavy (needs an HTML
-  //       parser + turndown-style converter on every request) and the
-  //       output is lossy — JSX-rendered pages don't roundtrip cleanly.
-  //
+  // Routes without an MDX source fall through to HTML. Lenient by design:
+  // an agent that asked for markdown still gets something useful.
   return NextResponse.next();
 }
 

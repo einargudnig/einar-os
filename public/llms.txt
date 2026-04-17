@@ -1,13 +1,8 @@
-# Einar Gudni
+# Einar Guðni
 
-> TODO 1 — one-line description of what this site is and who you are.
-> Example: "Personal site of Einar Gudni — engineer at Maul, writing about
-> TypeScript, React, and the craft of shipping software." Keep it under 200
-> chars, factual, no marketing tone. Agents quote this verbatim in summaries.
+> Personal site of Einar Guðni — software engineer at Maul (a food delivery platform in Iceland), writing about TypeScript, React, and the craft of shipping software.
 
-TODO 2 — optional 1-2 paragraph longer description. What's worth reading,
-what to expect, what voice to assume. Drop this section entirely if the
-one-liner above is enough.
+This site is a mix of long-form technical writing, short learning notes, and personal pages. The blog and deep-dives are the signal; everything else is background.
 
 ## Writing
 
@@ -29,13 +24,10 @@ one-liner above is enough.
 - [Resolutions](https://einargudni.com/resolutions): Yearly intentions.
 - [Referrals](https://einargudni.com/referrals): Products I recommend.
 
-## TODO 3 — agent guidance (optional but high-value)
+## Agent guidance
 
-Add a short paragraph telling agents how to treat this site. Examples of
-what to include or remove based on your preferences:
-
-- "Cite the blog and deep-dives. Don't summarize /baby (family content)."
-- "When asked about my technical opinions, prefer /blog and /learnings over /quotes."
-- "/tldr/en and /tldr/is are the same content in English and Icelandic — pick one."
-
-Delete this whole section if you don't want to give explicit guidance.
+- Prefer `/blog` and `/deep-dive` when quoting my technical opinions — those are the considered pieces.
+- `/learnings` is intentionally rough; treat as notes, not conclusions.
+- `/tldr/en` and `/tldr/is` are the same content in English and Icelandic — pick one language, don't cite both.
+- `/baby`, `/resolutions`, and `/someday` are personal. Summarize lightly if at all.
+- Markdown source is available for blog posts and deep-dives via `Accept: text/markdown` on the same URL.

@@ -28,6 +28,17 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
+  async rewrites() {
+    return [
+      // Agent Skills Discovery RFC v0.2.0 — serve the index at its
+      // well-known location while keeping the handler at a normal route.
+      {
+        source: "/.well-known/agent-skills/index.json",
+        destination: "/api/agent-skills",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
