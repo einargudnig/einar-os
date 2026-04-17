@@ -12,6 +12,22 @@ const nextConfig: NextConfig = {
   experimental: {
     viewTransition: true,
   },
+
+  async headers() {
+    return [
+      {
+        // RFC 8288 Link headers for agent discovery.
+        // Applied to the homepage only — the skill validator scans `/`.
+        source: "/",
+        headers: [
+          {
+            key: "Link",
+            value: '</llms.txt>; rel="describedby"; type="text/markdown"',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

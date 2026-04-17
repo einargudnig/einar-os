@@ -1,0 +1,41 @@
+# Einar Gudni
+
+> TODO 1 — one-line description of what this site is and who you are.
+> Example: "Personal site of Einar Gudni — engineer at Maul, writing about
+> TypeScript, React, and the craft of shipping software." Keep it under 200
+> chars, factual, no marketing tone. Agents quote this verbatim in summaries.
+
+TODO 2 — optional 1-2 paragraph longer description. What's worth reading,
+what to expect, what voice to assume. Drop this section entirely if the
+one-liner above is enough.
+
+## Writing
+
+- [Blog](https://einargudni.com/blog): Long-form posts.
+- [Learnings](https://einargudni.com/learnings): Short notes from things I've learned.
+- [Deep dives](https://einargudni.com/deep-dive/middleware): In-depth technical articles.
+- [Notes](https://einargudni.com/notes): Loose notes and bookmarks.
+
+## About
+
+- [About](https://einargudni.com/about): Background and current focus.
+- [Now](https://einargudni.com/now): What I'm working on right now.
+- [Uses](https://einargudni.com/uses): Hardware, software, and setup.
+
+## Optional
+
+- [Quotes](https://einargudni.com/quotes): Things worth remembering.
+- [Someday](https://einargudni.com/someday): Ideas I might explore.
+- [Resolutions](https://einargudni.com/resolutions): Yearly intentions.
+- [Referrals](https://einargudni.com/referrals): Products I recommend.
+
+## TODO 3 — agent guidance (optional but high-value)
+
+Add a short paragraph telling agents how to treat this site. Examples of
+what to include or remove based on your preferences:
+
+- "Cite the blog and deep-dives. Don't summarize /baby (family content)."
+- "When asked about my technical opinions, prefer /blog and /learnings over /quotes."
+- "/tldr/en and /tldr/is are the same content in English and Icelandic — pick one."
+
+Delete this whole section if you don't want to give explicit guidance.

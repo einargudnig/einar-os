@@ -19,6 +19,7 @@ export default defineConfig({
           excerpt: s.excerpt(), // excerpt of markdown content
           draft: s.boolean().optional().default(false),
           code: s.mdx(), // compile mdx to js code
+          body: s.raw(), // raw markdown body (served via Accept: text/markdown)
         })
         .transform((data) => ({ ...data, permalink: `/blog/${data.slug}` })),
     },
@@ -54,6 +55,7 @@ export default defineConfig({
           metadata: s.metadata(),
           draft: s.boolean().optional().default(false),
           code: s.mdx(),
+          body: s.raw(), // raw markdown body (served via Accept: text/markdown)
         })
         .transform((data) => ({
           ...data,
