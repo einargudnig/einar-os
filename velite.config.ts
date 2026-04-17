@@ -61,6 +61,21 @@ export default defineConfig({
         })),
     },
 
+    // collection for shared links / bookmarks
+    links: {
+      name: "Link",
+      pattern: "links/**/*.{md,mdx}",
+      schema: s
+        .object({
+          title: s.string().max(120),
+          url: s.string(),
+          description: s.string().max(300),
+          date: s.isodate(),
+          tags: s.array(s.string()).optional(),
+        })
+        .transform((data) => ({ ...data })),
+    },
+
     // collection for quotes
     quotes: {
       name: "Quote",
