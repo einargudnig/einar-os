@@ -206,7 +206,12 @@ export default function Home() {
       </Section>
 
       <Section className="mt-4">
-        <h2 className="text-xl font-bold">Health</h2>
+        <h2 className="text-xl font-bold">
+          Health{" "}
+          <span className="text-base font-normal text-muted-foreground">
+            · Whoop
+          </span>
+        </h2>
         <WhoopStats />
       </Section>
 
