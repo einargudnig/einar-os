@@ -22,6 +22,7 @@ const clientId: string = WHOOP_CLIENT_ID;
 const clientSecret: string = WHOOP_CLIENT_SECRET;
 
 const SCOPES = [
+  'offline',
   'read:recovery',
   'read:cycles',
   'read:workout',

@@ -2,6 +2,7 @@ import { Section } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
 import { ProjectCard } from "@/components/project-card";
 import { GitHubContributions } from "@/components/github-contributions";
+import { WhoopStats } from "@/components/whoop-stats";
 import { GlobeIcon } from "lucide-react";
 import Link from "next/link";
 import { posts } from "@/.velite";
@@ -202,6 +203,11 @@ export default function Home() {
             <ProjectCard key={project.title} {...project} />
           ))}
         </div>
+      </Section>
+
+      <Section className="mt-4">
+        <h2 className="text-xl font-bold">Health</h2>
+        <WhoopStats />
       </Section>
 
       <Section className="mt-4">
