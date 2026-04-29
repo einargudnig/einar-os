@@ -69,27 +69,24 @@ export function WhoopStats() {
     data.lastUpdated != null && hoursSince(data.lastUpdated) > STALE_AFTER_HOURS;
 
   const dateLabel = data.dataDate
-    ? new Date(data.dataDate).toLocaleDateString("en", {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-      })
+    ? (() => {
+        const d = new Date(data.dataDate);
+        const day = d.toLocaleDateString("en", {
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+        });
+        const time = d.toLocaleTimeString("en", {
+          hour: "numeric",
+          minute: "2-digit",
+        });
+        return `${day} · ${time}`;
+      })()
     : null;
 
   return (
     <div className={cn("space-y-4", stale && "opacity-60")}>
       <div className="grid grid-cols-3 gap-4">
-        {recoveryScore != null && data.recovery ? (
-          <WhoopRing
-            label="Recovery"
-            displayValue={`${recoveryScore}%`}
-            fill={recoveryScore / 100}
-            colorClass={recoveryColor(recoveryScore)}
-            subtitle={recoverySubtitle(data.recovery)}
-          />
-        ) : (
-          <RingPlaceholder label="Recovery" />
-        )}
         {sleepPerformance != null && data.sleep ? (
           <WhoopRing
             label="Sleep"
@@ -104,6 +101,17 @@ export function WhoopStats() {
           />
         ) : (
           <RingPlaceholder label="Sleep" />
+        )}
+        {recoveryScore != null && data.recovery ? (
+          <WhoopRing
+            label="Recovery"
+            displayValue={`${recoveryScore}%`}
+            fill={recoveryScore / 100}
+            colorClass={recoveryColor(recoveryScore)}
+            subtitle={recoverySubtitle(data.recovery)}
+          />
+        ) : (
+          <RingPlaceholder label="Recovery" />
         )}
         {strainDay != null ? (
           <WhoopRing

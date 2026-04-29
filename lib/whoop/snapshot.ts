@@ -11,6 +11,7 @@ if (!WHOOP_CLIENT_ID || !WHOOP_CLIENT_SECRET) {
 }
 
 const SNAPSHOT_PATH = "data/whoop/latest.json";
+const API_BASE = "https://api.prod.whoop.com/developer";
 
 interface WhoopCycle {
   id: number;
@@ -22,6 +23,31 @@ interface WhoopCycle {
     kilojoule: number;
     average_heart_rate: number;
     max_heart_rate: number;
+  };
+}
+
+interface WhoopSleepRecord {
+  id: number;
+  start: string;
+  end: string;
+  nap: boolean;
+  score_state: string;
+  score?: {
+    stage_summary: { total_in_bed_time_milli: number };
+    sleep_performance_percentage: number;
+    sleep_efficiency_percentage: number;
+    sleep_consistency_percentage: number;
+  };
+}
+
+interface WhoopRecoveryRecord {
+  cycle_id: number;
+  created_at: string;
+  score_state: string;
+  score?: {
+    recovery_score: number;
+    hrv_rmssd_milli: number;
+    resting_heart_rate: number;
   };
 }
 
@@ -46,72 +72,63 @@ interface Snapshot {
 
 const millisToHours = (ms: number) => ms / (1000 * 60 * 60);
 
-async function fetchDayStrain(client: WhoopClient): Promise<WhoopCycle | null> {
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 2);
-
-  // The WhoopClient only exposes recovery/sleep/workouts. Day strain lives on
-  // the cycle resource, which we fetch directly using the client's auth.
+async function whoopGet<T>(
+  client: WhoopClient,
+  path: string,
+  params: Record<string, string>,
+): Promise<{ records: T[] }> {
   await (client as any).ensureValidToken();
   const tokens = (client as any).tokens as { access_token: string };
 
-  const url = new URL("https://api.prod.whoop.com/developer/v2/cycle");
-  url.searchParams.set("start", yesterday.toISOString());
+  const url = new URL(`${API_BASE}${path}`);
+  for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
 
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${tokens.access_token}` },
   });
   if (!res.ok) {
-    throw new Error(`Failed to fetch cycle: ${res.statusText}`);
+    throw new Error(`Whoop ${path} ${res.status}: ${res.statusText}`);
   }
-  const data = (await res.json()) as { records: WhoopCycle[] };
-  const scored = data.records.filter((c) => c.score?.strain != null);
-  return scored[scored.length - 1] ?? null;
+  return res.json();
 }
 
 async function buildSnapshot(): Promise<Snapshot> {
   const client = new WhoopClient(WHOOP_CLIENT_ID!, WHOOP_CLIENT_SECRET!);
 
-  const now = new Date();
-  const twoDaysAgo = new Date(now);
-  twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-
-  const [recovery, sleep, cycle] = await Promise.all([
-    client.getRecovery(twoDaysAgo, now),
-    client.getSleep(twoDaysAgo, now),
-    fetchDayStrain(client),
+  // Whoop returns records newest-first. Fetch the latest few of each so we
+  // can skip naps / unscored cycles without windowing math.
+  const [recoveryRes, sleepRes, cycleRes] = await Promise.all([
+    whoopGet<WhoopRecoveryRecord>(client, "/v2/recovery", { limit: "2" }),
+    whoopGet<WhoopSleepRecord>(client, "/v2/activity/sleep", { limit: "10" }),
+    whoopGet<WhoopCycle>(client, "/v2/cycle", { limit: "2" }),
   ]);
 
-  const latestRecovery = recovery[recovery.length - 1] ?? null;
-  const latestSleep = [...sleep].reverse().find((s) => !s.nap && s.score) ?? null;
+  const latestRecovery = recoveryRes.records.find((r) => r.score) ?? null;
+  const latestSleep =
+    sleepRes.records.find((s) => !s.nap && s.score) ?? null;
 
-  // v2 Whoop API nests scored fields under `score` (just like sleep does).
-  // The shared client's WhoopRecovery type still lists them flat, so cast.
-  const recoveryScore = (latestRecovery as any)?.score as
-    | {
-        recovery_score: number;
-        hrv_rmssd_milli: number;
-        resting_heart_rate: number;
-      }
-    | undefined;
+  // /v2/cycle?limit=2 typically returns: [in-progress (no score), latest scored].
+  // The in-progress cycle has no score but its `start` is the freshest signal
+  // Whoop publishes — "tracking since this morning when you woke up."
+  const inProgressCycle = cycleRes.records.find((c) => !c.score) ?? null;
+  const latestScoredCycle =
+    cycleRes.records.find((c) => c.score?.strain != null) ?? null;
 
-  // The "data date" is the day these stats represent — typically yesterday's
-  // cycle. Fall back through cycle → sleep → null so we always show something
-  // meaningful, even if one source is missing.
   const dataDate =
-    cycle?.start ??
     latestSleep?.end ??
-    (latestRecovery as any)?.created_at ??
+    inProgressCycle?.start ??
+    latestScoredCycle?.end ??
+    latestRecovery?.created_at ??
     null;
 
   return {
-    lastUpdated: now.toISOString(),
+    lastUpdated: new Date().toISOString(),
     dataDate,
-    recovery: recoveryScore
+    recovery: latestRecovery?.score
       ? {
-          score: recoveryScore.recovery_score,
-          hrv: Math.round(recoveryScore.hrv_rmssd_milli),
-          restingHeartRate: recoveryScore.resting_heart_rate,
+          score: latestRecovery.score.recovery_score,
+          hrv: Math.round(latestRecovery.score.hrv_rmssd_milli),
+          restingHeartRate: latestRecovery.score.resting_heart_rate,
         }
       : null,
     sleep: latestSleep?.score
@@ -120,12 +137,14 @@ async function buildSnapshot(): Promise<Snapshot> {
           efficiency: latestSleep.score.sleep_efficiency_percentage,
           consistency: latestSleep.score.sleep_consistency_percentage,
           hoursSlept: Number(
-            millisToHours(latestSleep.score.stage_summary.total_in_bed_time_milli).toFixed(2),
+            millisToHours(
+              latestSleep.score.stage_summary.total_in_bed_time_milli,
+            ).toFixed(2),
           ),
         }
       : null,
-    strain: cycle?.score
-      ? { day: Number(cycle.score.strain.toFixed(1)) }
+    strain: latestScoredCycle?.score
+      ? { day: Number(latestScoredCycle.score.strain.toFixed(1)) }
       : null,
   };
 }
