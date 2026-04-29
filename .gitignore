@@ -46,5 +46,5 @@ next-env.d.ts
 
 # whoop
 .whoop-tokens.json
-/data/whoop
+/data/whoop/*
 !/data/whoop/latest.json

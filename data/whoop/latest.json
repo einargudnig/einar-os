@@ -1,0 +1,15 @@
+{
+  "lastUpdated": "2026-04-29T10:31:12.176Z",
+  "recovery": {
+    "hrv": null
+  },
+  "sleep": {
+    "performance": 84,
+    "efficiency": 97.1356,
+    "consistency": 73,
+    "hoursSlept": 8.15
+  },
+  "strain": {
+    "day": 11.7
+  }
+}
