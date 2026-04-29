@@ -126,12 +126,16 @@ export class WhoopClient {
           refresh_token: this.tokens.refresh_token,
           client_id: this.clientId,
           client_secret: this.clientSecret,
+          scope: "offline",
         }),
       },
     );
 
     if (!response.ok) {
-      throw new Error(`Failed to refresh token: ${response.statusText}`);
+      const body = await response.text().catch(() => "");
+      throw new Error(
+        `Failed to refresh token: ${response.status} ${response.statusText} — ${body}`,
+      );
     }
 
     const data = await response.json();
