@@ -1,18 +1,6 @@
 {
-  "lastUpdated": "2026-04-29T11:14:39.231Z",
-  "dataDate": "2026-04-27T00:06:24.200Z",
-  "recovery": {
-    "score": 91,
-    "hrv": 71,
-    "restingHeartRate": 45
-  },
-  "sleep": {
-    "performance": 84,
-    "efficiency": 97.1356,
-    "consistency": 73,
-    "hoursSlept": 8.15
-  },
-  "strain": {
-    "day": 11.7
-  }
+  "date": "2026-04-29",
+  "recovery": { "score": 66, "hrv": 61, "rhr": 44 },
+  "sleep": { "performance": 81, "hours": 5.51 },
+  "strain": 4.2
 }
