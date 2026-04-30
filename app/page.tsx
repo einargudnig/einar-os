@@ -5,8 +5,6 @@ import { GitHubContributions } from "@/components/github-contributions";
 import { WhoopStats } from "@/components/whoop-stats";
 import { GlobeIcon } from "lucide-react";
 import Link from "next/link";
-import { posts } from "@/.velite";
-import { formatBlogDate } from "@/lib/utils";
 
 const projects = [
   {
@@ -152,48 +150,6 @@ export default function Home() {
             <p className="text-sm text-muted-foreground">Long-term focus</p>
           </Link>
         </div>
-      </Section>
-
-      <Section className="mt-4">
-        <div className="flex items-baseline justify-between">
-          <h2 className="text-xl font-bold">Newest Writing</h2>
-          <Link
-            href="/blog"
-            className="text-sm text-muted-foreground hover:text-brand transition-colors"
-          >
-            all writing &rarr;
-          </Link>
-        </div>
-        {(() => {
-          const latest = posts
-            .filter((p) => !p.draft)
-            .sort(
-              (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-            )[0];
-          if (!latest) return null;
-          return (
-            <Link
-              href={latest.permalink}
-              className="group block border-t border-border/50 pt-4"
-            >
-              <div className="flex justify-between items-start">
-                <div className="space-y-1.5">
-                  <p className="font-semibold text-lg group-hover:text-brand transition-colors">
-                    {latest.title}
-                  </p>
-                  {latest.excerpt && (
-                    <p className="text-muted-foreground leading-relaxed max-w-[65ch]">
-                      {latest.excerpt}
-                    </p>
-                  )}
-                </div>
-                <p className="font-mono text-sm tabular-nums text-muted-foreground shrink-0 ml-4">
-                  {formatBlogDate(latest.date)}
-                </p>
-              </div>
-            </Link>
-          );
-        })()}
       </Section>
 
       <Section className="mt-4">
