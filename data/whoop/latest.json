@@ -1,6 +1,6 @@
 {
   "date": "2026-05-25",
-  "recovery": { "score": 83, "hrv": 65, "rhr": 44 },
-  "sleep": { "performance": 80, "hours": 6.25 },
-  "strain": 15.6
+  "recovery": { "score": 72, "hrv": 62, "rhr": 42 },
+  "sleep": { "performance": 76, "hours": 6.4 },
+  "strain": 15.4
 }
