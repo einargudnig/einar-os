@@ -39,9 +39,9 @@ export default function RootLayout({
           <WebMCP />
           <BirthdayConfetti />
           <ConvexClientProvider>
-            <main className="relative mx-auto mt-8 max-w-4xl overflow-auto px-6 md:px-8">
+            <main className="relative mx-auto mt-8 flex min-h-[calc(100dvh-4.5rem)] max-w-4xl flex-col overflow-auto px-6 md:px-8">
               <Navbar />
-              {children}
+              <div className="flex-1">{children}</div>
               <footer className="mt-16 mb-8 border-t border-border/50 pt-6 flex items-center justify-between text-xs text-muted-foreground font-mono">
                 <span>don't half ass it</span>
                 <span className="tabular-nums">{new Date().getFullYear()}</span>

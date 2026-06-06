@@ -78,6 +78,22 @@ export default defineConfig({
         .transform((data) => ({ ...data })),
     },
 
+    // collection for interesting stuff -- free-form micro-posts
+    interesting: {
+      name: "Interesting",
+      pattern: "interesting/**/*.{md,mdx}",
+      schema: s
+        .object({
+          title: s.string().max(120),
+          date: s.isodate(),
+          url: s.string().optional(),
+          tags: s.array(s.string()).optional(),
+          code: s.mdx(),
+          metadata: s.metadata(),
+        })
+        .transform((data) => ({ ...data })),
+    },
+
     // collection for quotes
     quotes: {
       name: "Quote",

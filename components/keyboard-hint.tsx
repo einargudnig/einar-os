@@ -62,7 +62,7 @@ export function KeyboardHint() {
   }
 
   return (
-    <div className="relative">
+    <div className="relative hidden md:block">
       {/* Trigger button */}
       <button
         onClick={handleToggle}
