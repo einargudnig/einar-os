@@ -76,6 +76,50 @@ function BabyIcon() {
   );
 }
 
+function SolOgBjorIcon() {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={cls}>
+      <circle cx="10" cy="10" r="3.5" fill="currentColor" opacity="0.3" className="pi-el pi-sun-core" />
+      <g strokeWidth="1.5" strokeLinecap="round" stroke="currentColor" opacity="0.25" className="pi-el pi-sun-rays">
+        <line x1="10" y1="1.5" x2="10" y2="3.5" />
+        <line x1="10" y1="16.5" x2="10" y2="18.5" />
+        <line x1="1.5" y1="10" x2="3.5" y2="10" />
+        <line x1="16.5" y1="10" x2="18.5" y2="10" />
+        <line x1="4" y1="4" x2="5.4" y2="5.4" />
+        <line x1="14.6" y1="14.6" x2="16" y2="16" />
+        <line x1="16" y1="4" x2="14.6" y2="5.4" />
+        <line x1="5.4" y1="14.6" x2="4" y2="16" />
+      </g>
+    </svg>
+  );
+}
+
+function NidoIcon() {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={cls}>
+      <path
+        d="M2.5 11.5C2.5 11.5 5 14.5 10 14.5C15 14.5 17.5 11.5 17.5 11.5"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        stroke="currentColor"
+        fill="none"
+        opacity="0.3"
+        className="pi-el pi-nest"
+      />
+      <path
+        d="M4 13C4 13 6 16 10 16C14 16 16 13 16 13"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        stroke="currentColor"
+        fill="none"
+        opacity="0.18"
+        className="pi-el pi-nest pi-nest-2"
+      />
+      <circle cx="10" cy="9" r="2" fill="currentColor" opacity="0.3" className="pi-el pi-egg" />
+    </svg>
+  );
+}
+
 export const projectIcons: Record<string, () => ReactNode> = {
   jstop: JstopIcon,
   "ts-mini": TsMiniIcon,
@@ -83,4 +127,6 @@ export const projectIcons: Record<string, () => ReactNode> = {
   "einar-os": EinarOsIcon,
   "todo-system": TodoSystemIcon,
   baby: BabyIcon,
+  "sól og bjór": SolOgBjorIcon,
+  nido: NidoIcon,
 };

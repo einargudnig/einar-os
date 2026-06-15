@@ -1,16 +1,15 @@
 import { cn } from "@/lib/utils";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface ContributionDay {
   date: string;
   count: number;
   level: number;
 }
+
+// Contribution dates are bare "YYYY-MM-DD" strings. Parse and read them in UTC
+// everywhere so week grouping, month labels, and hover labels are identical no
+// matter the server or client timezone.
+const parseDay = (date: string) => new Date(`${date}T00:00:00Z`);
 
 interface ContributionData {
   total: { lastYear: number };
@@ -30,7 +29,7 @@ function groupByWeeks(contributions: ContributionDay[]) {
   let currentWeek: ContributionDay[] = [];
 
   for (const day of contributions) {
-    const dayOfWeek = new Date(day.date).getDay();
+    const dayOfWeek = parseDay(day.date).getUTCDay();
 
     if (dayOfWeek === 0 && currentWeek.length > 0) {
       weeks.push(currentWeek);
@@ -53,11 +52,14 @@ function getMonthLabels(weeks: ContributionDay[][]) {
 
   for (let i = 0; i < weeks.length; i++) {
     const firstDay = weeks[i][0];
-    const date = new Date(firstDay.date);
-    const month = date.getMonth();
+    const date = parseDay(firstDay.date);
+    const month = date.getUTCMonth();
 
     if (month !== lastMonth) {
-      const monthName = date.toLocaleString("en", { month: "short" });
+      const monthName = date.toLocaleString("en", {
+        month: "short",
+        timeZone: "UTC",
+      });
       labels.push({ label: monthName, colStart: i });
       lastMonth = month;
     }
@@ -125,48 +127,43 @@ export async function GitHubContributions({
         </div>
 
         {/* Contribution grid */}
-        <TooltipProvider delayDuration={100}>
-          <div
-            className="grid w-full"
-            style={{
-              gridTemplateColumns: `repeat(${totalWeeks}, minmax(10px, 1fr))`,
-              gap: "2px",
-            }}
-          >
-            {weeks.map((week, weekIdx) => (
-              <div
-                key={weekIdx}
-                className="grid"
-                style={{
-                  gridTemplateRows: "repeat(7, 1fr)",
-                  gap: "2px",
-                }}
-              >
-                {week.map((day) => (
-                  <Tooltip key={day.date}>
-                    <TooltipTrigger asChild>
-                      <div
-                        className={cn(
-                          "aspect-square w-full rounded-[2px]",
-                          LEVEL_CLASSES[day.level],
-                        )}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="top" className="text-xs font-mono">
-                      <span className="font-semibold">{day.count}</span>{" "}
-                      contribution{day.count !== 1 ? "s" : ""} on{" "}
-                      {new Date(day.date).toLocaleDateString("en", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
-                    </TooltipContent>
-                  </Tooltip>
-                ))}
-              </div>
-            ))}
-          </div>
-        </TooltipProvider>
+        <div
+          className="grid w-full"
+          style={{
+            gridTemplateColumns: `repeat(${totalWeeks}, minmax(10px, 1fr))`,
+            gap: "2px",
+          }}
+        >
+          {weeks.map((week, weekIdx) => (
+            <div
+              key={weekIdx}
+              className="grid"
+              style={{
+                gridTemplateRows: "repeat(7, 1fr)",
+                gap: "2px",
+              }}
+            >
+              {week.map((day) => {
+                const label = parseDay(day.date).toLocaleDateString("en", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                  timeZone: "UTC",
+                });
+                return (
+                  <div
+                    key={day.date}
+                    title={`${day.count} contribution${day.count !== 1 ? "s" : ""} on ${label}`}
+                    className={cn(
+                      "aspect-square w-full rounded-[2px]",
+                      LEVEL_CLASSES[day.level],
+                    )}
+                  />
+                );
+              })}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -50,6 +50,20 @@ const projects = [
     tags: ["convex"],
     external: false,
   },
+  {
+    title: "sól og bjór",
+    description:
+      "Ranks Reykjavík bars by the cheapest beer and the most sun right now. Mobile-first, with a sun-aware shade map.",
+    href: "https://sologbjor.einargudni.com",
+    tags: ["React", "Cloudflare", "Bun"],
+  },
+  {
+    title: "nido",
+    description:
+      "A private little app for remembering who gave you what when a baby arrives — so the kindness gets thanked and the loans get returned.",
+    href: "https://nido.einargudni.com",
+    tags: ["Family", "Privacy-first"],
+  },
 ];
 
 export default function Home() {
