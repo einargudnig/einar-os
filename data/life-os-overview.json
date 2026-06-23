@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-06-23T09:01:07.123Z",
+  "generatedAt": "2026-06-23T09:25:18.261Z",
   "system": {
-    "sources": 10,
+    "sources": 11,
     "daysCovered": 91,
-    "dataPoints": 11517
+    "dataPoints": 11569
   },
   "sources": [
     "gcal",
@@ -14,12 +14,13 @@
     "toggl",
     "weather",
     "whoop",
+    "whoop_cycle",
     "whoop_sleep",
     "whoop_workout"
   ],
   "activity": {
-    "workouts": 24,
-    "githubPushes": 202,
-    "tracksPlayed": 67
+    "workouts": 25,
+    "githubPushes": 204,
+    "tracksPlayed": 68
   }
 }
