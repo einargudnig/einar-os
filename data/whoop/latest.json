@@ -1,6 +1,25 @@
 {
-  "date": "2026-06-21",
-  "recovery": { "score": 65, "hrv": 55, "rhr": 46 },
-  "sleep": { "performance": 92, "hours": 8.22 },
-  "strain": 3.6
+  "date": "2026-06-23",
+  "recovery": {
+    "score": 69,
+    "hrv": 56,
+    "rhr": 45
+  },
+  "sleep": {
+    "performance": 80,
+    "hours": 7.11
+  },
+  "strain": 14.6,
+  "trends": {
+    "days": 30,
+    "avgRecovery": 68,
+    "avgSleep": 7.4,
+    "workouts": 23
+  },
+  "insight": {
+    "afterGood": 73,
+    "afterShort": 63,
+    "sleepDelta": 10,
+    "enough": true
+  }
 }

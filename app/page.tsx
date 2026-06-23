@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { ProjectCard } from "@/components/project-card";
 import { GitHubContributions } from "@/components/github-contributions";
 import { WhoopStats } from "@/components/whoop-stats";
+import { LifeOsHealth } from "@/components/life-os-health";
 import { GlobeIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -183,6 +184,7 @@ export default function Home() {
           </span>
         </h2>
         <WhoopStats />
+        <LifeOsHealth />
       </Section>
 
       <Section className="mt-4">

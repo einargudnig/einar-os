@@ -1,0 +1,25 @@
+{
+  "generatedAt": "2026-06-23T09:01:07.123Z",
+  "system": {
+    "sources": 10,
+    "daysCovered": 91,
+    "dataPoints": 11517
+  },
+  "sources": [
+    "gcal",
+    "github",
+    "screentime",
+    "spotify",
+    "things",
+    "toggl",
+    "weather",
+    "whoop",
+    "whoop_sleep",
+    "whoop_workout"
+  ],
+  "activity": {
+    "workouts": 24,
+    "githubPushes": 202,
+    "tracksPlayed": 67
+  }
+}

@@ -1,4 +1,5 @@
 import { ExternalLink } from "@/components/blog/external-link";
+import { LifeOs } from "@/components/life-os";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -37,6 +38,8 @@ export default function Page() {
           It's time to prepare!
         </p>
       </div>
+      <div className="h-px bg-border/50" />
+      <LifeOs />
       <div className="flex justify-start">
         <Link href="/" className="p-2 -m-2 text-muted-foreground hover:text-brand transition-colors">
           <ArrowLeft />
