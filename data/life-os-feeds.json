@@ -1,0 +1,36 @@
+{
+  "generatedAt": "2026-06-26",
+  "days": 30,
+  "github": {
+    "pushes": 262,
+    "prs": 56,
+    "activeDays": 18,
+    "daily": [
+      { "day": "06-12", "pushes": 13 },
+      { "day": "06-13", "pushes": 0 },
+      { "day": "06-14", "pushes": 1 },
+      { "day": "06-15", "pushes": 18 },
+      { "day": "06-16", "pushes": 18 },
+      { "day": "06-17", "pushes": 3 },
+      { "day": "06-18", "pushes": 24 },
+      { "day": "06-19", "pushes": 11 },
+      { "day": "06-20", "pushes": 2 },
+      { "day": "06-21", "pushes": 10 },
+      { "day": "06-22", "pushes": 25 },
+      { "day": "06-23", "pushes": 35 },
+      { "day": "06-24", "pushes": 27 },
+      { "day": "06-25", "pushes": 3 }
+    ]
+  },
+  "spotify": {
+    "plays": 116,
+    "hours": 5.3,
+    "artists": 95,
+    "topArtist": { "name": "KALEO", "plays": 12 }
+  },
+  "toggl": {
+    "hours": 142.5,
+    "last7Hours": 18.3,
+    "topProject": { "name": "Maul", "hours": 132.6 }
+  }
+}
