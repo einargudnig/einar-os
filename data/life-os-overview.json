@@ -1,13 +1,15 @@
 {
-  "generatedAt": "2026-06-23",
+  "generatedAt": "2026-07-01",
   "system": {
-    "sources": 11,
-    "daysCovered": 91,
-    "dataPoints": 11580
+    "sources": 13,
+    "daysCovered": 99,
+    "dataPoints": 22089
   },
   "sources": [
+    "asana",
     "gcal",
     "github",
+    "obsidian",
     "screentime",
     "spotify",
     "things",
@@ -19,8 +21,8 @@
     "whoop_workout"
   ],
   "activity": {
-    "workouts": 25,
-    "githubPushes": 210,
-    "tracksPlayed": 68
+    "workouts": 27,
+    "githubPushes": 271,
+    "tracksPlayed": 166
   }
 }
