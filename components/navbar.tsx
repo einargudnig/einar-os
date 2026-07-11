@@ -36,7 +36,7 @@ export function Navbar() {
                     const isActive =
                       path === "/"
                         ? pathname === "/"
-                        : pathname.startsWith(path);
+                        : (pathname?.startsWith(path) ?? false);
 
                     return (
                       <Link
