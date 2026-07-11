@@ -1,4 +1,4 @@
-import { defineCollection, defineConfig, s } from "velite";
+import { defineConfig, s } from "velite";
 
 // `s` is extended from Zod with some custom schemas,
 // you can also import re-exported `z` from `velite` if you don't need these extension schemas.
