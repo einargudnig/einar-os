@@ -6,11 +6,12 @@
     "typescript",
     "import"
   ],
-  "rules": {
+  "categories": {
     "correctness": "warn",
     "suspicious": "warn",
     "perf": "warn"
   },
+  "rules": {},
   "env": {
     "browser": true,
     "node": true,
