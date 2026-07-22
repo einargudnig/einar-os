@@ -15,7 +15,7 @@ interface OGImageProps {
 
 export default async function Image({ params }: OGImageProps) {
   const { slug } = await params;
-  const post = posts.find((post) => post.slug === slug);
+  const post = posts.find((p) => p.slug === slug);
 
   if (!post) {
     return notFound();

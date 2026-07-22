@@ -527,10 +527,10 @@ function MapControls({
     setWaitingForLocation(true);
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        (geoPosition) => {
           const coords = {
-            longitude: position.coords.longitude,
-            latitude: position.coords.latitude,
+            longitude: geoPosition.coords.longitude,
+            latitude: geoPosition.coords.latitude,
           };
           map?.flyTo({
             center: [coords.longitude, coords.latitude],
