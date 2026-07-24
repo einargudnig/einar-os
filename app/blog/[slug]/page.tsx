@@ -12,7 +12,7 @@ interface BlogPostParams {
 
 export default async function BlogPost({ params }: BlogPostParams) {
   const { slug } = await params;
-  const post = posts.find((post) => post.slug === slug);
+  const post = posts.find((p) => p.slug === slug);
   // console.log("in slug route", post);
 
   if (!post) {
