@@ -48,3 +48,5 @@ next-env.d.ts
 .whoop-tokens.json
 /data/whoop/*
 !/data/whoop/latest.json
+.open-next/
+.wrangler/
