@@ -4,12 +4,12 @@
 // because the Cloudflare adapter prerenders inside workerd and @resvg/resvg-js
 // is a native addon that cannot load there. satori + resvg is the same engine
 // next/og used, so the output matches the old design.
-import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Resvg } from "@resvg/resvg-js";
-import matter from "gray-matter";
 import satori from "satori";
+import { readCollection } from "./content-meta.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = join(root, "public", "og");
@@ -170,17 +170,6 @@ const render = async (name, options) => {
   return name;
 };
 
-// Frontmatter is read straight off disk — this runs before Astro, so the
-// content collections aren't available yet.
-const collectionEntries = async (dir) => {
-  const files = await readdir(join(root, "content", dir));
-  return Promise.all(
-    files
-      .filter((file) => file.endsWith(".md") || file.endsWith(".mdx"))
-      .map(async (file) => matter(await readFile(join(root, "content", dir, file), "utf8")).data),
-  );
-};
-
 const STATIC_PAGES = [
   { name: "home", title: "Einar Gudni", description: "My home on the web" },
   {
@@ -214,8 +203,8 @@ const STATIC_PAGES = [
 await mkdir(outDir, { recursive: true });
 
 const [posts, deepDives] = await Promise.all([
-  collectionEntries("posts"),
-  collectionEntries("deep-dives"),
+  readCollection("posts"),
+  readCollection("deep-dives"),
 ]);
 
 const generated = await Promise.all([

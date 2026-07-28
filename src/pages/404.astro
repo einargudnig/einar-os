@@ -1,16 +1,15 @@
 ---
+// On-demand so the on-demand [slug] routes can Astro.rewrite("/404") into it.
+// A prerendered route has no component instance in the SSR pipeline, which
+// makes rewriting to it a 500.
+export const prerender = false;
+
 import BaseLayout from "../layouts/BaseLayout.astro";
+import NotFound from "../components/NotFound.astro";
+
+Astro.response.status = 404;
 ---
 
 <BaseLayout title="Not found">
-  <section class="mx-auto w-full max-w-2xl py-24 text-center">
-    <h1 class="font-bold text-3xl tracking-tight">404</h1>
-    <p class="mt-3 text-muted-foreground">This page doesn't exist.</p>
-    <a
-      href="/"
-      class="mt-8 inline-block text-sm font-mono text-muted-foreground hover:text-brand transition-colors"
-    >
-      &larr; back home
-    </a>
-  </section>
+  <NotFound />
 </BaseLayout>

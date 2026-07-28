@@ -13,9 +13,7 @@ const { slug } = Astro.params;
 const deepDives = await getCollection("deepDives");
 const dive = deepDives.find((entry) => entry.data.slug === slug);
 
-if (!dive) {
-  return Astro.rewrite("/404");
-}
+if (!dive) return Astro.rewrite("/404");
 
 const { Content } = await render(dive);
 ---

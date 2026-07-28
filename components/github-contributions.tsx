@@ -76,9 +76,11 @@ export async function GitHubContributions({
   let data: ContributionData;
 
   try {
+    // The Next-only `next: { revalidate }` option is gone; the homepage is
+    // edge-cached instead via routeRules in astro.config.mjs.
     const res = await fetch(
       `https://github-contributions-api.jogruber.de/v4/${username}?y=last`,
-      { next: { revalidate: 3600 } },
+      { cf: { cacheTtl: 3600, cacheEverything: true } } as RequestInit,
     );
     data = await res.json();
   } catch {

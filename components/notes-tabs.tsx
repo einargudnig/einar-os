@@ -5,12 +5,14 @@ import { cn } from "@/lib/utils";
 
 type Tab = "notes" | "links";
 
+// `notes` and `links` are supplied by Astro named slots, which TypeScript
+// cannot see on the React prop type — hence optional.
 export function NotesTabs({
   notes,
   links,
 }: {
-  notes: React.ReactNode;
-  links: React.ReactNode;
+  notes?: React.ReactNode;
+  links?: React.ReactNode;
 }) {
   const [active, setActive] = useState<Tab>("notes");
 

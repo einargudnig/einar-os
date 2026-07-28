@@ -1,5 +1,8 @@
 ---
+import type { ComponentProps } from "react";
 import { FileTree } from "@/components/blog/file-tree";
+
+type Props = ComponentProps<typeof FileTree>;
 
 const props = Astro.props;
 ---

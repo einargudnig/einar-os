@@ -1,19 +1,19 @@
 {
   "$schema": "https://oxc.rs/schema/.oxlintrc.json",
-  "plugins": [
-    "react",
-    "nextjs",
-    "typescript",
-    "import"
-  ],
-  "rules": {
+  "plugins": ["react", "typescript", "import"],
+  "categories": {
     "correctness": "warn",
     "suspicious": "warn",
     "perf": "warn"
+  },
+  "rules": {
+    // Automatic JSX runtime — React does not need to be in scope.
+    "react/react-in-jsx-scope": "off"
   },
   "env": {
     "browser": true,
     "node": true,
     "es2024": true
-  }
+  },
+  "ignorePatterns": ["dist", ".astro", ".wrangler", "tools", "convex-export*", "public"]
 }

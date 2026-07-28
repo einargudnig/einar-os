@@ -4,24 +4,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a personal website built with Next.js 16, featuring a blog and content management system. The site uses Velite for content processing and MDX for rich blog posts. It's deployed on Vercel with analytics and speed insights enabled.
+This is a personal website built with Astro 7, featuring a blog and content management system. Content is Markdown/MDX in `content/`, loaded through Astro content collections. Interactive pieces are React islands. It deploys to Cloudflare Workers via `@astrojs/cloudflare`.
 
 ## Development Commands
 
 ```bash
-# Start development server with Turbopack
+# Start the dev server
 npm run dev
 
-# Build for production (runs Velite first to process content, then Next.js build)
+# Build for production (generates OG images, then builds)
 npm run build
 
-# Start production server
-npm start
+# Build and serve the real Worker locally
+npm run preview
 
-# Lint code with oxlint
+# Regenerate Open Graph images only
+npm run og
+
+# Deploy to Cloudflare
+npm run deploy
+
+# Lint with oxlint / format with oxfmt
 npm run lint
-
-# Format code with oxfmt
 npm run format
 ```
 
@@ -29,99 +33,71 @@ npm run format
 
 ### Content Management System
 
-The project uses **Velite** as a content processing pipeline that transforms Markdown/MDX files into type-safe data:
+Content lives in `content/` at the repo root (not `src/content/`) because vault and capture tooling writes there by path. Collections are declared in `src/content.config.ts`:
 
-1. **Content Collections** (defined in `velite.config.ts`):
-   - `posts` - Blog posts in `content/posts/` directory
-   - `learnings` - Short-form learning notes in `content/learnings/`
-   - `deepDives` - In-depth technical articles in `content/deep-dives/`
+- `posts` — blog posts, `content/posts/`
+- `learnings` — short-form notes, `content/learnings/`
+- `deepDives` — long-form articles, `content/deep-dives/`
+- `links` — bookmarks, `content/links/`
+- `interesting` — micro-posts, `content/interesting/`
+- `quotes` — quotes, `content/quotes/`
 
-2. **Velite Build Process**:
-   - Runs automatically before Next.js dev/build (via `next.config.ts`)
-   - Processes MDX files and generates type-safe outputs in `.velite/` directory
-   - Creates `@/.velite` module with typed exports for content collections
-   - Compiles MDX to executable JavaScript code stored in the `code` property
+Query with `getCollection()` and render MDX with `render(entry)`. Frontmatter dates are parsed into `Date` objects via `z.coerce.date()`.
 
-3. **MDX Content Rendering**:
-   - MDX is NOT rendered directly by Next.js
-   - Instead, Velite compiles MDX to JS code strings
-   - `components/mdx-content.tsx` uses `new Function()` to execute compiled code
-   - Custom components are injected via the `sharedComponents` object
-   - This approach gives full control over component rendering
+### Rendering model
+
+Everything is prerendered **except** three routes that set `export const prerender = false`: `/`, `/blog/[slug]` and `/deep-dive/[slug]`. They must be on-demand so `src/middleware.ts` can honour `Accept: text/markdown` — a prerendered page is served straight from Cloudflare's asset binding and never reaches middleware or `src/fetch.ts`. Those three are edge-cached through `routeRules` in `astro.config.mjs`.
+
+Because they are on-demand, `@astrojs/sitemap` cannot discover them; they are listed explicitly via `customPages`.
+
+### MDX components
+
+Custom components available inside MDX are mapped in `src/components/mdx-components.ts` and passed to `<Content components={mdxComponents} />`. Anything interactive needs a client directive, which the `components` prop cannot express, so those get a thin `.astro` wrapper in `src/components/mdx/` that applies `client:*`.
+
+Code blocks are highlighted at build time by Astro's Shiki (`catppuccin-mocha`); `src/components/mdx/Pre.astro` only adds the surrounding chrome and a vanilla-JS copy button.
 
 ### Styling and UI
 
-- **Tailwind CSS v4** with custom PostCSS integration
-- **Radix UI** primitives for accessible components
-- **next-themes** for dark mode support (default: dark theme)
-- Custom blog components in `components/blog/` for rich content (callouts, code blocks, video embeds, etc.)
-- UI components in `components/ui/` follow shadcn/ui patterns
+- **Tailwind CSS v4** via `@tailwindcss/vite` (no PostCSS config)
+- **Radix UI** primitives, shadcn-style components in `components/ui/`
+- Dark by default, applied by an inline script in `src/layouts/BaseLayout.astro` before paint
+- Fonts come from `astro:fonts` (`<Font />` in the layout)
 
 ### Code Quality
 
-- **oxlint** for linting and **oxfmt** for formatting (from the oxc project)
-- **TypeScript** with strict mode enabled
-- Path alias `@/*` maps to project root
+- **oxlint** for linting and **oxfmt** for formatting
+- **TypeScript** strict, `@/*` maps to the repo root
 
 ### Application Structure
 
-- **App Router** (Next.js 16 App Directory)
-- **Route Structure**:
-  - `/` - Homepage with work experience and latest post
-  - `/blog` - List of all blog posts
-  - `/blog/[slug]` - Individual blog posts (static generation)
-  - `/deep-dive/[slug]` - In-depth articles (static generation)
-  - `/learnings` - Learning notes collection
-  - `/notes` - Notes page
-  - `/about`, `/now`, `/someday` - Static pages
-  - `/uses/*` - Tech stack and setup pages
-
-- **Layout Hierarchy**:
-  - Root layout (`app/layout.tsx`) provides global navbar, theme provider, fonts (Geist Sans/Mono)
-  - Nested layouts like `app/uses/layout.tsx` for section-specific structure
-
-### Dynamic Pages
-
-Blog posts and deep dives use:
-- `generateStaticParams()` for build-time static generation
-- Content fetched from Velite-processed collections
-- MDX rendered via `<MDXContent code={post.code} />` component
+- Pages in `src/pages/`, layouts in `src/layouts/`, `.astro` components in `src/components/`
+- React components stay in `components/` at the root and render statically unless given a `client:*` directive
+- `.well-known/*` documents are real prerendered endpoints under `src/pages/.well-known/` — there are no rewrites
 
 ## Important Implementation Details
 
 ### Adding New Blog Posts
 
-1. Create `.mdx` file in appropriate directory:
-   - `content/posts/` for blog posts
-   - `content/learnings/` for learning notes
-   - `content/deep-dives/` for technical deep dives
-
-2. Include required frontmatter:
-   - Posts: `title`, `slug`, `date`, `draft` (optional)
-   - Learnings: `title`, `date`, `topic`, `link` (optional), `tags` (optional)
-   - Deep Dives: `title`, `slug`, `date`, `topic` (optional), `tags` (optional), `draft` (optional)
-
-3. Velite automatically processes on next dev/build
+1. Create an `.mdx` file in `content/posts/`, `content/learnings/` or `content/deep-dives/`
+2. Include the frontmatter required by `src/content.config.ts` (posts need `title`, `slug`, `date`; `draft` optional)
+3. OG images are generated from frontmatter by `scripts/generate-og.mjs` on the next build
 
 ### Custom MDX Components
 
-To add new custom components for use in MDX:
-1. Create component in `components/blog/`
-2. Import and add to `sharedComponents` object in `components/mdx-content.tsx`
-3. Component will be available in all MDX files
+1. Create the component in `components/blog/`
+2. Add it to `mdxComponents` in `src/components/mdx-components.ts`
+3. If it is interactive, wrap it in `src/components/mdx/<Name>.astro` with a client directive
 
-### Type Safety with Velite
+### Open Graph images
 
-- Velite generates TypeScript types in `.velite/index.d.ts`
-- Import collections: `import { posts, learnings, deepDives } from '@/.velite'`
-- All content is fully typed with metadata, slugs, dates, etc.
+`scripts/generate-og.mjs` renders every OG image with satori + resvg into `public/og/` before `astro build`. It is a Node prebuild step rather than an Astro endpoint because the Cloudflare adapter prerenders inside workerd, where `@resvg/resvg-js` (a native addon) cannot load. Geist TTFs are vendored in `src/assets/fonts/`.
 
 ## Deployment Notes
 
-- Site is optimized for Vercel deployment
-- Uses `@vercel/analytics` and `@vercel/speed-insights`
-- Static generation via `generateStaticParams()` ensures fast page loads
-- Velite runs at build time, so `.velite/` directory must be generated before deployment
+- Deploys to Cloudflare Workers; `@astrojs/cloudflare` writes `dist/server/wrangler.json` with `main` and `assets` filled in, and the root `wrangler.jsonc` supplies the rest
+- Images are optimised at build time (`imageService: "compile"`), not per request
+- Cloudflare rejects any single asset over 25 MiB — keep large media transcoded
+- `PUBLIC_CONVEX_URL` must be set for the `/baby` page
 
 ## Agent skills
 

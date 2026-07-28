@@ -14,9 +14,7 @@ const { slug } = Astro.params;
 const posts = await getCollection("posts");
 const post = posts.find((entry) => entry.data.slug === slug);
 
-if (!post) {
-  return Astro.rewrite("/404");
-}
+if (!post) return Astro.rewrite("/404");
 
 const { Content } = await render(post);
 ---

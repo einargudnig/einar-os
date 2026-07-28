@@ -4,6 +4,7 @@
 //
 // Anything interactive needs a client directive, which the `components` prop
 // can't express. Those get a thin .astro wrapper in src/components/mdx/.
+import type { ComponentProps } from "react";
 import { Blockquote } from "@/components/blog/blockquote";
 import { Callout } from "@/components/blog/callout";
 import { CaptionedImage } from "@/components/blog/captioned-image";
@@ -31,8 +32,8 @@ export const mdxComponents = {
   a: Anchor,
   pre: Pre,
   blockquote: Blockquote,
-  ul: (props: Record<string, unknown>) => StylishList({ ...props, type: "disc" }),
-  ol: (props: Record<string, unknown>) => StylishList({ ...props, type: "number" }),
+  ul: (props: ComponentProps<typeof StylishList>) => StylishList({ ...props, type: "disc" }),
+  ol: (props: ComponentProps<typeof StylishList>) => StylishList({ ...props, type: "number" }),
   li: StylishListItem,
   img: CaptionedImage,
 

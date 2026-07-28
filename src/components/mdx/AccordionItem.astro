@@ -1,7 +1,10 @@
 ---
 // Holds open/closed state, so it hydrates. Slotted MDX children are rendered
 // to HTML on the server and handed to the island as `children`.
+import type { ComponentProps } from "react";
 import { AccordionItem } from "@/components/blog/interactive-elements";
+
+type Props = ComponentProps<typeof AccordionItem>;
 
 const props = Astro.props;
 ---
