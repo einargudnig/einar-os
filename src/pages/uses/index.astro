@@ -1,0 +1,16 @@
+---
+import { Image } from "astro:assets";
+import UsesLayout from "../../layouts/UsesLayout.astro";
+// Moved out of public/ so astro:assets can optimise it — the source is a 6MB
+// PNG that next/image used to shrink at request time.
+import desk from "../../assets/desk.png";
+---
+
+<UsesLayout>
+  <div>
+    <Image src={desk} alt="Desk" class="rounded-md" loading="eager" />
+    <p class="mt-3 text-xs text-muted-foreground">
+      Point and shoot photo of the current setup
+    </p>
+  </div>
+</UsesLayout>

@@ -8,7 +8,10 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   site: "https://einargudni.com",
-  adapter: cloudflare(),
+  // 'compile' optimises images at build time instead of routing them through
+  // the runtime Images binding — every image here is static, so there's no
+  // reason to pay for a transform on each request.
+  adapter: cloudflare({ imageService: "compile" }),
 
   // Pages are prerendered by default. `/`, `/blog/[slug]` and
   // `/deep-dive/[slug]` opt out individually so middleware can run at request

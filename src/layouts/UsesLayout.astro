@@ -1,0 +1,48 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+interface Props {
+  title?: string;
+}
+
+const { title = "Uses" } = Astro.props;
+
+const sections = [
+  { href: "/uses/desk", label: "Desk" },
+  { href: "/uses/devices", label: "Devices" },
+  { href: "/uses/keyboard", label: "Keyboard" },
+  { href: "/uses/command-line", label: "Command line" },
+  { href: "/uses/infrastructure", label: "Infrastructure" },
+];
+
+// The React version used <Button asChild><Link/></Button>; Radix's Slot needs
+// a React element child, which .astro can't hand it. Same classes, plain <a>.
+const buttonClass = buttonVariants({ variant: "outline" });
+---
+
+<BaseLayout title={title}>
+  <section class="mx-auto w-full max-w-2xl space-y-8 print:space-y-6 mb-8">
+    <a href="/uses">
+      <h1 class="font-bold text-3xl tracking-tight mb-5">Uses</h1>
+    </a>
+    <div class="flex-col items-center justify-center">
+      <div class="flex items-center justify-center">
+        <div
+          class="flex w-fit items-stretch [&>*]:rounded-none [&>*:first-child]:rounded-l-md [&>*:last-child]:rounded-r-md [&>*:not(:first-child)]:-ml-px"
+          role="group"
+        >
+          {
+            sections.map(({ href, label }) => (
+              <a href={href} class={cn(buttonClass, "relative focus:z-10")}>
+                {label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+      <div class="mt-8"><slot /></div>
+    </div>
+  </section>
+</BaseLayout>
