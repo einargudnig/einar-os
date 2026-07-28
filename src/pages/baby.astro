@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { BabyIsland } from "@/components/baby-island";
+---
+
+<BaseLayout title="Baby">
+  {/* client:only — the page is a live Convex subscription plus a ticking
+      countdown that renders null until mounted, so there is nothing useful
+      to server-render and doing so would only risk a hydration mismatch. */}
+  <BabyIsland client:only="react" />
+</BaseLayout>

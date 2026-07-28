@@ -38,7 +38,7 @@ function useCountdown() {
   return { days, hours, minutes, seconds, arrived: false };
 }
 
-export default function BabyPage() {
+export function BabyPage() {
   const countdown = useCountdown();
   const [isVoting, setIsVoting] = useState<VotingState>({
     gender: false,

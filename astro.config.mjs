@@ -4,6 +4,7 @@ import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import cloudflare from "@astrojs/cloudflare";
+import { cacheCloudflare } from "@astrojs/cloudflare/cache";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
@@ -24,6 +25,17 @@ export default defineConfig({
   build: { format: "file" },
 
   integrations: [react(), mdx(), sitemap()],
+
+  // The three on-demand routes are content pages that change only when I
+  // publish. Edge-cache them so being on-demand (for Accept negotiation)
+  // doesn't mean re-rendering — or, for `/`, re-hitting the GitHub
+  // contributions API — on every request.
+  cache: { provider: cacheCloudflare() },
+  routeRules: {
+    "/": { maxAge: 3600, swr: 600 },
+    "/blog/[...slug]": { maxAge: 3600, swr: 600 },
+    "/deep-dive/[...slug]": { maxAge: 3600, swr: 600 },
+  },
 
   fonts: [
     {

@@ -1,0 +1,220 @@
+---
+// On-demand so middleware can serve llms.txt for Accept: text/markdown.
+// routeRules edge-caches the rendered result, so the GitHub contributions
+// fetch below does not run per request.
+export const prerender = false;
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { Section } from "@/components/section";
+import { Badge } from "@/components/ui/badge";
+import { ProjectCard } from "@/components/project-card";
+import { GitHubContributions } from "@/components/github-contributions";
+import { WhoopStats } from "@/components/whoop-stats";
+import { LifeOsHealth } from "@/components/life-os-health";
+import { GlobeIcon } from "lucide-react";
+
+// Was a `headers()` entry in next.config.ts.
+Astro.response.headers.set("Link", '</llms.txt>; rel="describedby"; type="text/markdown"');
+
+const projects = [
+  {
+    title: "jstop",
+    description:
+      "A macOs menu bar app that monitors node processes. Like htop, but for your Node.js toolkit.",
+    href: "https://github.com/einargudnig/jstop",
+    tags: ["Swift", "macOs"],
+  },
+  {
+    title: "ts-mini",
+    description:
+      "Interactive visualization of the TypeScript compiler pipeline. Explore how code gets scanned, parsed, and emitted.",
+    href: "/ts-mini",
+    tags: ["TypeScript", "React", "Shiki"],
+    external: false,
+  },
+  {
+    title: "dotfiles",
+    description:
+      "My personal development environment. Neovim, tmux, zsh, and macOS configuration managed with care.",
+    href: "https://github.com/einargudnig/dotfiles",
+    tags: ["Neovim", "Zsh", "macOS"],
+  },
+  {
+    title: "einar-os",
+    description:
+      "This site. Built with Astro 7, MDX content collections, and Tailwind v4. Deployed on Cloudflare Workers.",
+    href: "https://github.com/einargudnig/einar-os",
+    tags: ["Astro", "MDX", "Tailwind"],
+  },
+  {
+    title: "todo-system",
+    description:
+      "A CLI-powered task management system with Taskwarrior, syncing to Things 3 and Asana.",
+    href: "https://github.com/einargudnig/todo-system",
+    tags: ["CLI", "Taskwarrior", "Productivity"],
+  },
+  {
+    title: "baby",
+    description: "A countdown and tracker for the newest member of the family.",
+    href: "/baby",
+    tags: ["convex"],
+    external: false,
+  },
+  {
+    title: "sól og bjór",
+    description:
+      "Ranks Reykjavík bars by the cheapest beer and the most sun right now. Mobile-first, with a sun-aware shade map.",
+    href: "https://sologbjor.einargudni.com",
+    tags: ["React", "Cloudflare", "Bun"],
+  },
+  {
+    title: "nido",
+    description:
+      "A private little app for remembering who gave you what when a baby arrives — so the kindness gets thanked and the loans get returned.",
+    href: "https://nido.einargudni.com",
+    tags: ["Family", "Privacy-first"],
+  },
+];
+
+const work = [
+  {
+    company: "Maul",
+    link: "https://maul.is",
+    badges: [] as string[],
+    title: "Software Developer",
+    start: "2020",
+    end: "Present",
+    stack: ["React", "Tailwind", "AWS"],
+  },
+  {
+    company: "Tiffin",
+    link: "https://tiffin.dk",
+    badges: ["Remote"],
+    title: "Software Developer",
+    start: "2022",
+    end: "2024",
+    stack: ["React", "Tailwind", "AWS"],
+  },
+  {
+    company: "Contractor",
+    link: "https://einargudni.com",
+    badges: ["Remote"],
+    title: "Software Developer",
+    start: "2022",
+    end: "Present",
+    stack: [
+      "JavaScript",
+      "TypeScript",
+      "React/Next.js/Remix",
+      "Tailwind",
+      "Chakra-Ui",
+      "Node.js",
+      "AWS",
+    ],
+  },
+];
+
+const shortcuts = [
+  { href: "/about", label: "About", hint: "Who, What, Why" },
+  { href: "/now", label: "Now", hint: "Short-term focus" },
+  { href: "/someday", label: "Someday", hint: "Long-term focus" },
+];
+---
+
+<BaseLayout>
+  <section class="mx-auto w-full space-y-8">
+    <div class="grid md:grid-cols-[2fr_1fr] gap-8 items-end">
+      <div class="space-y-3">
+        <h1 class="text-4xl md:text-5xl font-bold tracking-tighter leading-none">
+          Einar Gudni
+        </h1>
+        <p class="max-w-[65ch] text-lg text-muted-foreground leading-relaxed">
+          <span class="italic font-semibold text-foreground">Curious</span>, Tinkerer,
+          Late bloomer &amp; Nerd
+        </p>
+        <p class="items-center text-pretty font-mono text-xs text-muted-foreground">
+          <a
+            class="inline-flex gap-x-1.5 align-baseline leading-none hover:text-brand transition-colors"
+            href="https://www.google.com/maps/place/Reykjavík"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <GlobeIcon className="h-3 w-3" />
+            Reykjavík, Iceland
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <Section className="mt-4">
+      <div class="flex items-center justify-between">
+        {
+          shortcuts.map(({ href, label, hint }) => (
+            <a
+              href={href}
+              class="group rounded-md px-4 py-3 -mx-4 transition-colors hover:bg-muted/50"
+            >
+              <p class="text-lg font-medium group-hover:text-brand transition-colors">
+                {label}
+              </p>
+              <p class="text-sm text-muted-foreground">{hint}</p>
+            </a>
+          ))
+        }
+      </div>
+    </Section>
+
+    <Section className="mt-4">
+      <h2 class="text-xl font-bold">Projects</h2>
+      <div class="grid md:grid-cols-2 gap-3 stagger-list">
+        {projects.map((project) => <ProjectCard {...project} />)}
+      </div>
+    </Section>
+
+    <Section className="mt-4">
+      <h2 class="text-xl font-bold">
+        Health <span class="text-base font-normal text-muted-foreground">· Whoop</span>
+      </h2>
+      <WhoopStats />
+      <LifeOsHealth />
+    </Section>
+
+    <Section className="mt-4">
+      <h2 class="text-xl font-bold">Activity</h2>
+      <GitHubContributions username="einargudnig" />
+    </Section>
+
+    <Section className="mt-4" id="work">
+      <h2 class="text-xl font-bold">Work Experience</h2>
+      <div class="divide-y divide-border/50">
+        {
+          work.map((job) => (
+            <div class="py-4 first:pt-0">
+              <div class="flex items-center justify-between gap-x-2 text-base">
+                <h3 class="inline-flex items-center gap-x-2 font-semibold leading-none">
+                  <a class="hover:text-brand transition-colors" href={job.link}>
+                    {job.company}
+                  </a>
+                  {job.badges.map((badge) => (
+                    <Badge variant="secondary" className="text-xs">
+                      {badge}
+                    </Badge>
+                  ))}
+                </h3>
+                <div class="text-sm font-mono tabular-nums text-muted-foreground">
+                  {job.start} - {job.end}
+                </div>
+              </div>
+              <p class="font-mono text-sm text-muted-foreground mt-1">{job.title}</p>
+              <div class="mt-3 flex flex-wrap gap-1.5">
+                {job.stack.map((tag) => (
+                  <Badge variant="outline">{tag}</Badge>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </Section>
+  </section>
+</BaseLayout>
