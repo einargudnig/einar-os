@@ -1,0 +1,41 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Hæhæ!">
+  <section class="mx-auto w-full max-w-2xl space-y-8 print:space-y-6 mb-8">
+    <div class="flex items-center justify-between">
+      <h1 class="font-semibold text-2xl tracking-tight">Hæhæ!</h1>
+      <img
+        src="/images/avatar.jpeg"
+        alt="Einar Gudni"
+        width="150"
+        height="150"
+        class="rounded-full grayscale"
+      />
+    </div>
+
+    <p class="flex max-w-md text-md text-foreground">
+      Ég er Einar! Ég er forritari og hef mikinn áhuga á nýjustu tækni. Ég er
+      vanur að búa til veflausnir með React og TypeScript. Ég er lausnamiðaður
+      og legg áherslu á góða notendaupplifun.
+    </p>
+    <p class="flex max-w-md text-md text-foreground">
+      Ég get hjálpað til við þróa veflausnir, setja upp kerfi, nýsmíði og
+      uppfærslur.
+    </p>
+    <p class="flex max-w-md text-md text-foreground">
+      Ég hef unnið sem forritari síðan 2020, bæði hjá fyrirtækjum og sem
+      sjálfstæður verktaki.
+    </p>
+    <p class="flex max-w-md text-md text-foreground">
+      Þú getur séð hvað ég hef verið að gera hér á þessari síðu eða haft
+      samband við mig í gegnum netfangið einargudnig@gmail.com
+    </p>
+    <div class="flex justify-start">
+      <a href="/tldr/en" class="mr-2 p-2 -m-2">
+        This page in English <span aria-hidden="true">🇬🇧</span>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
