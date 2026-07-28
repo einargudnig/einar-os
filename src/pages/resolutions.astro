@@ -1,0 +1,36 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+// Disabled and non-interactive, so it renders statically — no client directive.
+import { Checkbox } from "@/components/ui/checkbox";
+
+const resolutions = [
+  "Become a dad!",
+  "sub 75 minute pro single HYROX ",
+  "Create a native app",
+  "Publish an app (app store, play store)",
+  "Create a simple web service in hono",
+  "Re-write the simple web service in effect",
+  "Finish Total TypeScript Pro courses",
+  "Finish the uses page",
+];
+---
+
+<BaseLayout title="Resolutions">
+  <section class="mx-auto w-full max-w-2xl space-y-8 print:space-y-6 mb-8">
+    <h1 class="font-semibold text-2xl tracking-tight">Resolutions</h1>
+
+    <div class="prose prose-neutral dark:prose-invert">
+      <p class="text-brand text-lg font-mono">2026</p>
+      <ul class="mt-4">
+        {
+          resolutions.map((item) => (
+            <li class="flex items-center gap-2">
+              <Checkbox disabled />
+              <p>{item}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

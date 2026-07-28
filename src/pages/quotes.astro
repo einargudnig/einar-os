@@ -1,0 +1,57 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { mdxComponents } from "../components/mdx-components";
+import { formatBlogDate } from "@/lib/utils";
+
+const quotes = await getCollection("quotes");
+const sorted = quotes.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Quote bodies are usually empty; only render the MDX when there is some.
+const entries = await Promise.all(
+  sorted.map(async (quote) => ({
+    quote,
+    Content: quote.body?.trim() ? (await render(quote)).Content : null,
+  })),
+);
+
+const isoDate = (date: Date) => date.toISOString().slice(0, 10);
+---
+
+<BaseLayout title="Quotes">
+  <section class="mx-auto w-full max-w-2xl space-y-10 print:space-y-8 mb-8">
+    <h1 class="font-bold text-3xl tracking-tight mb-5">Quotes</h1>
+
+    <div class="divide-y divide-border/50 stagger-list">
+      {
+        entries.map(({ quote, Content }) => (
+          <div class="py-8 first:pt-0 last:pb-0">
+            <article>
+              <blockquote class="border-l-2 border-brand pl-4 italic text-lg leading-relaxed max-w-[65ch]">
+                &ldquo;{quote.data.text}&rdquo;
+              </blockquote>
+              <div class="text-sm text-muted-foreground mt-3 flex items-center gap-2">
+                <span class="font-medium text-foreground">{quote.data.author}</span>
+                {quote.data.source && (
+                  <>
+                    <span class="mx-1">·</span>
+                    <span>{quote.data.source}</span>
+                  </>
+                )}
+                <span class="mx-1">·</span>
+                <time class="font-mono tabular-nums" datetime={isoDate(quote.data.date)}>
+                  {formatBlogDate(quote.data.date)}
+                </time>
+              </div>
+              {Content && (
+                <div class="mt-4 text-sm text-muted-foreground mdx-content">
+                  <Content components={mdxComponents} />
+                </div>
+              )}
+            </article>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

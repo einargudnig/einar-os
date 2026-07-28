@@ -1,0 +1,40 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ExternalLink from "../components/ExternalLink.astro";
+import BackLink from "../components/BackLink.astro";
+
+const referrals = [
+  {
+    name: "Raycast",
+    description: "The best macOS productivity app.",
+    url: "https://raycast.com/?via=einar",
+  },
+  {
+    name: "WHOOP",
+    description: "Get a free WHOOP and one month free when you join with my link.",
+    url: "https://join.whoop.com/11514F27",
+  },
+];
+---
+
+<BaseLayout title="Referrals">
+  <section class="mx-auto w-full max-w-2xl space-y-8 print:space-y-6 mb-8">
+    <h1 class="font-semibold text-2xl tracking-tight">Referrals</h1>
+    <p class="-mt-4 text-muted-foreground">
+      Products and services I use and recommend. Use these links to get a
+      discount (and I might get one too).
+    </p>
+    <div class="prose prose-neutral dark:prose-invert space-y-6">
+      {
+        referrals.map((referral) => (
+          <div>
+            <p class="text-brand text-lg font-mono">{referral.name}</p>
+            <p>{referral.description}</p>
+            <ExternalLink href={referral.url}>Get started &rarr;</ExternalLink>
+          </div>
+        ))
+      }
+    </div>
+    <BackLink />
+  </section>
+</BaseLayout>

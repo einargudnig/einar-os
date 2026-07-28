@@ -1,0 +1,54 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { mdxComponents } from "../components/mdx-components";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { formatBlogDate } from "@/lib/utils";
+
+const learnings = await getCollection("learnings");
+const sorted = learnings.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// render() is async, so the MDX bodies are resolved up front rather than
+// inside the template.
+const entries = await Promise.all(
+  sorted.map(async (item) => ({ item, Content: (await render(item)).Content })),
+);
+
+const isoDate = (date: Date) => date.toISOString().slice(0, 10);
+---
+
+<BaseLayout title="Notes">
+  <section class="mx-auto w-full max-w-2xl space-y-10 print:space-y-8 mb-8">
+    <h1 class="font-bold text-3xl tracking-tight mb-5">Notes</h1>
+
+    <div class="divide-y divide-border/50 stagger-list">
+      {
+        entries.map(({ item, Content }) => (
+          <div class="py-8 first:pt-0">
+            <article class="prose dark:prose-invert mb-3 mdx-content">
+              <header class="mb-4">
+                <h2 class="text-xl font-semibold">{item.data.title}</h2>
+                <div class="text-sm text-muted-foreground flex items-center gap-2">
+                  <span class="text-brand font-mono">{item.data.topic}</span>
+                  <span>·</span>
+                  <time class="font-mono tabular-nums" datetime={isoDate(item.data.date)}>
+                    {formatBlogDate(item.data.date)}
+                  </time>
+                  {item.data.deepDiveSlug && (
+                    <a href={`/deep-dive/${item.data.deepDiveSlug}`} class="no-underline">
+                      <span class={cn(buttonVariants({ size: "sm", variant: "outline" }))}>
+                        Deep Dive
+                      </span>
+                    </a>
+                  )}
+                </div>
+              </header>
+              <Content components={mdxComponents} />
+            </article>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
