@@ -1,7 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { projectIcons } from "@/components/project-icons";
 import { ArrowTopRightIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
 
 export interface Project {
   title: string;
@@ -12,7 +11,7 @@ export interface Project {
 }
 
 export function ProjectCard({ title, description, href, tags, external = true }: Project) {
-  const Wrapper = external ? "a" : Link;
+  // Internal and external links are both plain anchors now.
   const linkProps = external
     ? { href, target: "_blank" as const, rel: "noopener noreferrer" }
     : { href };
@@ -20,7 +19,7 @@ export function ProjectCard({ title, description, href, tags, external = true }:
   const Icon = projectIcons[title];
 
   return (
-    <Wrapper
+    <a
       {...linkProps}
       className="group relative flex flex-col justify-between rounded-lg border border-border/50 p-5 transition-[border-color,background-color,transform] duration-200 ease-[var(--ease-out)] hover:border-brand/30 hover:bg-muted/30 hover-lift"
     >
@@ -45,6 +44,6 @@ export function ProjectCard({ title, description, href, tags, external = true }:
           </Badge>
         ))}
       </div>
-    </Wrapper>
+    </a>
   );
 }

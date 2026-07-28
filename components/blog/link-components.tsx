@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 import { ArrowRightIcon, ExternalLinkIcon, LinkIcon } from "lucide-react";
-import Link from "next/link";
 import { ExternalLink } from "./external-link";
 
 interface CardLinkProps {
@@ -27,7 +26,7 @@ export function CardLink({
         </a>
       )
     : ({ children }: { children: React.ReactNode }) => (
-        <Link href={href}>{children}</Link>
+        <a href={href}>{children}</a>
       );
 
   return (
@@ -73,7 +72,7 @@ export function ResourceLink({
   }
 
   return (
-    <Link
+    <a
       href={href}
       className={cn(
         "inline-flex items-center gap-1 font-medium text-primary hover:underline",
@@ -82,7 +81,7 @@ export function ResourceLink({
     >
       <LinkIcon className="h-4 w-4" />
       {children}
-    </Link>
+    </a>
   );
 }
 
@@ -115,7 +114,7 @@ export function ReadMoreLink({
   }
 
   return (
-    <Link
+    <a
       href={href}
       className={cn(
         "inline-flex items-center gap-1.5 font-medium text-primary hover:underline",
@@ -124,6 +123,6 @@ export function ReadMoreLink({
     >
       <span>{children}</span>
       <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-    </Link>
+    </a>
   );
 }

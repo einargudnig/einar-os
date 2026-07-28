@@ -21,7 +21,7 @@ if (!post) {
 const { Content } = await render(post);
 ---
 
-<BaseLayout title={post.data.title}>
+<BaseLayout title={post.data.title} ogImage={`blog-${post.data.slug}`}>
   <section class="mx-auto w-full max-w-2xl space-y-8 print:space-y-6">
     <div>
       <h1

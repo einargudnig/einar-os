@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 interface CaptionedImageProps {
   src: string;
@@ -11,6 +10,11 @@ interface CaptionedImageProps {
   priority?: boolean;
 }
 
+// Was next/image. MDX passes `src` as a runtime string pointing into public/,
+// which astro:assets cannot optimise — that needs an imported ImageMetadata.
+// Optimising these means moving blog images beside their content and using
+// relative references; until then this is a plain <img>, so the local/remote
+// split that existed only to toggle `unoptimized` is gone.
 export function CaptionedImage({
   src,
   alt,
@@ -20,37 +24,19 @@ export function CaptionedImage({
   className,
   priority = false,
 }: CaptionedImageProps) {
-  // Determine if this is a local or remote image
-  const isRemoteImage = src.startsWith("http");
-
   return (
     <figure className={cn("my-8", className)}>
-      {isRemoteImage ? (
-        // Remote image with unoptimized prop
-        <div className="overflow-hidden rounded-md">
-          <Image
-            src={src}
-            alt={alt}
-            width={width || 800}
-            height={height || 450}
-            className="w-full object-cover"
-            unoptimized
-            priority={priority}
-          />
-        </div>
-      ) : (
-        // Local image with optimization
-        <div className="overflow-hidden rounded-md">
-          <Image
-            src={src}
-            alt={alt}
-            width={width || 800}
-            height={height || 450}
-            className="w-full object-cover"
-            priority={priority}
-          />
-        </div>
-      )}
+      <div className="overflow-hidden rounded-md">
+        <img
+          src={src}
+          alt={alt}
+          width={width || 800}
+          height={height || 450}
+          className="w-full object-cover"
+          loading={priority ? "eager" : "lazy"}
+          decoding={priority ? "sync" : "async"}
+        />
+      </div>
 
       {caption && (
         <figcaption className="mt-2 text-center text-sm text-muted-foreground">

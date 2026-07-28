@@ -20,7 +20,7 @@ if (!dive) {
 const { Content } = await render(dive);
 ---
 
-<BaseLayout title={dive.data.title}>
+<BaseLayout title={dive.data.title} ogImage={`deep-dive-${dive.data.slug}`}>
   <section class="mx-auto w-full max-w-2xl space-y-8 print:space-y-6">
     <div>
       <h1
