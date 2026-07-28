@@ -1,0 +1,57 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { PencilLine } from "lucide-react";
+import { formatBlogDate } from "@/lib/utils";
+
+// Matches the Next page: drafts are listed here (only the sitemap filters them).
+const posts = await getCollection("posts");
+const sortedPosts = posts.sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+---
+
+<BaseLayout title="Blog">
+  <section class="mx-auto w-full space-y-8 print:space-y-6 mb-8">
+    <h1 class="font-bold text-3xl tracking-tight mb-5">Blog</h1>
+
+    <div class="grid stagger-list">
+      {
+        sortedPosts.length === 0 && (
+          <div class="py-16 text-center">
+            <p class="text-lg text-muted-foreground">No posts yet.</p>
+            <p class="text-sm text-muted-foreground/60 mt-1">Check back soon.</p>
+          </div>
+        )
+      }
+      {
+        sortedPosts.map((post) => (
+          <div class="group border-b border-border/50 last:border-b-0">
+            <h2 class="text-lg">
+              <a
+                href={`/blog/${post.data.slug}`}
+                class="flex items-center justify-between py-3 px-2 -mx-2 rounded-md transition-colors hover:bg-muted/50"
+              >
+                <p class="text-foreground group-hover:text-brand transition-colors mr-1">
+                  {post.data.title}
+                </p>
+                <p class="ml-1 text-sm font-mono tabular-nums text-muted-foreground shrink-0">
+                  {formatBlogDate(post.data.date)}
+                </p>
+              </a>
+            </h2>
+          </div>
+        ))
+      }
+      <Alert variant="default" className="mt-4">
+        <PencilLine />
+        <AlertTitle>Heads up!</AlertTitle>
+        <AlertDescription>
+          I have written more posts over the years, I'm in the process of
+          migrating them to this new page.
+        </AlertDescription>
+      </Alert>
+    </div>
+  </section>
+</BaseLayout>

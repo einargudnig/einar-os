@@ -1,0 +1,10 @@
+---
+// Pure container in the React version — no state, so no hydration needed.
+import { cn } from "@/lib/utils";
+
+const { class: className } = Astro.props;
+---
+
+<div class={cn("my-6 divide-y rounded-lg border", className)}>
+  <slot />
+</div>

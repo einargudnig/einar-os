@@ -1,0 +1,20 @@
+---
+// External links keep the decorated ExternalLink treatment; internal links are
+// plain anchors now that next/link is gone.
+import { ExternalLink } from "@/components/blog/external-link";
+
+const { href, ...rest } = Astro.props;
+const isExternal = typeof href === "string" && (href.startsWith("http") || href.startsWith("mailto:"));
+---
+
+{
+  isExternal ? (
+    <ExternalLink href={href}>
+      <slot />
+    </ExternalLink>
+  ) : (
+    <a href={href} {...rest}>
+      <slot />
+    </a>
+  )
+}

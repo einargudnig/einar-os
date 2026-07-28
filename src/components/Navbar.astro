@@ -1,0 +1,64 @@
+---
+// No client directive: these render to static SVG at build time.
+import { Github, Twitter } from "lucide-react";
+import { KeyboardHint } from "@/components/keyboard-hint";
+import { cn } from "@/lib/utils";
+
+const navItems = {
+  "/": { name: "home" },
+  "/uses": { name: "uses" },
+  "/blog": { name: "blog" },
+  "/interesting": { name: "interesting" },
+};
+
+// Was usePathname() in a client component; the whole nav is static now.
+const pathname = Astro.url.pathname;
+const isActive = (path: string) =>
+  path === "/" ? pathname === "/" : pathname.startsWith(path);
+---
+
+<nav class="mx-auto w-full space-y-8 print:space-y-6">
+  <aside class="mb-16 tracking-tight">
+    <div class="lg:sticky lg:top-20">
+      <nav class="pb-4 border-b border-border/50" id="nav">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center flex-row-reverse md:flex-row">
+            <div class="flex flex-row gap-x-1">
+              {
+                Object.entries(navItems).map(([path, { name }]) => (
+                  <a
+                    href={path}
+                    class={cn(
+                      "transition-colors duration-200 flex align-middle relative py-2 px-3 rounded-md",
+                      "after:absolute after:bottom-0 after:left-3 after:right-3 after:h-px",
+                      isActive(path)
+                        ? "text-foreground after:bg-foreground/60"
+                        : "text-muted-foreground hover:text-brand hover:bg-muted/50 after:bg-transparent",
+                    )}
+                  >
+                    {name}
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+          <div class="flex items-center gap-x-3">
+            <KeyboardHint client:idle />
+            <a
+              href="https://github.com/einargudnig"
+              class="text-muted-foreground hover:text-brand transition-colors p-2 -m-1"
+            >
+              <Github size={20} strokeWidth={1.5} />
+            </a>
+            <a
+              href="https://x.com/einargudni"
+              class="text-muted-foreground hover:text-brand transition-colors p-2 -m-1"
+            >
+              <Twitter size={20} strokeWidth={1.5} />
+            </a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </aside>
+</nav>

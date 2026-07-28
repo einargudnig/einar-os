@@ -1,0 +1,65 @@
+---
+import { Font } from "astro:assets";
+import { ClientRouter } from "astro:transitions";
+import "../styles/globals.css";
+
+import Navbar from "../components/Navbar.astro";
+import { KeyboardNav } from "@/components/keyboard-nav";
+import { WebMCP } from "@/components/web-mcp";
+import { BirthdayConfetti } from "@/components/birthday-confetti";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = "Einar Gudni", description = "My home on the web 🏡" } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+
+    <Font cssVariable="--font-geist-sans" preload />
+    <Font cssVariable="--font-geist-mono" />
+
+    {/* Applied before paint so the dark default never flashes. Reuses the
+        `theme` key next-themes wrote, so existing visitors keep their choice. */}
+    <script is:inline>
+      const stored = localStorage.getItem("theme");
+      const theme = stored === "light" || stored === "dark"
+        ? stored
+        : stored === "system"
+          ? (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")
+          : "dark";
+      document.documentElement.classList.toggle("dark", theme === "dark");
+      document.documentElement.style.colorScheme = theme;
+    </script>
+
+    <ClientRouter />
+  </head>
+
+  <body class="antialiased mb-10 lg:mx-auto">
+    <WebMCP client:idle />
+    <BirthdayConfetti client:idle />
+
+    <main
+      class="relative mx-auto mt-8 flex min-h-[calc(100dvh-4.5rem)] max-w-4xl flex-col overflow-auto px-6 md:px-8"
+    >
+      <Navbar />
+      <div class="flex-1"><slot /></div>
+      <footer
+        class="mt-16 mb-8 border-t border-border/50 pt-6 flex items-center justify-between text-xs text-muted-foreground font-mono"
+      >
+        <span>don't half ass it</span>
+        <span class="tabular-nums">{year}</span>
+      </footer>
+      <KeyboardNav client:idle />
+    </main>
+  </body>
+</html>

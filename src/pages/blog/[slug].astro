@@ -1,0 +1,57 @@
+---
+// On-demand so middleware can honour `Accept: text/markdown`. Prerendered
+// pages are served straight from the asset binding and never reach middleware.
+export const prerender = false;
+
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { mdxComponents } from "../../components/mdx-components";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { formatBlogDate } from "@/lib/utils";
+
+const { slug } = Astro.params;
+
+const posts = await getCollection("posts");
+const post = posts.find((entry) => entry.data.slug === slug);
+
+if (!post) {
+  return Astro.rewrite("/404");
+}
+
+const { Content } = await render(post);
+---
+
+<BaseLayout title={post.data.title}>
+  <section class="mx-auto w-full max-w-2xl space-y-8 print:space-y-6">
+    <div>
+      <h1
+        class="font-bold text-3xl md:text-4xl tracking-tight max-w-[650px] leading-tight text-balance"
+      >
+        {post.data.title}
+      </h1>
+      <div class="flex items-center gap-3 mt-4 mb-8">
+        <div
+          class="font-mono text-sm text-muted-foreground tabular-nums tracking-tighter"
+        >
+          {formatBlogDate(post.data.date)}
+        </div>
+        <div class="h-px flex-1 bg-border/50"></div>
+      </div>
+    </div>
+
+    {
+      post.data.draft && (
+        <div class="mb-6">
+          <Alert>
+            <AlertTitle>Under construction</AlertTitle>
+            <AlertDescription>This post is not finished!</AlertDescription>
+          </Alert>
+        </div>
+      )
+    }
+
+    <article class="prose dark:prose-invert max-w-[65ch] leading-relaxed mdx-content">
+      <Content components={mdxComponents} />
+    </article>
+  </section>
+</BaseLayout>

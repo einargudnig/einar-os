@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "einar-os",
+  "compatibility_date": "2026-07-26",
+  "compatibility_flags": ["nodejs_compat"],
+
+  "assets": {
+    // Content negotiation (Accept: text/markdown) has to beat the asset
+    // router, which otherwise serves prerendered HTML — and normalises
+    // trailing slashes — before the Worker ever runs. Keep this list in
+    // sync with the routes handled in src/fetch.ts.
+    "run_worker_first": ["/", "/blog/*", "/deep-dive/*", "/spike"]
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}

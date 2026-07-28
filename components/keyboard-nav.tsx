@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { navigate } from "astro:transitions/client";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -18,7 +18,6 @@ const routes: Record<string, { path: string; label: string }> = {
 };
 
 export function KeyboardNav() {
-  const router = useRouter();
   const pendingRef = useRef(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
   const [display, setDisplay] = useState<"idle" | "pending" | string>("idle");
@@ -94,7 +93,7 @@ export function KeyboardNav() {
         if (route) {
           e.preventDefault();
           setDisplay(route.label);
-          router.push(route.path);
+          navigate(route.path);
           setTimeout(() => setDisplay("idle"), 800);
         } else {
           setDisplay("idle");
@@ -104,7 +103,7 @@ export function KeyboardNav() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [router]);
+  }, []);
 
   const show = display !== "idle";
 

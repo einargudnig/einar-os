@@ -48,3 +48,9 @@ next-env.d.ts
 .whoop-tokens.json
 /data/whoop/*
 !/data/whoop/latest.json
+
+# astro
+dist/
+.astro/
+.wrangler/
+.open-next/

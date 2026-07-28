@@ -1,0 +1,10 @@
+---
+// Reads headings out of the DOM and tracks the active one on scroll, so it
+// must hydrate. client:load rather than client:visible — it sits at the top
+// of the article and should be populated immediately.
+import { TableOfContents } from "@/components/blog/table-of-contents";
+
+const props = Astro.props;
+---
+
+<TableOfContents {...props} client:load />

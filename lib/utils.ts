@@ -6,11 +6,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Formats a date string into a reader-friendly format
- * @param dateString - ISO format date string (YYYY-MM-DD)
+ * Formats a date into a reader-friendly format
+ * @param dateString - ISO format date string (YYYY-MM-DD), or a Date
+ *   (content collections parse frontmatter dates into Date objects)
  * @returns Formatted date string (e.g., "October 11, 2024")
  */
-export function formatBlogDate(dateString: string): string {
+export function formatBlogDate(dateString: string | Date): string {
   const date = new Date(dateString);
 
   return date.toLocaleDateString("en-US", {

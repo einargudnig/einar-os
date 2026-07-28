@@ -1,0 +1,11 @@
+---
+// Holds open/closed state, so it hydrates. Slotted MDX children are rendered
+// to HTML on the server and handed to the island as `children`.
+import { AccordionItem } from "@/components/blog/interactive-elements";
+
+const props = Astro.props;
+---
+
+<AccordionItem {...props} client:visible>
+  <slot />
+</AccordionItem>
