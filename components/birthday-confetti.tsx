@@ -154,7 +154,10 @@ export function BirthdayConfetti() {
     };
   }, [show, dismissed]);
 
-  if (!show || dismissed) return null;
+  // Empty fragment rather than null — see the note in web-mcp.tsx. Returning
+  // null here makes Astro's renderer detection log an invalid-hook error on
+  // every request for the ~364 days a year this renders nothing.
+  if (!show || dismissed) return <></>;
 
   return (
     <>

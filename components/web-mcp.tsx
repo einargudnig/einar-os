@@ -98,5 +98,10 @@ export function WebMCP() {
     };
   }, []);
 
-  return null;
+  // An empty fragment rather than null: Astro's React renderer detects
+  // components by calling them and inspecting the result's $$typeof. null
+  // fails that check, so it keeps probing with other renderers and those
+  // calls happen outside a React render — logging "Invalid hook call" on
+  // every request. Renders nothing either way.
+  return <></>;
 }

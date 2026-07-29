@@ -23,6 +23,10 @@ const contentPages = [
 
 export default defineConfig({
   site: "https://einargudni.com",
+
+  // Astro's default 4321 collides with the life-os daemon (and 4322 is taken
+  // too). 3000 is where the Next dev server used to live.
+  server: { port: 3000 },
   // 'compile' optimises images at build time instead of routing them through
   // the runtime Images binding — every image here is static, so there's no
   // reason to pay for a transform on each request.
