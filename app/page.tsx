@@ -4,6 +4,7 @@ import { ProjectCard } from "@/components/project-card";
 import { GitHubContributions } from "@/components/github-contributions";
 import { WhoopStats } from "@/components/whoop-stats";
 import { LifeOsHealth } from "@/components/life-os-health";
+import { HireMe } from "@/components/hire-me";
 import { GlobeIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -228,6 +229,11 @@ export default function Home() {
             </div>
           ))}
         </div>
+      </Section>
+
+      <Section className="mt-4" id="contact">
+        <h2 className="text-xl font-bold">Work with me</h2>
+        <HireMe />
       </Section>
     </section>
   );
