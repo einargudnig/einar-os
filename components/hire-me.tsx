@@ -52,8 +52,9 @@ export function HireMe() {
       </span>
 
       <p className="mt-3 max-w-[55ch] text-sm text-muted-foreground leading-relaxed">
-        I'm taking on contract and full-time work — React, TypeScript, Node and AWS. Based in
-        Reykjavík, happy remote. Tell me what you're building and I'll get back to you.
+        I'm taking on contract and full-time work — building software, putting AI and automation to
+        work, and smoothing out the flows that slow people down. Whatever the problem is, if it can
+        be solved with software I'm interested. Based in Reykjavík, happy remote.
       </p>
 
       {status === "sent" ? (
@@ -97,7 +98,7 @@ export function HireMe() {
               minLength={10}
               maxLength={5000}
               rows={4}
-              placeholder="A little about the project, timeline and budget."
+              placeholder="What you're working on, and where you could use a hand."
             />
           </label>
 
