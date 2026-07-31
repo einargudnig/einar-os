@@ -48,13 +48,11 @@ export function HireMe() {
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-60 motion-reduce:hidden" />
           <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand" />
         </span>
-        Open for work
+        Open for opportunities
       </span>
 
-      <p className="mt-3 max-w-[55ch] text-sm text-muted-foreground leading-relaxed">
-        I'm taking on contract and full-time work — building software, putting AI and automation to
-        work, and smoothing out the flows that slow people down. Whatever the problem is, if it can
-        be solved with software I'm interested. Based in Reykjavík, happy remote.
+      <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+        Software, AI and automation — whatever the problem, if software can solve it I'm interested.
       </p>
 
       {status === "sent" ? (
