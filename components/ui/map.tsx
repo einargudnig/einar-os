@@ -119,13 +119,16 @@ function Map({ children, styles, ...props }: MapProps) {
 
   const isLoading = !isMounted || !isLoaded || !isStyleLoaded;
 
+  const mapContextValue = useMemo<MapContextValue>(
+    () => ({
+      map: mapRef.current,
+      isLoaded: isMounted && isLoaded && isStyleLoaded,
+    }),
+    [isMounted, isLoaded, isStyleLoaded]
+  );
+
   return (
-    <MapContext.Provider
-      value={{
-        map: mapRef.current,
-        isLoaded: isMounted && isLoaded && isStyleLoaded,
-      }}
-    >
+    <MapContext.Provider value={mapContextValue}>
       <div ref={containerRef} className="relative w-full h-full">
         {isLoading && <DefaultLoader />}
         {/* guard against hydration error */}
@@ -249,10 +252,13 @@ function MapMarker({
     markerRef.current?.setDraggable(draggable);
   }, [draggable]);
 
+  const markerContextValue = useMemo<MarkerContextValue>(
+    () => ({ markerRef, markerElementRef, map, isReady }),
+    [markerRef, markerElementRef, map, isReady]
+  );
+
   return (
-    <MarkerContext.Provider
-      value={{ markerRef, markerElementRef, map, isReady }}
-    >
+    <MarkerContext.Provider value={markerContextValue}>
       {children}
     </MarkerContext.Provider>
   );
@@ -527,10 +533,10 @@ function MapControls({
     setWaitingForLocation(true);
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        (geoPosition) => {
           const coords = {
-            longitude: position.coords.longitude,
-            latitude: position.coords.latitude,
+            longitude: geoPosition.coords.longitude,
+            latitude: geoPosition.coords.latitude,
           };
           map?.flyTo({
             center: [coords.longitude, coords.latitude],
