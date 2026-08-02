@@ -1,15 +1,15 @@
 {
-  "date": "2026-07-26",
+  "date": "2026-08-02",
   "recovery": {
-    "score": 75,
-    "hrv": 58,
-    "rhr": 44
+    "score": 35,
+    "hrv": 53,
+    "rhr": 46
   },
   "sleep": {
-    "performance": 80,
-    "hours": 7.45
+    "performance": 44,
+    "hours": 4.05
   },
-  "strain": 5,
+  "strain": 4.1,
   "trends": {
     "days": 30,
     "avgRecovery": 65,
@@ -18,8 +18,8 @@
   },
   "insight": {
     "afterGood": 74,
-    "afterShort": 62,
-    "sleepDelta": 12,
+    "afterShort": 59,
+    "sleepDelta": 15,
     "enough": true
   }
 }
