@@ -12,8 +12,11 @@ export default function Page() {
       <h1 className="font-bold text-3xl tracking-tight mb-5">Quotes</h1>
 
       <div className="divide-y divide-border/50 stagger-list">
-        {sorted.map((quote, index) => (
-          <div key={`${quote.author}-${quote.date}-${index}`} className="py-8 first:pt-0 last:pb-0">
+        {sorted.map((quote) => (
+          // `author` + `date` alone aren't guaranteed unique (a single author
+          // can be quoted more than once on the same day), so `text` is
+          // included to disambiguate — two distinct quotes never share text.
+          <div key={`${quote.author}-${quote.date}-${quote.text}`} className="py-8 first:pt-0 last:pb-0">
             <article>
               <blockquote className="border-l-2 border-brand pl-4 italic text-lg leading-relaxed max-w-[65ch]">
                 &ldquo;{quote.text}&rdquo;

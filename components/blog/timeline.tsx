@@ -55,7 +55,7 @@ export function Timeline({ items, className }: TimelineProps) {
     <div className={cn("my-4", className)}>
       {items.map((item, index) => (
         <TimelineItem
-          key={index}
+          key={`${item.date}-${item.title}`}
           date={item.date}
           title={item.title}
           description={item.description}
