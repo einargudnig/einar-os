@@ -7,6 +7,7 @@ import { LifeOsHealth } from "@/components/life-os-health";
 import { HireMe } from "@/components/hire-me";
 import { GlobeIcon } from "lucide-react";
 import Link from "next/link";
+import { getWhoopSnapshot } from "@/lib/life-os";
 
 const projects = [
   {
@@ -68,7 +69,9 @@ const projects = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const whoop = await getWhoopSnapshot();
+
   const work = [
     {
       company: "Maul",
@@ -184,8 +187,8 @@ export default function Home() {
             · Whoop
           </span>
         </h2>
-        <WhoopStats />
-        <LifeOsHealth />
+        <WhoopStats data={whoop} />
+        <LifeOsHealth data={whoop} />
       </Section>
 
       <Section className="mt-4">
@@ -231,7 +234,7 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section className="mt-4" id="contact">
+      <Section className="mt-4 scroll-mt-8" id="contact">
         <h2 className="text-xl font-bold">Work with me</h2>
         <HireMe />
       </Section>
