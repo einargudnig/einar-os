@@ -16,9 +16,6 @@ const navItems = {
   "/blog": {
     name: "blog",
   },
-  "/interesting": {
-    name: "interesting",
-  },
 };
 
 export function Navbar() {
