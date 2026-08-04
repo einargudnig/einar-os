@@ -30,21 +30,22 @@ async function importJsonl(
   }
 
   const lines = content.split("\n").filter((line) => line.trim());
-  let count = 0;
 
-  for (const line of lines) {
-    const doc: ConvexDocument = JSON.parse(line);
-    await sql`
-      INSERT INTO ${sql(tableName)} (id, prediction, timestamp)
-      VALUES (${doc._id}, ${doc.prediction}, ${doc.timestamp})
-      ON CONFLICT (id) DO UPDATE SET
-        prediction = EXCLUDED.prediction,
-        timestamp = EXCLUDED.timestamp
-    `;
-    count++;
-  }
+  await Promise.all(
+    lines.map((line) => {
+      const doc: ConvexDocument = JSON.parse(line);
+      const { _id: id, prediction, timestamp } = doc;
+      return sql`
+        INSERT INTO ${sql(tableName)} (id, prediction, timestamp)
+        VALUES (${id}, ${prediction}, ${timestamp})
+        ON CONFLICT (id) DO UPDATE SET
+          prediction = EXCLUDED.prediction,
+          timestamp = EXCLUDED.timestamp
+      `;
+    })
+  );
 
-  return count;
+  return lines.length;
 }
 
 async function main() {
@@ -64,6 +65,7 @@ async function main() {
 
     for (const { jsonl, table } of tables) {
       const filePath = `${exportDir}/${jsonl}`;
+      // eslint-disable-next-line no-await-in-loop -- tables must import one at a time so each "Imported N rows into TABLE" log reflects that table's own completion, and to bound total concurrent DB connections alongside the per-row Promise.all in importJsonl.
       const count = await importJsonl(filePath, table);
       console.log(`Imported ${count} rows into ${table}`);
     }
