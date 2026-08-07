@@ -12,7 +12,8 @@
     "perf": "warn"
   },
   "rules": {
-    "import/no-unassigned-import": ["warn", { "allow": ["**/*.css"] }]
+    "import/no-unassigned-import": ["warn", { "allow": ["**/*.css"] }],
+    "react/react-in-jsx-scope": "off"
   },
   "env": {
     "browser": true,
