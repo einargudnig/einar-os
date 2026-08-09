@@ -66,6 +66,19 @@ export function StylishList({
   // Convert children to array to handle both single and multiple children
   const childrenArray = React.Children.toArray(children);
 
+  // Content-derived, deduped keys for children that need to be wrapped
+  // (a plain index would misreconcile if the list is ever reordered/filtered)
+  const keyCounts = new Map<string, number>();
+  const keyFor = (child: ReactNode) => {
+    const base =
+      React.isValidElement(child) && child.key != null
+        ? String(child.key)
+        : String(child);
+    const count = keyCounts.get(base) ?? 0;
+    keyCounts.set(base, count + 1);
+    return count === 0 ? base : `${base}-${count}`;
+  };
+
   // Apply spacing based on the gap prop
   const gapClasses = {
     tight: "space-y-1",
@@ -117,7 +130,7 @@ export function StylishList({
         }
 
         return (
-          <StylishListItem key={index} icon={icon} index={index + 1}>
+          <StylishListItem key={keyFor(child)} icon={icon} index={index + 1}>
             {child}
           </StylishListItem>
         );

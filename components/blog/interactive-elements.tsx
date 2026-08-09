@@ -24,7 +24,7 @@ export function Tabs({ items, defaultIndex = 0, className }: TabsProps) {
       <div className="flex border-b overflow-x-auto">
         {items.map((item, idx) => (
           <button
-            key={idx}
+            key={item.label}
             className={cn(
               "px-4 py-2 text-sm font-medium whitespace-nowrap",
               activeTab === idx
