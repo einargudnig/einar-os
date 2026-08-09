@@ -2,7 +2,7 @@ import { posts } from "@/.velite";
 import { MDXContent } from "@/components/mdx-content";
 import { formatBlogDate } from "@/lib/utils";
 import { notFound } from "next/navigation";
-import Balancer from "react-wrap-balancer";
+import { Balancer } from "react-wrap-balancer";
 
 interface BlogPostParams {
   params: Promise<{

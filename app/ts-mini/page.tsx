@@ -1,5 +1,5 @@
 import { CompilerVisualizer } from "@/components/compiler-visualizer";
-import Balancer from "react-wrap-balancer";
+import { Balancer } from "react-wrap-balancer";
 
 export default function TypeScriptMiniPage() {
   return (
