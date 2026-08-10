@@ -105,6 +105,10 @@ function Map({ children, styles, ...props }: MapProps) {
       mapInstance.remove();
       mapRef.current = null;
     };
+    // The map instance is created once on mount only; theme/style changes
+    // are applied via mapInstance.setStyle in the effect below instead of
+    // recreating the map, and `...props` are used as initial config only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted]);
 
   useEffect(() => {
@@ -115,7 +119,7 @@ function Map({ children, styles, ...props }: MapProps) {
         { diff: true }
       );
     }
-  }, [resolvedTheme]);
+  }, [resolvedTheme, mapStyles]);
 
   const isLoading = !isMounted || !isLoaded || !isStyleLoaded;
 
@@ -185,6 +189,28 @@ function MapMarker({
   const markerElementRef = useRef<HTMLDivElement | null>(null);
   const [isReady, setIsReady] = useState(false);
 
+  // Latest callback props, read from the effect below so the marker's
+  // event listeners stay fresh without recreating the marker on every
+  // render (the marker is created once per isLoaded/map, not per prop).
+  const handlersRef = useRef({
+    onClick,
+    onMouseEnter,
+    onMouseLeave,
+    onDragStart,
+    onDrag,
+    onDragEnd,
+  });
+  useEffect(() => {
+    handlersRef.current = {
+      onClick,
+      onMouseEnter,
+      onMouseLeave,
+      onDragStart,
+      onDrag,
+      onDragEnd,
+    };
+  });
+
   useEffect(() => {
     if (!isLoaded || !map) return;
 
@@ -201,21 +227,27 @@ function MapMarker({
 
     markerRef.current = marker;
 
-    if (onClick) container.addEventListener("click", onClick);
-    if (onMouseEnter) container.addEventListener("mouseenter", onMouseEnter);
-    if (onMouseLeave) container.addEventListener("mouseleave", onMouseLeave);
+    const handleClick = (e: MouseEvent) => handlersRef.current.onClick?.(e);
+    const handleMouseEnter = (e: MouseEvent) =>
+      handlersRef.current.onMouseEnter?.(e);
+    const handleMouseLeave = (e: MouseEvent) =>
+      handlersRef.current.onMouseLeave?.(e);
+
+    container.addEventListener("click", handleClick);
+    container.addEventListener("mouseenter", handleMouseEnter);
+    container.addEventListener("mouseleave", handleMouseLeave);
 
     const handleDragStart = () => {
       const lngLat = marker.getLngLat();
-      onDragStart?.({ lng: lngLat.lng, lat: lngLat.lat });
+      handlersRef.current.onDragStart?.({ lng: lngLat.lng, lat: lngLat.lat });
     };
     const handleDrag = () => {
       const lngLat = marker.getLngLat();
-      onDrag?.({ lng: lngLat.lng, lat: lngLat.lat });
+      handlersRef.current.onDrag?.({ lng: lngLat.lng, lat: lngLat.lat });
     };
     const handleDragEnd = () => {
       const lngLat = marker.getLngLat();
-      onDragEnd?.({ lng: lngLat.lng, lat: lngLat.lat });
+      handlersRef.current.onDragEnd?.({ lng: lngLat.lng, lat: lngLat.lat });
     };
 
     if (draggable) {
@@ -227,11 +259,9 @@ function MapMarker({
     setIsReady(true);
 
     return () => {
-      if (onClick) container.removeEventListener("click", onClick);
-      if (onMouseEnter)
-        container.removeEventListener("mouseenter", onMouseEnter);
-      if (onMouseLeave)
-        container.removeEventListener("mouseleave", onMouseLeave);
+      container.removeEventListener("click", handleClick);
+      container.removeEventListener("mouseenter", handleMouseEnter);
+      container.removeEventListener("mouseleave", handleMouseLeave);
       if (draggable) {
         marker.off("dragstart", handleDragStart);
         marker.off("drag", handleDrag);
@@ -242,7 +272,12 @@ function MapMarker({
       markerElementRef.current = null;
       setIsReady(false);
     };
-  }, [isLoaded]);
+    // longitude/latitude/draggable are synced imperatively via the effects
+    // below; markerOptions are creation-time-only marker config; callback
+    // props are read from handlersRef (see above) instead of being listed
+    // here, so the marker isn't torn down and recreated on every render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded, map]);
 
   useEffect(() => {
     markerRef.current?.setLngLat([longitude, latitude]);
@@ -329,7 +364,10 @@ function MarkerPopup({
       containerRef.current = null;
       setMounted(false);
     };
-  }, [isReady]);
+    // popupOptions are applied at popup creation only; markerRef is a
+    // stable ref object and doesn't need to trigger a re-run.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isReady, markerRef]);
 
   const handleClose = () => popupRef.current?.remove();
 
@@ -412,7 +450,11 @@ function MarkerTooltip({
       containerRef.current = null;
       setMounted(false);
     };
-  }, [isReady, map]);
+    // popupOptions are applied at popup creation only; markerRef and
+    // markerElementRef are stable ref objects and don't need to trigger
+    // a re-run.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isReady, map, markerRef, markerElementRef]);
 
   if (!mounted || !containerRef.current) return null;
 
@@ -686,6 +728,13 @@ function MapPopup({
 
   const container = useMemo(() => document.createElement("div"), []);
 
+  // Latest onClose, read from the effect below so the popup's "close"
+  // listener stays fresh without recreating the popup on every render.
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
+
   useEffect(() => {
     if (!map) return;
 
@@ -699,7 +748,7 @@ function MapPopup({
       .setLngLat([longitude, latitude])
       .addTo(map);
 
-    const onCloseProp = () => onClose?.();
+    const onCloseProp = () => onCloseRef.current?.();
 
     popup.on("close", onCloseProp);
 
@@ -712,7 +761,12 @@ function MapPopup({
       }
       popupRef.current = null;
     };
-  }, [map]);
+    // longitude/latitude are synced imperatively via the effect below;
+    // popupOptions are applied at popup creation only; container is a
+    // stable memoized value; onClose is read from onCloseRef (see above)
+    // instead of being listed here.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, container]);
 
   useEffect(() => {
     popupRef.current?.setLngLat([longitude, latitude]);
