@@ -1,5 +1,3 @@
-const SITE_URL = "https://einargudni.com";
-
 // MCP Server Card (SEP-1649, schema still under review in
 // modelcontextprotocol PR #2127). This site does not run an MCP server —
 // capabilities is deliberately empty to avoid advertising tools that
