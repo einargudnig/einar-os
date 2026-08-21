@@ -25,7 +25,13 @@ const year = new Date().getFullYear();
 // Next derived these from the opengraph-image file convention; now they're
 // explicit.
 const ogImageUrl = new URL(`/og/${ogImage}.png`, Astro.site);
-const canonical = new URL(Astro.url.pathname, Astro.site);
+// build.format: "file" prerenders to /blog.html, so Astro.url.pathname carries a
+// .html suffix that the served URL never has — /blog.html only 307s to /blog.
+// Strip it, or every prerendered page advertises a redirect as its canonical.
+const canonical = new URL(
+  Astro.url.pathname.replace(/(?:\/index)?\.html$/, "") || "/",
+  Astro.site,
+);
 ---
 
 <html lang="en">
