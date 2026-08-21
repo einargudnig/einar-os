@@ -56,16 +56,27 @@ const canonical = new URL(
     <Font cssVariable="--font-geist-mono" />
 
     {/* Applied before paint so the dark default never flashes. Reuses the
-        `theme` key next-themes wrote, so existing visitors keep their choice. */}
+        `theme` key next-themes wrote, so existing visitors keep their choice.
+
+        Re-applied on astro:after-swap because ClientRouter replaces the <html>
+        element's attributes with the incoming document's, and that document has
+        no class="dark" — the class only ever exists at runtime. Without this you
+        land dark, click one link, and stay light for the rest of the session.
+        The event fires before the new page paints, so there's still no flash. */}
     <script is:inline>
-      const stored = localStorage.getItem("theme");
-      const theme = stored === "light" || stored === "dark"
-        ? stored
-        : stored === "system"
-          ? (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")
-          : "dark";
-      document.documentElement.classList.toggle("dark", theme === "dark");
-      document.documentElement.style.colorScheme = theme;
+      function applyTheme() {
+        const stored = localStorage.getItem("theme");
+        const theme = stored === "light" || stored === "dark"
+          ? stored
+          : stored === "system"
+            ? (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")
+            : "dark";
+        document.documentElement.classList.toggle("dark", theme === "dark");
+        document.documentElement.style.colorScheme = theme;
+      }
+      applyTheme();
+      // document survives the swap, so registering once on first load is enough.
+      document.addEventListener("astro:after-swap", applyTheme);
     </script>
 
     <ClientRouter />
