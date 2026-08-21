@@ -1,6 +1,6 @@
 ---
 // No client directive: these render to static SVG at build time.
-import { Github, Twitter } from "lucide-react";
+import { Github, Mail, Twitter } from "lucide-react";
 import { KeyboardHint } from "@/components/keyboard-hint";
 import { cn } from "@/lib/utils";
 
@@ -8,7 +8,6 @@ const navItems = {
   "/": { name: "home" },
   "/uses": { name: "uses" },
   "/blog": { name: "blog" },
-  "/interesting": { name: "interesting" },
 };
 
 // Was usePathname() in a client component; the whole nav is static now.
@@ -44,6 +43,33 @@ const isActive = (path: string) =>
           </div>
           <div class="flex items-center gap-x-3">
             <KeyboardHint client:idle />
+            {/* Jumps to the contact form on the home page. The navbar is already at
+                its width limit on phones, so the label collapses to a mail icon
+                that sits with the social links. */}
+            <a
+              href="/#contact"
+              class={cn(
+                "hidden sm:inline-flex items-center gap-x-2 rounded-full border py-1.5 px-3",
+                "text-sm transition-colors",
+                "border-border/60 text-muted-foreground",
+                "hover:border-brand/40 hover:bg-muted/50 hover:text-brand",
+              )}
+            >
+              <span class="relative flex h-1.5 w-1.5">
+                <span
+                  class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-60 motion-reduce:hidden"
+                ></span>
+                <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand"></span>
+              </span>
+              work with me
+            </a>
+            <a
+              href="/#contact"
+              aria-label="Work with me"
+              class="sm:hidden text-muted-foreground hover:text-brand transition-colors p-2 -m-1"
+            >
+              <Mail size={20} strokeWidth={1.5} />
+            </a>
             <a
               href="https://github.com/einargudnig"
               class="text-muted-foreground hover:text-brand transition-colors p-2 -m-1"

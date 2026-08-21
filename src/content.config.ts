@@ -3,8 +3,7 @@ import { glob } from "astro/loaders";
 
 // Content stays at the repo root rather than moving under src/ — the vault and
 // capture tooling write into these directories by path.
-const contentGlob = (dir: string) =>
-  glob({ pattern: "**/*.{md,mdx}", base: `./content/${dir}` });
+const contentGlob = (dir: string) => glob({ pattern: "**/*.{md,mdx}", base: `./content/${dir}` });
 
 const posts = defineCollection({
   loader: contentGlob("posts"),
@@ -52,16 +51,6 @@ const links = defineCollection({
   }),
 });
 
-const interesting = defineCollection({
-  loader: contentGlob("interesting"),
-  schema: z.object({
-    title: z.string().max(120),
-    date: z.coerce.date(),
-    url: z.string().optional(),
-    tags: z.array(z.string()).optional(),
-  }),
-});
-
 const quotes = defineCollection({
   loader: contentGlob("quotes"),
   schema: z.object({
@@ -72,4 +61,4 @@ const quotes = defineCollection({
   }),
 });
 
-export const collections = { posts, learnings, deepDives, links, interesting, quotes };
+export const collections = { posts, learnings, deepDives, links, quotes };

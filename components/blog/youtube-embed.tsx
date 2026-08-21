@@ -129,6 +129,7 @@ export function YouTubeEmbed({
           title={title}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen={allowFullscreen}
+          sandbox="allow-scripts allow-popups allow-presentation"
           className="absolute inset-0 h-full w-full"
           loading="lazy"
         />

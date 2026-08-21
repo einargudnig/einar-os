@@ -1,12 +1,5 @@
-import latest from "@/data/whoop/latest.json";
+import type { WhoopSnapshot } from "@/lib/life-os";
 import { WhoopRing } from "./whoop-ring";
-
-interface WhoopData {
-  date: string;
-  recovery?: { score: number; hrv?: number; rhr?: number };
-  sleep?: { performance: number; hours?: number };
-  strain?: number;
-}
 
 const STRAIN_MAX = 21;
 
@@ -20,8 +13,7 @@ const sleepColor = (perf: number) =>
   : perf >= 70 ? "text-yellow-400"
   : "text-red-500";
 
-export function WhoopStats() {
-  const data = latest as WhoopData;
+export function WhoopStats({ data }: { data: WhoopSnapshot }) {
   const dateLabel = new Date(data.date).toLocaleDateString("en", {
     weekday: "short",
     month: "short",
@@ -63,7 +55,7 @@ export function WhoopStats() {
   );
 }
 
-function recoverySubtitle(r: NonNullable<WhoopData["recovery"]>) {
+function recoverySubtitle(r: NonNullable<WhoopSnapshot["recovery"]>) {
   const parts: string[] = [];
   if (r.hrv != null) parts.push(`HRV ${r.hrv}ms`);
   if (r.rhr != null) parts.push(`RHR ${r.rhr}`);

@@ -39,7 +39,6 @@ Content lives in `content/` at the repo root (not `src/content/`) because vault 
 - `learnings` — short-form notes, `content/learnings/`
 - `deepDives` — long-form articles, `content/deep-dives/`
 - `links` — bookmarks, `content/links/`
-- `interesting` — micro-posts, `content/interesting/`
 - `quotes` — quotes, `content/quotes/`
 
 Query with `getCollection()` and render MDX with `render(entry)`. Frontmatter dates are parsed into `Date` objects via `z.coerce.date()`.

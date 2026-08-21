@@ -15,9 +15,7 @@
   "exclude": [
     "node_modules",
     "dist",
-    ".open-next",
     ".wrangler",
-    ".velite",
     "tools",
     "convex-export",
     "convex-export-data",

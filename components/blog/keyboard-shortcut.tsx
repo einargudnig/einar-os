@@ -16,7 +16,10 @@ export function KeyboardShortcut({
     <div className={cn("flex items-center text-sm my-2", className)}>
       <div className="flex items-center gap-1">
         {keys.map((key, index) => (
-          <React.Fragment key={index}>
+          // Keyed by the key label itself; callers should avoid passing
+          // duplicate labels within the same shortcut, since two identical
+          // keys would otherwise share a React key.
+          <React.Fragment key={key}>
             <kbd className="px-2 py-1 font-mono text-xs font-semibold text-foreground bg-muted border border-border rounded shadow-sm">
               {key}
             </kbd>

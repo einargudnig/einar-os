@@ -103,17 +103,17 @@ export function KeyboardHint() {
               <kbd className="text-xs text-muted-foreground font-mono">?</kbd>
             </div>
             <div className="space-y-1">
-              {bindings.map((b, i) =>
+              {bindings.map((b) =>
                 "divider" in b ? (
                   <p
-                    key={i}
+                    key={b.label}
                     className="text-xs text-muted-foreground font-semibold pt-2 pb-1 border-t border-border/50 mt-2"
                   >
                     {b.label}
                   </p>
                 ) : (
                   <div
-                    key={i}
+                    key={b.label}
                     className="flex items-center justify-between py-0.5"
                   >
                     <span className="text-xs text-muted-foreground">

@@ -11,7 +11,13 @@ import { ProjectCard } from "@/components/project-card";
 import { GitHubContributions } from "@/components/github-contributions";
 import { WhoopStats } from "@/components/whoop-stats";
 import { LifeOsHealth } from "@/components/life-os-health";
+import { HireMe } from "@/components/hire-me";
+import { getWhoopSnapshot } from "@/lib/life-os";
 import { GlobeIcon } from "lucide-react";
+
+// Live from the life-os API when LIFEOS_API_URL is set, otherwise the committed
+// snapshot. routeRules edge-caches this page, so it isn't fetched per request.
+const whoop = await getWhoopSnapshot();
 
 // Was a `headers()` entry in next.config.ts.
 Astro.response.headers.set("Link", '</llms.txt>; rel="describedby"; type="text/markdown"');
@@ -175,8 +181,8 @@ const shortcuts = [
       <h2 class="text-xl font-bold">
         Health <span class="text-base font-normal text-muted-foreground">· Whoop</span>
       </h2>
-      <WhoopStats />
-      <LifeOsHealth />
+      <WhoopStats data={whoop} />
+      <LifeOsHealth data={whoop} />
     </Section>
 
     <Section className="mt-4">
@@ -215,6 +221,11 @@ const shortcuts = [
           ))
         }
       </div>
+    </Section>
+
+    <Section className="mt-4 scroll-mt-8" id="contact">
+      <h2 class="text-xl font-bold">Work with me</h2>
+      <HireMe client:visible />
     </Section>
   </section>
 </BaseLayout>

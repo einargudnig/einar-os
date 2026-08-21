@@ -102,8 +102,8 @@ export async function GitHubContributions({
         </p>
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <span>Less</span>
-          {LEVEL_CLASSES.map((cls, i) => (
-            <div key={i} className={cn("h-[11px] w-[11px] rounded-[2px]", cls)} />
+          {LEVEL_CLASSES.map((cls) => (
+            <div key={cls} className={cn("h-[11px] w-[11px] rounded-[2px]", cls)} />
           ))}
           <span>More</span>
         </div>
@@ -118,10 +118,10 @@ export async function GitHubContributions({
             gap: "2px",
           }}
         >
-          {Array.from({ length: totalWeeks }).map((_, i) => {
+          {weeks.map((week, i) => {
             const label = monthLabels.find((m) => m.colStart === i);
             return (
-              <div key={i} className="min-w-0">
+              <div key={week[0].date} className="min-w-0">
                 {label ? <span>{label.label}</span> : null}
               </div>
             );
@@ -136,9 +136,9 @@ export async function GitHubContributions({
             gap: "2px",
           }}
         >
-          {weeks.map((week, weekIdx) => (
+          {weeks.map((week) => (
             <div
-              key={weekIdx}
+              key={week[0].date}
               className="grid"
               style={{
                 gridTemplateRows: "repeat(7, 1fr)",
