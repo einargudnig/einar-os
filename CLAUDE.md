@@ -96,7 +96,6 @@ Code blocks are highlighted at build time by Astro's Shiki (`catppuccin-mocha`);
 - Deploys to Cloudflare Workers; `@astrojs/cloudflare` writes `dist/server/wrangler.json` with `main` and `assets` filled in, and the root `wrangler.jsonc` supplies the rest
 - Images are optimised at build time (`imageService: "compile"`), not per request
 - Cloudflare rejects any single asset over 25 MiB — keep large media transcoded
-- `PUBLIC_CONVEX_URL` must be set for the `/baby` page
 
 ## Agent skills
 

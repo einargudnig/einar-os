@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "dev:all": "concurrently \"convex dev\" \"astro dev\"",
     "build": "npm run og && astro build",
     "preview": "npm run build && wrangler dev --config dist/server/wrangler.json",
     "deploy": "npm run build && wrangler deploy --config dist/server/wrangler.json",
@@ -13,7 +12,6 @@
     "check": "oxlint && astro check",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
-    "convex:dev": "convex dev",
     "quotes": "cd tools/quotes-tui && npm run start",
     "og": "node scripts/generate-og.mjs"
   },
@@ -31,7 +29,6 @@
     "astro": "^7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "convex": "^1.31.5",
     "dotenv": "^17.2.3",
     "lightningcss": "^1.30.2",
     "lucide-react": "^0.577.0",
@@ -50,7 +47,6 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@typescript/native-preview": "^7.0.0-dev.20260707.2",
-    "concurrently": "^9.2.1",
     "express": "^5.1.0",
     "gray-matter": "^4.0.3",
     "open": "^10.2.0",

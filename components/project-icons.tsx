@@ -59,23 +59,6 @@ function TodoSystemIcon() {
   );
 }
 
-function BabyIcon() {
-  return (
-    <svg viewBox="0 0 20 20" fill="none" className={cls}>
-      <path
-        d="M10 16.5C10 16.5 3 12.5 3 7.5C3 5 5 3 7 3C8.2 3 9.2 3.6 10 4.5C10.8 3.6 11.8 3 13 3C15 3 17 5 17 7.5C17 12.5 10 16.5 10 16.5Z"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        stroke="currentColor"
-        fill="none"
-        opacity="0.3"
-        className="pi-el pi-heart"
-      />
-    </svg>
-  );
-}
-
 function SolOgBjorIcon() {
   return (
     <svg viewBox="0 0 20 20" fill="none" className={cls}>
@@ -126,7 +109,6 @@ export const projectIcons: Record<string, () => ReactNode> = {
   dotfiles: DotfilesIcon,
   "einar-os": EinarOsIcon,
   "todo-system": TodoSystemIcon,
-  baby: BabyIcon,
   "sól og bjór": SolOgBjorIcon,
   nido: NidoIcon,
 };
