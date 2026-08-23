@@ -41,6 +41,9 @@ const canonical = new URL(
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {/* Byte-identical to the file the Next site shipped: PNG data behind an
+        .ico extension. Left as-is for parity — no `type`, so browsers sniff. */}
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
