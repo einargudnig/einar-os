@@ -6,7 +6,7 @@ Production is untouched — `einargudni.com` still serves the Next.js app from V
 no DNS has been changed, and this branch is not merged to `master`. Delete this file
 once the cutover is done.
 
-State as of 2026-08-21: build clean, oxlint clean, `astro check` 0 errors / 0 warnings
+State as of 2026-08-23: build clean, oxlint clean, `astro check` 0 errors / 0 warnings
 across 96 files. All routes verified 200 against the preview and diffed against the
 live Vercel site.
 
@@ -58,11 +58,44 @@ snapshot in `data/whoop/latest.json`:
 
 ## 3. Regressions to fix
 
-- [ ] **No favicon.** `master` had `app/favicon.ico`; nothing replaced it, so every page
-      logs a 404 for `/favicon.ico`. Drop one in `public/`.
-- [ ] **Blog images are no longer optimised.** `CaptionedImage` receives runtime string
-      paths into `public/`, which `astro:assets` can't process. The fix is moving images
-      beside their content so they can be referenced relatively.
+- [x] ~~**No favicon.**~~ Restored from `master` to `public/favicon.ico`, declared in
+      `BaseLayout`. Note it is PNG data behind an `.ico` extension — that is what the Next
+      site shipped, kept byte-identical for parity, so the `<link>` asserts no `type`.
+- [x] ~~**Blog images are no longer optimised.**~~ `CaptionedImage` is now
+      `src/components/mdx/CaptionedImage.astro` and takes an `ImageMetadata`; the six
+      optimisable images moved to `src/assets/blog/` and posts import them. It still
+      accepts a plain string for `tmux.gif`, which optimising would flatten.
+
+      Two things surfaced while fixing this:
+
+      - Every call site hardcoded `width={1042 / 2} height={401 / 2}`, which matched none
+        of the six images. Combined with `object-cover` that cropped four of them to a
+        200px band and upscaled the `barf` screenshots ~2.6x. Astro infers real dimensions
+        from the import, so those posts now render at true aspect ratio — a visible change,
+        and the same bug is live on Vercel today.
+      - The `keyboard` photos were unresized 3024px iPhone originals, 2.26 MB combined,
+        carrying EXIF (device + capture time). Resized to the 1344px display cap and
+        stripped: **2.26 MB -> 229 KB**.
+
+- [ ] **`/_image` is a silent passthrough on the on-demand routes.** `imageService:
+      "compile"` transforms at build time, which only reaches prerendered pages — and
+      `/`, `/blog/[slug]` and `/deep-dive/[slug]` are deliberately `prerender = false` so
+      middleware can honour `Accept: text/markdown`. So blog images emit a correct
+      `srcset` of WebP variants, and every one of those URLs returns **200 with the
+      untouched original** — right markup, no transform, wrong content type. Verified
+      against the built Worker. `desk.png` on prerendered `/uses` does become `desk.webp`,
+      which is what makes the contrast visible.
+
+      Not urgent now that the sources are display-sized, but it means any large image
+      added later silently regresses. Three ways out, none blocking the cutover:
+
+      1. Keep pre-sizing sources by hand (status quo — free, but relies on remembering).
+      2. `imageService: "cloudflare"` for real runtime transforms — costs per transform
+         and needs Images enabled on the account, which §`astro.config.mjs` deliberately
+         avoided.
+      3. A prebuild transform step emitting WebP variants, exactly the pattern
+         `scripts/generate-og.mjs` already uses to work around workerd's lack of native
+         image support. Most consistent with the repo, most work.
 
 ## 4. Cleanup — none of it blocking
 
@@ -76,6 +109,12 @@ snapshot in `data/whoop/latest.json`:
       letting it ride along with unrelated work.
 - [ ] **Delete the `migrate/cloudflare-workers` branch** — the OpenNext attempt, fully
       superseded by this one.
+- [ ] **18 orphaned images, 5.8 MB**, deployed on every build and referenced by nothing in
+      `content/`: all of `public/images/blog/obsidian/` (11), `oktoberfest/` (6), and
+      `keyboard/IMG_6108.heic`. No post mentions either topic — possibly drafts that never
+      landed. Recoverable from git history if deleted.
+- [ ] **Next boilerplate still in `public/`** — `next.svg`, `vercel.svg`, `file.svg`,
+      `globe.svg`, `window.svg`.
 
 ---
 

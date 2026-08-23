@@ -7,7 +7,6 @@
 import type { ComponentProps } from "react";
 import { Blockquote } from "@/components/blog/blockquote";
 import { Callout } from "@/components/blog/callout";
-import { CaptionedImage } from "@/components/blog/captioned-image";
 import { ColorSwatch } from "@/components/blog/color-swatch";
 import { ExternalLink } from "@/components/blog/external-link";
 import { Heading, Subheading } from "@/components/blog/heading";
@@ -22,6 +21,7 @@ import { YouTubeEmbed } from "@/components/blog/youtube-embed";
 import Accordion from "./mdx/Accordion.astro";
 import AccordionItem from "./mdx/AccordionItem.astro";
 import Anchor from "./mdx/Anchor.astro";
+import CaptionedImage from "./mdx/CaptionedImage.astro";
 import FileTree from "./mdx/FileTree.astro";
 import Pre from "./mdx/Pre.astro";
 import Tabs from "./mdx/Tabs.astro";

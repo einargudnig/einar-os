@@ -1,0 +1,58 @@
+---
+// Was next/image, then a plain React <img> during the Astro port. astro:assets
+// can only optimise an imported ImageMetadata, never a runtime string, so posts
+// import their images from src/assets/blog/ and pass the binding through.
+//
+// `src` still accepts a string for the things astro:assets can't process —
+// public/images/blog/tmux/tmux.gif, where optimising would flatten the animation.
+import { Image } from "astro:assets";
+import { cn } from "@/lib/utils";
+
+interface Props {
+  src: ImageMetadata | string;
+  alt: string;
+  caption?: string;
+  className?: string;
+  priority?: boolean;
+}
+
+const { src, alt, caption, className, priority = false } = Astro.props;
+
+// The prose column is max-w-[65ch] inside max-w-2xl, so nothing ever renders
+// wider than ~672 CSS px; 1344 covers 2x DPR. Never request a width the source
+// can't fill — astro:assets would upscale and emit a heavier, blurrier variant.
+const COLUMN = 672;
+const candidates = [400, COLUMN, COLUMN * 2].filter(
+  (w) => typeof src !== "string" && w <= src.width,
+);
+const widths = candidates.length > 0 ? candidates : undefined;
+
+const loading = priority ? "eager" : "lazy";
+const decoding = priority ? "sync" : "async";
+---
+
+<figure class={cn("my-8", className)}>
+  <div class="overflow-hidden rounded-md">
+    {
+      typeof src === "string" ? (
+        <img src={src} alt={alt} class="h-auto max-w-full" {loading} {decoding} />
+      ) : (
+        <Image
+          src={src}
+          alt={alt}
+          {widths}
+          sizes={widths ? `(min-width: ${COLUMN + 32}px) ${COLUMN}px, 100vw` : undefined}
+          class="h-auto max-w-full"
+          {loading}
+          {decoding}
+        />
+      )
+    }
+  </div>
+
+  {
+    caption && (
+      <figcaption class="mt-2 text-center text-sm text-muted-foreground">{caption}</figcaption>
+    )
+  }
+</figure>

@@ -8,7 +8,9 @@ This directory contains custom React components for enhancing MDX blog posts. Th
 
 - `Blockquote` - Enhanced blockquotes with optional author and citation
 - `Callout` - Info, warning, error, and tip callouts with titles
-- `CaptionedImage` - Images with optional captions
+- `CaptionedImage` - Images with optional captions. Lives in `src/components/mdx/` as an
+  `.astro` component so `astro:assets` can optimise the image; posts import from
+  `src/assets/blog/` and pass the binding as `src`.
 - `CodeBlock` - Syntax highlighted code with line numbers and filename
 - `StylishList` - Enhanced lists with multiple styling options
 

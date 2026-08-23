@@ -4,6 +4,10 @@ slug: barf
 date: 2025-08-08
 ---
 
+import commits from "@/src/assets/blog/barf/commits.png";
+import files from "@/src/assets/blog/barf/files.png";
+import numbers from "@/src/assets/blog/barf/numbers.png";
+
 <Heading>Big Ass Refactoring</Heading>
 <Spacer size="small" />
 
@@ -48,10 +52,8 @@ This would have taken me months to do manually.
 
 <Spacer size="small" />
 <CaptionedImage
-  src="/images/blog/barf/commits.png"
+  src={commits}
   alt="Refactor example showing commit history"
-  width={1042 / 2}
-  height={401 / 2}
   caption="146 commits during the refactoring process"
 />
 
@@ -60,10 +62,8 @@ As you can see this, refactor was 146 commits, I commited every time I updated a
 package or refactored a file.
 <Spacer size="small" />
 <CaptionedImage
-  src="/images/blog/barf/files.png"
+  src={files}
   alt="Statistics showing files refactored"
-  width={1042 / 2}
-  height={401 / 2}
   caption="336 files were changed during the refactoring process"
 />
 <Spacer size="small" />
@@ -71,10 +71,8 @@ I changed 336 files. Some had minor changes, other major changes. Some of it was
 a part of this new vite setup
 <Spacer size="small" />
 <CaptionedImage
-  src="/images/blog/barf/numbers.png"
+  src={numbers}
   alt="Statistics showing number of lines changed"
-  width={1042 / 2}
-  height={401 / 2}
   caption="Significant reduction in lines of code after refactoring"
 />
 <Spacer size="small" />
