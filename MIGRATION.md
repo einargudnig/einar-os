@@ -20,16 +20,18 @@ live Vercel site.
       `CONTACT_FROM_EMAIL` (defaults: `einargudnig@gmail.com`, `onboarding@resend.dev`,
       the latter only delivering to the Resend account owner).
       `wrangler secret put RESEND_API_KEY --name <worker>`
-- [ ] **Decide apex vs www.** `astro.config.mjs` sets `site: "https://einargudni.com"`,
-      but production serves from **www** — the apex 307s to it. This decides every
-      canonical, `og:url` and sitemap URL the build emits, and the DNS shape. The Next
-      site emitted no canonical at all, so this is a new decision, not a regression.
+- [x] ~~**Decide apex vs www.**~~ **Apex wins** (2026-08-24). `astro.config.mjs` already
+      sets `site: "https://einargudni.com"`, and a repo-wide search finds *zero*
+      `www.einargudni` references — every hardcoded URL (`llms.txt`, `src/lib/site.ts`,
+      `scripts/generate-og.mjs`, the `.well-known` docs) is already on the apex. So this
+      is a no-op in code; only DNS has to match. Cloudflare's CNAME flattening removes the
+      old technical reason to prefer www. `www` gets a redirect to the apex, reversing
+      today's direction.
 - [ ] **Deploy under the production Worker name.** Everything so far is
       `einar-os-preview`; `wrangler.jsonc` declares `einar-os`.
 - [ ] **Merge `migrate/astro` into `master`.**
 - [ ] **DNS.** Give this its own session — see §1.7 of `~/CLOUDFLARE_MIGRATION.md`.
-      `einargudni.com` is the low-risk one: registrar Name.com, no MX records, so no
-      email to break.
+      See §5 below; the "registrar Name.com" note that used to live here was wrong.
 - [ ] **Delete the Vercel project** only after Cloudflare has served real traffic for
       about a week. It costs nothing idle and it's the rollback.
 
@@ -115,6 +117,70 @@ snapshot in `data/whoop/latest.json`:
       landed. Recoverable from git history if deleted.
 - [ ] **Next boilerplate still in `public/`** — `next.svg`, `vercel.svg`, `file.svg`,
       `globe.svg`, `window.svg`.
+
+---
+
+## 5. DNS — verified state as of 2026-08-24
+
+Everything here was read from live DNS and the Vercel CLI, not from memory. **Two things
+in the previous version of this file were wrong.**
+
+**Vercel is the registrar *and* the DNS host** — not Name.com, as this doc claimed:
+
+```
+einargudni.com   Registrar: Vercel   Nameservers: Vercel   Expires: Jan 22 2027
+NS               ns1.vercel-dns.com, ns2.vercel-dns.com
+```
+
+So there is no third-party registrar panel in this migration; custom nameservers get set
+from inside Vercel's domain settings. Consequence for §1: deleting the Vercel *project* is
+safe and does not touch the *domain registration*, but it also means the Vercel
+relationship doesn't end at cutover — they keep billing for the domain. Leaving entirely
+needs a registrar transfer, which carries its own 60-day post-transfer lock. **Separate
+decision, deliberately not bundled into the cutover.**
+
+**The zone has four hostnames, not one.** `nido` is a live Vercel deployment unrelated to
+this migration and must keep working after the nameservers move:
+
+| host | target | platform |
+|------|--------|----------|
+| `einargudni.com` | `216.150.1.193` | Vercel |
+| `www` | `216.150.16.65` | Vercel (apex 307s here today) |
+| `nido` | `216.150.16.1` | Vercel — **separate project, not being migrated** |
+| `sologbjor` | `sol-og-bjor.pages.dev` | Cloudflare Pages (already) |
+
+No MX and no TXT records at all, so the "no email to break" claim does hold.
+
+`vercel dns ls einargudni.com` returns *"You don't have permission to list the domain
+record"* even though `vercel domains ls` lists the domain under that same scope, so the
+zone could not be enumerated from the CLI. **Export the record list from the Vercel
+dashboard DNS panel and diff it against Cloudflare's auto-import before flipping
+nameservers** — `dig` only finds hostnames you already thought to guess, and a dropped
+`nido` record takes a live site dark.
+
+### CAA will block cert issuance as written
+
+Current records authorise `letsencrypt.org`, `pki.goog`, `sectigo.com`. Cloudflare
+Universal SSL also issues from **SSL.com**, and `ssl.com` is absent. CAA is an allowlist,
+so if Cloudflare routes issuance there the cert simply never provisions — it fails as a
+stuck cert, not a clear error. Add `ssl.com`, and re-check the list at cutover since
+Cloudflare's docs say it isn't exhaustive.
+
+### Order of operations — two changes, never one
+
+They fail in unrelated ways (bad DNS = nothing resolves; bad Worker route = DNS fine and
+the app 500s). Combined, there's no way to tell which is broken while the site is down.
+
+1. **Move DNS, change nothing user-visible.** Add the zone at Cloudflare, let it
+   auto-import, diff against the Vercel export. Keep every record **grey-clouded
+   (DNS-only)** so Vercel keeps serving and keeps renewing its own certificate —
+   orange-clouding at this stage double-proxies and can interfere with Vercel's
+   validation. Then set Cloudflare's nameservers in Vercel and wait out propagation.
+   The site never moves; any breakage here is unambiguously DNS.
+2. **Point the apex at the Worker.** The zone must be active on Cloudflare first, so this
+   cannot be reordered. `wrangler.jsonc` has no `routes` yet — the custom domain needs
+   wiring. `RESEND_API_KEY` only matters from this step onward. Vercel stays live as the
+   rollback for a week.
 
 ---
 
