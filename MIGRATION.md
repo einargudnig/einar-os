@@ -139,17 +139,31 @@ relationship doesn't end at cutover — they keep billing for the domain. Leavin
 needs a registrar transfer, which carries its own 60-day post-transfer lock. **Separate
 decision, deliberately not bundled into the cutover.**
 
-**The zone has four hostnames, not one.** `nido` is a live Vercel deployment unrelated to
-this migration and must keep working after the nameservers move:
+**Six live hostnames, not one.** Five of them are separate Vercel projects that must keep
+working after the nameservers move:
 
-| host | target | platform |
-|------|--------|----------|
-| `einargudni.com` | `216.150.1.193` | Vercel |
-| `www` | `216.150.16.65` | Vercel (apex 307s here today) |
-| `nido` | `216.150.16.1` | Vercel — **separate project, not being migrated** |
-| `sologbjor` | `sol-og-bjor.pages.dev` | Cloudflare Pages (already) |
+| host | project | platform | notes |
+|------|---------|----------|-------|
+| `einargudni.com` | — | Vercel | 307s to `www` today; becomes the Worker |
+| `www` | `einar-os` | Vercel | the site being migrated |
+| `nido` | `nido` | Vercel | Next 16 — **stays on Vercel, see below** |
+| `posture` | `posture` | Vercel | Swift package, static `site/` |
+| `craft` | `craft` | Vercel | Next 14.2.1 |
+| `writing` | `writings` | Vercel | Astro 4.16.7 (host is singular, project plural) |
+| `sologbjor` | — | Cloudflare Pages | already migrated |
+| `*` | — | Vercel | **wildcard** — see below |
 
 No MX and no TXT records at all, so the "no email to break" claim does hold.
+
+**There is a wildcard `*.einargudni.com` A record pointing at Vercel.** A random subdomain
+returns `NOERROR` and resolves, so DNS cannot be used to enumerate this zone — every name
+answers. The live set above was established from `vercel project ls` plus an HTTP probe
+(200 = real, 404 = wildcard catching an unattached name). Decide during the move whether to
+carry the wildcard over; nothing needs it, every live host has an explicit record, and
+dropping it gives honest NXDOMAIN instead of a phantom Vercel 404.
+
+Certificate Transparency was *not* a usable cross-check here: crt.sh 502s, and
+CertSpotter's free tier returned 2 of 6 known subdomains.
 
 `vercel dns ls einargudni.com` returns *"You don't have permission to list the domain
 record"* even though `vercel domains ls` lists the domain under that same scope, so the
@@ -181,6 +195,23 @@ the app 500s). Combined, there's no way to tell which is broken while the site i
    cannot be reordered. `wrangler.jsonc` has no `routes` yet — the custom domain needs
    wiring. `RESEND_API_KEY` only matters from this step onward. Vercel stays live as the
    rollback for a week.
+
+### The other four sites do not move first (decided 2026-08-24)
+
+Grey-clouded records keep `nido`, `posture`, `craft` and `writing` on Vercel untouched
+while Cloudflare serves only as nameserver, so each can migrate later as a one-record flip
+on its own schedule. Sequencing them *ahead* of this cutover was considered and rejected —
+they carry three stalled `migrate/cloudflare-workers` branches, four weeks cold, ~100
+uncommitted files between them, and **`nido` is hard-blocked**: Next 16 renamed
+`middleware.ts` to `proxy.ts` and pins it to the Node runtime, while OpenNext supports
+Edge middleware only. No configuration satisfies both. Escaping it needs a Supabase
+session-refresh refactor on a live app, so `nido` stays on Vercel indefinitely.
+
+Note `nido` hit the same wall this repo already escaped. OpenNext is the trap on
+Cloudflare — it cost einar-os 3.12 MiB and the paid plan before the Astro rebuild brought
+it to 0.39 MiB. `craft` and `writing` both took the static-export path, which is why they
+sit 1 and 23 files from done. Migrate in that order (`writing`, `craft`, `posture`) and
+leave `nido` alone.
 
 ---
 
