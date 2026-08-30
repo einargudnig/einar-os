@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-08-23",
+  "generatedAt": "2026-08-30",
   "system": {
     "sources": 13,
-    "daysCovered": 152,
-    "dataPoints": 45109
+    "daysCovered": 159,
+    "dataPoints": 49114
   },
   "sources": [
     "asana",
@@ -21,8 +21,8 @@
     "whoop_workout"
   ],
   "activity": {
-    "workouts": 47,
-    "githubPushes": 737,
-    "tracksPlayed": 677
+    "workouts": 57,
+    "githubPushes": 802,
+    "tracksPlayed": 752
   }
 }
