@@ -145,6 +145,28 @@ To add new custom components for use in MDX:
   because `@resvg/resvg-js` is a native addon that will not load in workerd.
 - Velite runs at build time, so `.velite/` must be generated before deployment
 
+### Environment variables
+
+Two kinds, and they are set in different places:
+
+**Build-time** (`VITE_`-prefixed, inlined into the bundle — must be present
+when `vite build` runs, not at request time):
+
+| Variable | Effect if missing |
+| --- | --- |
+| `VITE_CONVEX_URL` | `/baby` renders without live vote data |
+| `VITE_CF_IMAGES` | Images served untransformed. Set to `1` **only after** enabling Image Transformations on the zone, otherwise every `/cdn-cgi/image/` URL 404s |
+
+**Runtime** (Worker secrets — `wrangler secret put NAME`):
+
+| Variable | Effect if missing |
+| --- | --- |
+| `RESEND_API_KEY` | Contact form returns 503 with a "email me directly" message |
+| `LIFEOS_API_URL`, `LIFEOS_WEB_TOKEN` | Whoop numbers fall back to the committed snapshot in `data/whoop/latest.json` |
+| `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` | Defaults in `src/routes/api/contact.ts` are used |
+
+Every one of these degrades gracefully; none will fail a build or a request.
+
 ## Agent skills
 
 ### Issue tracker

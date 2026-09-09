@@ -38,9 +38,9 @@ const projects = [
   {
     title: "einar-os",
     description:
-      "This site. Built with Next.js 16, Velite for MDX content, and Tailwind v4. Deployed on Vercel.",
+      "This site. Built with TanStack Start, Velite for MDX content, and Tailwind v4. Deployed on Cloudflare Workers.",
     href: "https://github.com/einargudnig/einar-os",
-    tags: ["Next.js", "MDX", "Tailwind"],
+    tags: ["TanStack", "MDX", "Tailwind"],
   },
   {
     title: "todo-system",
