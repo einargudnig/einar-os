@@ -2,7 +2,7 @@ import { ExternalLink } from "@/components/blog/external-link";
 import { LifeOs } from "@/components/life-os";
 import { LifeOsFeeds } from "@/components/life-os-feeds";
 import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/components/ui/link";
 
 export default function Page() {
   return (

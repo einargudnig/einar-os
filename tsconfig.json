@@ -1,45 +1,24 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": ["vite/client"],
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
+    "module": "preserve",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "incremental": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     },
     "allowJs": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "convex/_generated/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "tools"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "components/**/*", "lib/**/*", "scripts/**/*", "convex/**/*", "*.ts"],
+  "exclude": ["node_modules", "tools", "dist", ".velite"]
 }

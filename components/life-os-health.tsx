@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/components/ui/link";
 import type { WhoopSnapshot } from "@/lib/life-os";
 
 // Trends + the sleep→recovery insight, computed by my life-os from its store. Sits

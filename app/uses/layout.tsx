@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
-import Link from "next/link";
+import { Link } from "@/components/ui/link";
 
 export default function UsesLayout({
   children,

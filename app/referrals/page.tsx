@@ -1,6 +1,6 @@
 import { ExternalLink } from "@/components/blog/external-link";
 import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/components/ui/link";
 
 const referrals = [
   {

@@ -1,7 +1,7 @@
 import { ExternalLink } from "@/components/blog/external-link";
 import { ArrowLeft } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { Image } from "@/components/ui/image";
+import { Link } from "@/components/ui/link";
 
 export default function Page() {
   return (

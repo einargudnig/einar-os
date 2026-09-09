@@ -1,7 +1,7 @@
 import * as runtime from "react/jsx-runtime";
 import * as React from "react";
-import Image from "next/image";
-import Link from "next/link";
+import { Image } from "@/components/ui/image";
+import { Link } from "@/components/ui/link";
 import { ExternalLink } from "./blog/external-link";
 import { CodeBlock } from "./blog/code-block";
 import { Blockquote } from "./blog/blockquote";

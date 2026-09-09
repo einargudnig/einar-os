@@ -1,6 +1,6 @@
-import Image from "next/image";
+import { Image } from "@/components/ui/image";
 import avatar from "../../../public/images/avatar.jpeg";
-import Link from "next/link";
+import { Link } from "@/components/ui/link";
 
 export default function IsPage() {
   return (

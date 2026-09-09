@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/components/ui/link";
 import { learnings } from "@/.velite";
 import { MDXContent } from "@/components/mdx-content";
 import { formatBlogDate } from "@/lib/utils";

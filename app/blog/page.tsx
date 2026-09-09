@@ -1,5 +1,5 @@
 import { posts } from "../../.velite";
-import Link from "next/link";
+import { Link } from "@/components/ui/link";
 import { formatBlogDate } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PencilLine } from "lucide-react";

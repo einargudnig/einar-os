@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Image } from "@/components/ui/image";
 import desk from "../../public/images/desk.png";
 
 export default function Page() {

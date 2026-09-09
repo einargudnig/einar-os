@@ -14,9 +14,8 @@ node_modules
 /coverage
 /.playwright-mcp
 
-# next.js
-/.next/
-/out/
+# vite
+/dist/
 
 # production
 /build
@@ -34,15 +33,18 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
-# vercel
-.vercel
+# cloudflare
+.wrangler
+worker-configuration.d.ts
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
 
 # velite
 .velite
+
+# generated route tree
+src/routeTree.gen.ts
 
 # whoop
 .whoop-tokens.json

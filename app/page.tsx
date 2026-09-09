@@ -6,7 +6,7 @@ import { WhoopStats } from "@/components/whoop-stats";
 import { LifeOsHealth } from "@/components/life-os-health";
 import { HireMe } from "@/components/hire-me";
 import { GlobeIcon } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/components/ui/link";
 import { getWhoopSnapshot } from "@/lib/life-os";
 
 const projects = [
@@ -121,10 +121,8 @@ export default async function Home() {
             Einar Gudni
           </h1>
           <p className="max-w-[65ch] text-lg text-muted-foreground leading-relaxed">
-            <span className="italic font-semibold text-foreground">
-              Curious
-            </span>
-            , Tinkerer, Late bloomer & Nerd
+            <span className="italic font-semibold text-foreground">Curious</span>, Tinkerer, Late
+            bloomer & Nerd
           </p>
           <p className="items-center text-pretty font-mono text-xs text-muted-foreground">
             <a
@@ -145,27 +143,21 @@ export default async function Home() {
             href="/about"
             className="group rounded-md px-4 py-3 -mx-4 transition-colors hover:bg-muted/50"
           >
-            <p className="text-lg font-medium group-hover:text-brand transition-colors">
-              About
-            </p>
+            <p className="text-lg font-medium group-hover:text-brand transition-colors">About</p>
             <p className="text-sm text-muted-foreground">Who, What, Why</p>
           </Link>
           <Link
             href="/now"
             className="group rounded-md px-4 py-3 -mx-4 transition-colors hover:bg-muted/50"
           >
-            <p className="text-lg font-medium group-hover:text-brand transition-colors">
-              Now
-            </p>
+            <p className="text-lg font-medium group-hover:text-brand transition-colors">Now</p>
             <p className="text-sm text-muted-foreground">Short-term focus</p>
           </Link>
           <Link
             href="/someday"
             className="group rounded-md px-4 py-3 -mx-4 transition-colors hover:bg-muted/50"
           >
-            <p className="text-lg font-medium group-hover:text-brand transition-colors">
-              Someday
-            </p>
+            <p className="text-lg font-medium group-hover:text-brand transition-colors">Someday</p>
             <p className="text-sm text-muted-foreground">Long-term focus</p>
           </Link>
         </div>
@@ -182,10 +174,7 @@ export default async function Home() {
 
       <Section className="mt-4">
         <h2 className="text-xl font-bold">
-          Health{" "}
-          <span className="text-base font-normal text-muted-foreground">
-            · Whoop
-          </span>
+          Health <span className="text-base font-normal text-muted-foreground">· Whoop</span>
         </h2>
         <WhoopStats data={whoop} />
         <LifeOsHealth data={whoop} />
@@ -203,10 +192,7 @@ export default async function Home() {
             <div key={job.company} className="py-4 first:pt-0">
               <div className="flex items-center justify-between gap-x-2 text-base">
                 <h3 className="inline-flex items-center gap-x-2 font-semibold leading-none">
-                  <a
-                    className="hover:text-brand transition-colors"
-                    href={job.link}
-                  >
+                  <a className="hover:text-brand transition-colors" href={job.link}>
                     {job.company}
                   </a>
                   {job.badges.map((badge) => (
@@ -219,9 +205,7 @@ export default async function Home() {
                   {job.start} - {job.end}
                 </div>
               </div>
-              <p className="font-mono text-sm text-muted-foreground mt-1">
-                {job.title}
-              </p>
+              <p className="font-mono text-sm text-muted-foreground mt-1">{job.title}</p>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {job.stack.map((tag) => (
                   <Badge key={tag} variant="outline">
