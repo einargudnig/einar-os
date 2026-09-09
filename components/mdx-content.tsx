@@ -1,4 +1,3 @@
-import * as runtime from "react/jsx-runtime";
 import * as React from "react";
 import { Image } from "@/components/ui/image";
 import { Link } from "@/components/ui/link";
@@ -20,6 +19,7 @@ import { FileTree } from "./blog/file-tree";
 import { Timeline } from "./blog/timeline";
 import { Heading, Subheading } from "./blog/heading";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { lazy, Suspense } from "react";
 import type { ComponentPropsWithoutRef, ComponentType, ReactNode } from "react";
 
 // A minimal type describing the MDX component we render
@@ -29,13 +29,7 @@ const sharedComponents: Record<string, ComponentType<any>> = {
   // Basic Next.js components
   Image,
   Link,
-  img: ({
-    src: rawSrc,
-    alt,
-    width,
-    height,
-    className,
-  }: ComponentPropsWithoutRef<"img">) => {
+  img: ({ src: rawSrc, alt, width, height, className }: ComponentPropsWithoutRef<"img">) => {
     const src = typeof rawSrc === "string" ? rawSrc : undefined;
     if (!src) return null;
     const w =
@@ -50,15 +44,7 @@ const sharedComponents: Record<string, ComponentType<any>> = {
         : typeof height === "string"
           ? parseInt(height, 10)
           : undefined;
-    return (
-      <CaptionedImage
-        src={src}
-        alt={alt ?? ""}
-        width={w}
-        height={h}
-        className={className}
-      />
-    );
+    return <CaptionedImage src={src} alt={alt ?? ""} width={w} height={h} className={className} />;
   },
   a: ({ href, children, ...props }: ComponentPropsWithoutRef<"a">) => {
     if (href && (href.startsWith("http") || href.startsWith("mailto:"))) {
@@ -120,10 +106,7 @@ const sharedComponents: Record<string, ComponentType<any>> = {
   ),
 
   // Custom quote components
-  blockquote: ({
-    children,
-    ...props
-  }: ComponentPropsWithoutRef<"blockquote">) => (
+  blockquote: ({ children, ...props }: ComponentPropsWithoutRef<"blockquote">) => (
     <Blockquote {...props}>{children}</Blockquote>
   ),
 
@@ -188,31 +171,45 @@ const sharedComponents: Record<string, ComponentType<any>> = {
   Subheading,
 };
 
-// Parse the Velite generated MDX code into a React component function
-const useMDXComponent = (code: string): MDXComponent => {
-  const fn = new Function(code) as (args: any) => {
-    default: ComponentType<any>;
-  };
-  // Provide both jsx runtime and React for components using hooks/state
-  const mod = fn({ ...runtime, React });
-  return mod.default as MDXComponent;
+// Every MDX file under content/ becomes a real module. The map is lazy so
+// Rollup still code-splits each post into its own chunk, and React.lazy lets
+// the SSR stream await the import rather than falling back to the client.
+const modules = import.meta.glob<{ default: MDXComponent }>("/content/**/*.{md,mdx}");
+
+const cache = new Map<string, MDXComponent>();
+
+// `path` is velite's s.path(), e.g. "posts/aeropress" — no extension, because
+// the collections mix .md and .mdx.
+const resolve = (path: string): MDXComponent => {
+  const cached = cache.get(path);
+  if (cached) return cached;
+
+  const key = [`/content/${path}.mdx`, `/content/${path}.md`].find(
+    (candidate) => candidate in modules,
+  );
+  if (!key) {
+    throw new Error(`No MDX module for "${path}"`);
+  }
+
+  const Component = lazy(modules[key]) as unknown as MDXComponent;
+  cache.set(path, Component);
+  return Component;
 };
 
 interface MDXProps {
-  code: string;
+  path: string;
   components?: Record<string, unknown>;
   enableTableOfContents?: boolean;
   draft?: boolean;
 }
 
-// MDXContent component
 export const MDXContent = ({
-  code,
+  path,
   components,
   enableTableOfContents = true,
   draft = false,
 }: MDXProps) => {
-  const Component = useMDXComponent(code);
+  const Component = resolve(path);
   return (
     <>
       {enableTableOfContents && <TableOfContents />}
@@ -225,7 +222,9 @@ export const MDXContent = ({
         </div>
       )}
       <article className="mdx-content">
-        <Component components={{ ...sharedComponents, ...components }} />
+        <Suspense fallback={null}>
+          <Component components={{ ...sharedComponents, ...components }} />
+        </Suspense>
       </article>
     </>
   );

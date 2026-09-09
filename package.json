@@ -8,7 +8,7 @@
     "build": "velite && bun run og && vite build",
     "preview": "vite preview",
     "deploy": "bun run build && wrangler deploy",
-    "og": "bun scripts/generate-og.ts",
+    "og": "bun scripts/generate-og.mjs",
     "lint": "oxlint",
     "typecheck": "tsc --noEmit",
     "check": "oxlint && bun run typecheck",
@@ -16,7 +16,8 @@
     "format:check": "oxfmt --check .",
     "cf-typegen": "wrangler types",
     "convex:dev": "convex dev",
-    "quotes": "cd tools/quotes-tui && bun run start"
+    "quotes": "cd tools/quotes-tui && bun run start",
+    "pretypecheck": "velite"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",
@@ -44,6 +45,8 @@
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.54.6",
+    "@mdx-js/react": "^3.1.1",
+    "@mdx-js/rollup": "^3.1.1",
     "@resvg/resvg-js": "^2.6.2",
     "@shikijs/rehype": "^3.13.0",
     "@tailwindcss/vite": "^4.3.3",

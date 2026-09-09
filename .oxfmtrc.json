@@ -5,9 +5,11 @@
   "lineWidth": 100,
   "ignorePatterns": [
     "node_modules",
-    ".next",
     "dist",
     "build",
-    ".velite"
+    ".velite",
+    "content",
+    "docs",
+    ".agents"
   ]
 }

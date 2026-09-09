@@ -19,6 +19,14 @@
     },
     "allowJs": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "components/**/*", "lib/**/*", "scripts/**/*", "convex/**/*", "*.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "components/**/*",
+    "lib/**/*",
+    "scripts/**/*",
+    "convex/**/*",
+    "*.ts"
+  ],
   "exclude": ["node_modules", "tools", "dist", ".velite"]
 }

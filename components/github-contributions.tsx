@@ -1,20 +1,13 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { contributionsQueryOptions } from "@/lib/github";
 import { cn } from "@/lib/utils";
 
-interface ContributionDay {
-  date: string;
-  count: number;
-  level: number;
-}
+import type { ContributionDay } from "@/lib/github";
 
 // Contribution dates are bare "YYYY-MM-DD" strings. Parse and read them in UTC
 // everywhere so week grouping, month labels, and hover labels are identical no
 // matter the server or client timezone.
 const parseDay = (date: string) => new Date(`${date}T00:00:00Z`);
-
-interface ContributionData {
-  total: { lastYear: number };
-  contributions: ContributionDay[];
-}
 
 const LEVEL_CLASSES = [
   "bg-muted/50",
@@ -68,22 +61,9 @@ function getMonthLabels(weeks: ContributionDay[][]) {
   return labels;
 }
 
-export async function GitHubContributions({
-  username,
-}: {
-  username: string;
-}) {
-  let data: ContributionData;
-
-  try {
-    const res = await fetch(
-      `https://github-contributions-api.jogruber.de/v4/${username}?y=last`,
-      { next: { revalidate: 3600 } },
-    );
-    data = await res.json();
-  } catch {
-    return null;
-  }
+export function GitHubContributions({ username }: { username: string }) {
+  const { data } = useSuspenseQuery(contributionsQueryOptions(username));
+  if (!data) return null;
 
   const weeks = groupByWeeks(data.contributions);
   const monthLabels = getMonthLabels(weeks);
@@ -154,10 +134,7 @@ export async function GitHubContributions({
                   <div
                     key={day.date}
                     title={`${day.count} contribution${day.count !== 1 ? "s" : ""} on ${label}`}
-                    className={cn(
-                      "aspect-square w-full rounded-[2px]",
-                      LEVEL_CLASSES[day.level],
-                    )}
+                    className={cn("aspect-square w-full rounded-[2px]", LEVEL_CLASSES[day.level])}
                   />
                 );
               })}

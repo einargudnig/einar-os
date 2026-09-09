@@ -15,18 +15,22 @@ type ImageProps = Omit<ComponentPropsWithoutRef<"img">, "src"> & {
  * transform strategy is decided in `resolveSrc` below — everything else here
  * is just the loading/priority plumbing next/image used to handle.
  *
- * Vite resolves a static `import avatar from "../public/images/avatar.jpeg"`
- * to a plain URL string, so those call sites need no change.
+ * Assets under public/ are referenced by their served URL rather than
+ * imported, so the bundler does not emit a second copy of each one.
  */
 const resolveSrc = (src: string, width?: number, unoptimized?: boolean) => {
   if (unoptimized || src.startsWith("http") || src.startsWith("data:")) {
     return src;
   }
+  // SVG is already resolution-independent, and there is no /cdn-cgi handler
+  // in front of the dev server — both would 404 through the transform.
+  if (src.endsWith(".svg") || !import.meta.env.PROD) return src;
 
-  // TODO(einar): decide the local-image optimization strategy. See the
-  // three options discussed — pass through, Cloudflare /cdn-cgi/image, or
-  // build-time variants. `width` is available here for a resize hint.
-  return src;
+  const opts = [`width=${width ?? 1200}`, "format=auto", "quality=85"];
+  // Without this the transform returns only the first frame of a GIF.
+  if (src.endsWith(".gif")) opts.push("anim=true");
+
+  return `/cdn-cgi/image/${opts.join(",")}${src}`;
 };
 
 export const Image = ({

@@ -4,25 +4,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a personal website built with Next.js 16, featuring a blog and content management system. The site uses Velite for content processing and MDX for rich blog posts. It's deployed on Vercel with analytics and speed insights enabled.
+This is a personal website built with TanStack Start (Vite 8, React 19, TanStack Router + Query) on Bun 1.4. Velite processes frontmatter and metadata; MDX compiles to real modules via `@mdx-js/rollup`. It is deployed to Cloudflare Workers.
 
 ## Development Commands
 
 ```bash
-# Start development server with Turbopack
-npm run dev
+# Dev server (velite --watch alongside vite)
+bun run dev
 
-# Build for production (runs Velite first to process content, then Next.js build)
-npm run build
+# Build: velite -> OG images -> vite build (includes prerendering)
+bun run build
 
-# Start production server
-npm start
+# Preview the built worker locally
+bun run preview
 
-# Lint code with oxlint
-npm run lint
+# Deploy to Cloudflare Workers
+bun run deploy
 
-# Format code with oxfmt
-npm run format
+# Lint (oxlint) + typecheck (tsc, TypeScript 7)
+bun run check
+
+# Format with oxfmt
+bun run format
 ```
 
 ## Architecture
@@ -37,23 +40,26 @@ The project uses **Velite** as a content processing pipeline that transforms Mar
    - `deepDives` - In-depth technical articles in `content/deep-dives/`
 
 2. **Velite Build Process**:
-   - Runs automatically before Next.js dev/build (via `next.config.ts`)
-   - Processes MDX files and generates type-safe outputs in `.velite/` directory
+   - Run explicitly by the `dev` and `build` scripts
+   - Validates frontmatter and generates typed output in `.velite/`
    - Creates `@/.velite` module with typed exports for content collections
-   - Compiles MDX to executable JavaScript code stored in the `code` property
+   - Emits `path` (via `s.path()`) so a route can find the file's compiled module
 
 3. **MDX Content Rendering**:
-   - MDX is NOT rendered directly by Next.js
-   - Instead, Velite compiles MDX to JS code strings
-   - `components/mdx-content.tsx` uses `new Function()` to execute compiled code
+   - `@mdx-js/rollup` compiles each `.md`/`.mdx` file into a real ES module
+   - `components/mdx-content.tsx` resolves it from an `import.meta.glob` map
+     keyed by velite's `path`, wrapped in `React.lazy` so Rollup code-splits
+     per post and the SSR stream still awaits it
    - Custom components are injected via the `sharedComponents` object
-   - This approach gives full control over component rendering
+   - Velite's `s.mdx()` is deliberately **not** used: it emits a JS string that
+     has to be `eval`'d, and workerd forbids code generation from strings
 
 ### Styling and UI
 
-- **Tailwind CSS v4** with custom PostCSS integration
+- **Tailwind CSS v4** via `@tailwindcss/vite`
 - **Radix UI** primitives for accessible components
-- **next-themes** for dark mode support (default: dark theme)
+- **next-themes** for dark mode support (default: dark theme) — despite the
+  name it has no Next dependency and works fine here
 - Custom blog components in `components/blog/` for rich content (callouts, code blocks, video embeds, etc.)
 - UI components in `components/ui/` follow shadcn/ui patterns
 
@@ -65,27 +71,35 @@ The project uses **Velite** as a content processing pipeline that transforms Mar
 
 ### Application Structure
 
-- **App Router** (Next.js 16 App Directory)
+- **File-based routing** under `src/routes/`, route tree generated into
+  `src/routeTree.gen.ts` (gitignored)
 - **Route Structure**:
   - `/` - Homepage with work experience and latest post
   - `/blog` - List of all blog posts
-  - `/blog/[slug]` - Individual blog posts (static generation)
-  - `/deep-dive/[slug]` - In-depth articles (static generation)
+  - `/blog/$slug` - Individual blog posts (prerendered)
+  - `/deep-dive/$slug` - In-depth articles (prerendered)
   - `/learnings` - Learning notes collection
   - `/notes` - Notes page
   - `/about`, `/now`, `/someday` - Static pages
   - `/uses/*` - Tech stack and setup pages
+  - `/api/*` and `/.well-known/*` - server routes (agent discovery, contact,
+    markdown source). The `[.]` in a filename escapes a literal dot, so
+    `src/routes/[.]well-known/api-catalog.ts` serves `/.well-known/api-catalog`.
 
 - **Layout Hierarchy**:
-  - Root layout (`app/layout.tsx`) provides global navbar, theme provider, fonts (Geist Sans/Mono)
-  - Nested layouts like `app/uses/layout.tsx` for section-specific structure
+  - `src/routes/__root.tsx` provides the document shell, navbar and theme provider
+  - `src/routes/uses/route.tsx` is a layout route wrapping the `/uses` section
+  - `src/start.ts` holds global request middleware (`Accept: text/markdown`
+    content negotiation)
 
 ### Dynamic Pages
 
 Blog posts and deep dives use:
-- `generateStaticParams()` for build-time static generation
+- An explicit `pages` list in `vite.config.ts`, built from the velite output.
+  This replaces `generateStaticParams()`. Link-crawling is deliberately off:
+  it misses unlinked entries and fails the build on dead links inside content.
 - Content fetched from Velite-processed collections
-- MDX rendered via `<MDXContent code={post.code} />` component
+- MDX rendered via `<MDXContent path={post.path} />` component
 
 ## Important Implementation Details
 
@@ -118,10 +132,18 @@ To add new custom components for use in MDX:
 
 ## Deployment Notes
 
-- Site is optimized for Vercel deployment
-- Uses `@vercel/analytics` and `@vercel/speed-insights`
-- Static generation via `generateStaticParams()` ensures fast page loads
-- Velite runs at build time, so `.velite/` directory must be generated before deployment
+- Deployed to Cloudflare Workers (`wrangler.jsonc`, `bun run deploy`)
+- All 35 pages are prerendered to `dist/client` and served by the assets binding
+- `assets.run_worker_first` covers `/`, `/blog/*` and `/deep-dive/*` so the
+  markdown-negotiation middleware sees those requests. Anything matching runs
+  the Worker first, and `src/start.ts` hands non-markdown requests straight
+  back to `env.ASSETS` — keep that list and the middleware's matcher in sync.
+- `autoSubfolderIndex: false` keeps canonical URLs slash-free (`/blog/tmux`,
+  not `/blog/tmux/`), matching the sitemap and existing inbound links
+- OG images are generated at build time by `scripts/generate-og.mjs`
+  (satori + resvg) into `public/og/`. They cannot be generated at request time
+  because `@resvg/resvg-js` is a native addon that will not load in workerd.
+- Velite runs at build time, so `.velite/` must be generated before deployment
 
 ## Agent skills
 
