@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { CheckIcon, ClipboardIcon } from "lucide-react";
 import { useState, useEffect } from "react";
-import { codeToHtml } from "shiki";
+import { highlight } from "@/lib/highlighter";
 
 interface CodeBlockProps {
   children: string;
@@ -24,9 +24,7 @@ export function CodeBlock({
   useEffect(() => {
     const highlightCode = async () => {
       try {
-        const html = await codeToHtml(children, {
-          lang: language,
-          theme: "catppuccin-mocha",
+        const html = await highlight(children, language, {
           transformers: showLineNumbers
             ? [
                 {
