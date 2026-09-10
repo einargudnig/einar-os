@@ -145,6 +145,27 @@ To add new custom components for use in MDX:
   because `@resvg/resvg-js` is a native addon that will not load in workerd.
 - Velite runs at build time, so `.velite/` must be generated before deployment
 
+### Domains
+
+Canonical host is the bare apex `einargudni.com`; `www` 301s to it via a
+Cloudflare Redirect Rule. `SITE_URL` in `lib/discovery.ts` is the single source
+of truth and must stay apex-form — the sitemap, OG tags and `llms.txt` all
+derive from it.
+
+The zone also carries `posture` and `nido` (still on Vercel until migrated) and
+`sologbjor` (Cloudflare Pages). There is deliberately **no wildcard**: each
+subdomain gets an explicit record, because they are separate projects that
+resolve to different targets.
+
+- `infra/einargudni.com.zone` — importable record set (Cloudflare DNS > Import).
+  Proxy status is not expressible in a zone file: `posture` and `nido` must be
+  grey-clouded so Vercel keeps terminating their TLS.
+- `scripts/verify-dns.sh [nameserver]` — pass a Cloudflare nameserver to check
+  the zone before flipping NS; pass nothing to check the live site after.
+
+Worker Custom Domains require the zone to be active in the same Cloudflare
+account, which is why the zone moves before any app does.
+
 ### Environment variables
 
 Two kinds, and they are set in different places:

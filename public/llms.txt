@@ -8,7 +8,7 @@ This site is a mix of long-form technical writing, short learning notes, and per
 
 - [Blog](https://einargudni.com/blog): Long-form posts.
 - [Learnings](https://einargudni.com/learnings): Short notes from things I've learned.
-- [Deep dives](https://einargudni.com/deep-dive/middleware): In-depth technical articles.
+- [Deep dives](https://einargudni.com/deep-dive/middleware-rr7): In-depth technical articles.
 - [Notes](https://einargudni.com/notes): Loose notes and bookmarks.
 
 ## About
