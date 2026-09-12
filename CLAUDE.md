@@ -157,6 +157,7 @@ The zone also carries `posture` and `nido` (still on Vercel until migrated) and
 subdomain gets an explicit record, because they are separate projects that
 resolve to different targets.
 
+- `infra/DNS-CUTOVER.md` — the cutover runbook: phases, gates and rollback.
 - `infra/einargudni.com.zone` — importable record set (Cloudflare DNS > Import).
   Proxy status is not expressible in a zone file: `posture` and `nido` must be
   grey-clouded so Vercel keeps terminating their TLS.
