@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { ArrowRightIcon, ExternalLinkIcon, LinkIcon } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/components/ui/link";
 import { ExternalLink } from "./external-link";
 
 interface CardLinkProps {

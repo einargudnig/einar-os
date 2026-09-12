@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,7 +27,7 @@ export function HireMe() {
       });
 
       if (!response.ok) {
-        const { error: message } = await response.json().catch(() => ({}));
+        const { error: message } = (await response.json().catch(() => ({}))) as { error?: string };
         throw new Error(message ?? "Something went wrong. Try again?");
       }
 

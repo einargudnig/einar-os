@@ -18,7 +18,7 @@ export default defineConfig({
           metadata: s.metadata(), // extract markdown reading-time, word-count, etc.
           excerpt: s.excerpt(), // excerpt of markdown content
           draft: s.boolean().optional().default(false),
-          code: s.mdx(), // compile mdx to js code
+          path: s.path(), // used to resolve the compiled MDX module
           body: s.raw(), // raw markdown body (served via Accept: text/markdown)
         })
         .transform((data) => ({ ...data, permalink: `/blog/${data.slug}` })),
@@ -35,7 +35,7 @@ export default defineConfig({
           link: s.string().optional(),
           tags: s.array(s.string()).optional(),
           deepDiveSlug: s.slug().optional(),
-          code: s.mdx(),
+          path: s.path(),
           metadata: s.metadata(),
         })
         .transform((data) => ({ ...data })),
@@ -54,7 +54,7 @@ export default defineConfig({
           tags: s.array(s.string()).optional(),
           metadata: s.metadata(),
           draft: s.boolean().optional().default(false),
-          code: s.mdx(),
+          path: s.path(),
           body: s.raw(), // raw markdown body (served via Accept: text/markdown)
         })
         .transform((data) => ({
@@ -87,7 +87,7 @@ export default defineConfig({
         author: s.string().max(100),
         source: s.string().optional(),
         date: s.isodate(),
-        code: s.mdx(),
+        path: s.path(),
         metadata: s.metadata(),
       }),
     },

@@ -1,0 +1,32 @@
+; einargudni.com — records to import into Cloudflare (DNS > Records > Import)
+;
+; Covers only what a zone file CAN express. Deliberately NOT here:
+;   - apex and www        -> created automatically when you attach the Worker
+;                            as a Custom Domain (a zone file cannot express that)
+;   - *.einargudni.com    -> the wildcard is being dropped on purpose
+;   - MX / SPF / DKIM     -> the zone has none; there is no email to carry over
+;
+; After importing, set the proxy status by hand — the zone file cannot carry it:
+;   posture, nido   -> DNS only  (grey cloud) so Vercel keeps terminating its TLS
+;   sologbjor       -> Proxied   (orange cloud)
+;
+; TTL 300 is deliberate for the transition: it keeps every app migration
+; reversible within five minutes. Raise it once things have settled.
+
+$ORIGIN einargudni.com.
+$TTL 300
+
+; --- still on Vercel until migrated (phases 08 and 09) ---------------------
+posture         300  IN  CNAME  cname.vercel-dns.com.
+nido            300  IN  CNAME  cname.vercel-dns.com.
+
+; --- already on Cloudflare Pages ------------------------------------------
+sologbjor       300  IN  CNAME  sol-og-bjor.pages.dev.
+
+; --- certificate authority authorisation ----------------------------------
+; letsencrypt.org and pki.goog are the two issuers Cloudflare Universal SSL
+; uses, so these carry across unchanged and certs provision without edits.
+; sectigo.com is retained from the Vercel setup; harmless to keep.
+@               300  IN  CAA  0 issue "letsencrypt.org"
+@               300  IN  CAA  0 issue "pki.goog"
+@               300  IN  CAA  0 issue "sectigo.com"
