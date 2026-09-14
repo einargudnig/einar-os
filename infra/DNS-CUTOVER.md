@@ -6,32 +6,53 @@ Moving the zone from Vercel DNS to Cloudflare, then the apps that sit on it.
 - **Nameservers today:** `ns1.vercel-dns.com`, `ns2.vercel-dns.com`
 - **Worker already live:** <https://einar-os.einargudni.workers.dev>
 
-Two facts make this unusually low-risk: the zone has **no MX records** and **no
-TXT records**, so there is no email, SPF, DKIM or domain verification to carry
-across.
+> [!CAUTION]
+> **Corrected 2026-09-14.** An earlier version of this file claimed the zone had
+> no email and only four live hosts. Both were wrong. The method was flawed:
+> "returns a Vercel 404" was treated as proof a name had no record, and MX/TXT
+> were checked only at the apex. The wildcard answers *every* name, so a 404 is
+> exactly what a missing record looks like — and Resend's email lives on
+> `send.einargudni.com`, not the apex.
 
 ---
 
 ## What is actually live today
 
-A wildcard `*.einargudni.com` points every possible name at Vercel, so
-*everything* resolves and only some hosts answer. A ~70-name sweep found four.
+Classify by **record**, not by HTTP status. A host is explicit if it has a
+CNAME, or an A that differs from the wildcard's answer (`216.150.x.x`).
 
-| Host | Now | Serves | After cutover |
-| --- | --- | --- | --- |
-| `einargudni.com` | 307 | Vercel redirect to www | **becomes canonical**, served by the Worker |
-| `www` | 200 | the site, on Vercel | **301 → apex** |
-| `posture` | 200 | live Vercel project (Astro, static) | stays on Vercel, explicit CNAME |
-| `nido` | 200 | live Vercel project (Next.js, SSR) | stays on Vercel, explicit CNAME |
-| `sologbjor` | 200 | Cloudflare Pages already | unchanged |
-| `*.einargudni.com` | 404 | wildcard → Vercel, answers nothing | **dropped** |
+### Explicit records — must all be carried across
+
+| Host | Record | State |
+| --- | --- | --- |
+| `craft` | A `76.76.21.21` | live, 200 (Vercel legacy IP) |
+| `writing` | A `76.76.21.21` | live, 200 |
+| `learning` | A `66.241.124.56` | Fly.io — currently not responding, record is real |
+| `learnings` | CNAME `remix-workbook.fly.dev` | Fly.io |
+| `coolify` | A `37.27.184.91` | Hetzner, self-hosted |
+| `sologbjor` | CNAME `sol-og-bjor.pages.dev` | live, Cloudflare Pages |
+| `send` | MX `feedback-smtp.us-east-1.amazonses.com` + SPF | **Resend email** |
+| `resend._domainkey` | TXT | **DKIM** |
+| `@` | 3× CAA | letsencrypt, pki.goog, sectigo |
+
+### Served *only* by the wildcard
+
+| Host | State | After cutover |
+| --- | --- | --- |
+| `einargudni.com` | 307 → www | **becomes canonical**, Worker |
+| `www` | 200, the site | **301 → apex** |
+| `posture` | 200, Astro/static on Vercel | needs its **own** record |
+| `nido` | 200, Next.js/SSR on Vercel | needs its **own** record |
+
+> [!CAUTION]
+> **The wildcard is load-bearing.** `www`, `posture` and `nido` have no records
+> of their own — they resolve through `*` and are routed by Host header at
+> Vercel. Either keep the wildcard, or give those three explicit records
+> *before* dropping it. Dropping it blind takes down the main site and both apps.
 
 > [!WARNING]
-> **Confirm before dropping the wildcard.** The sweep covered ~70 likely names,
-> not every possible one. Because the wildcard returns a Vercel 404 rather than
-> `NXDOMAIN`, a subdomain with an unguessable name would not show up. Check the
-> Vercel dashboard's domain list for `einargudni.com` and confirm it lists
-> exactly these five. Anything missed goes dark at cutover.
+> Still confirm against Vercel's domain list before dropping the wildcard.
+> Enumeration by probing cannot prove a negative here.
 
 ---
 
@@ -62,12 +83,18 @@ repeatable behind it.
 | --- | --- | --- | --- | --- |
 | — | `@` | Worker custom domain | Proxied | Created by attaching the Worker |
 | — | `www` | Worker custom domain | Proxied | Redirect Rule catches it first; Worker is the harmless fallback |
-| CNAME | `posture` | `cname.vercel-dns.com` | **DNS only** | Grey-cloud so Vercel keeps terminating its own TLS |
-| CNAME | `nido` | `cname.vercel-dns.com` | **DNS only** | Same |
+| CNAME | `posture` | `cname.vercel-dns.com` | **DNS only** | New record — was wildcard-served. Grey-cloud so Vercel keeps terminating TLS |
+| CNAME | `nido` | `cname.vercel-dns.com` | **DNS only** | New record — same |
+| A | `craft`, `writing` | `76.76.21.21` | **DNS only** | Existing Vercel apps |
+| A/CNAME | `learning`, `learnings`, `coolify` | Fly.io / Hetzner | **DNS only** | Not Vercel; carry across as-is |
 | CNAME | `sologbjor` | `sol-og-bjor.pages.dev` | Proxied | Better: re-add as a Pages custom domain once the zone is live |
-| CAA | `@` | `letsencrypt.org`, `pki.goog`, `sectigo.com` | n/a | Already permits Cloudflare's two issuers — carry across unchanged |
+| MX+TXT | `send` | SES relay + SPF | n/a | **Resend email — do not lose** |
+| TXT | `resend._domainkey` | DKIM public key | n/a | **Resend DKIM — do not lose** |
+| CAA | `@` | `letsencrypt.org`, `pki.goog`, `sectigo.com` | n/a | Already permits Cloudflare's two issuers |
 
-No MX, no TXT, no wildcard.
+`posture` and `nido` need explicit CNAMEs to `cname.vercel-dns.com` added to the
+zone file before the wildcard goes; `www` and the apex are covered by attaching
+the Worker.
 
 The CNAME and CAA rows import directly: **DNS → Records → Import** →
 [`infra/einargudni.com.zone`](./einargudni.com.zone). Proxy status is the one
@@ -127,16 +154,16 @@ broken; the site is still served entirely by Vercel.
 
 Queries the Cloudflare nameservers directly while the world still resolves via
 Vercel, so the new zone is proven correct before any traffic depends on it.
-Checks every record, asserts MX stays empty and that an unknown host returns
-`NXDOMAIN`, then — once nameservers have moved — the live site, the www
-redirect, all three subdomains, markdown negotiation and the well-known
-endpoints.
+Asserts every explicit record by name and value, that Resend's MX, SPF and DKIM
+survive (and that the DKIM key is not truncated — it must end `IDAQAB`), and
+that `www`, `posture` and `nido` still resolve however they get there. Once
+nameservers have moved it also checks the live site, the www redirect, all five
+app subdomains, markdown negotiation and the well-known endpoints.
 
-Run against today's DNS it reports `6 passed, 9 failed`, which is the correct
-not-yet-cut-over state.
+Run against today's DNS it reports `18 passed, 6 failed`; the six are exactly
+the things the cutover changes.
 
-**Gate:** every record resolves as the table says and the nonsense host returns
-`NXDOMAIN`. Do not proceed otherwise.
+**Gate:** all record and email checks pass. Do not proceed otherwise.
 
 ### 04 — Pre-empt Vercel re-verification · **you**
 

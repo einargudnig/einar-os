@@ -26,34 +26,60 @@ else
   head_ "Querying public DNS (post-cutover check)"
 fi
 
-# --- records ---------------------------------------------------------------
-head_ "DNS records"
+# --- explicit records that must survive the move ----------------------------
+head_ "Explicit records"
+
+check_a() {  # name expected-ip
+  got=$("${DIG[@]}" A "$1.$DOMAIN" | sort | tr '\n' ' ')
+  case "$got" in *"$2"*) ok "$1 A -> $2" ;; *) bad "$1 A" "$2" "$got" ;; esac
+}
+check_cname() {  # name expected-target
+  got=$("${DIG[@]}" CNAME "$1.$DOMAIN")
+  [ "$got" = "$2" ] && ok "$1 CNAME -> $2" || bad "$1 CNAME" "$2" "$got"
+}
+
+check_a     craft     76.76.21.21
+check_a     writing   76.76.21.21
+check_a     learning  66.241.124.56
+check_a     coolify   37.27.184.91
+check_cname learnings remix-workbook.fly.dev.
+check_cname sologbjor sol-og-bjor.pages.dev.
 
 apex=$("${DIG[@]}" A "$DOMAIN" | tr '\n' ' ')
-[ -n "$apex" ] && ok "apex resolves — $apex" || bad "apex has no A record" "Cloudflare anycast IPs" "$apex"
+[ -n "$apex" ] && ok "apex resolves — $apex" || bad "apex has no A record" "an address" "$apex"
 
-for host in posture nido; do
-  target=$("${DIG[@]}" CNAME "$host.$DOMAIN")
-  case "$target" in
-    cname.vercel-dns.com.) ok "$host → Vercel (not migrated yet)" ;;
-    "")                    bad "$host has no CNAME" "cname.vercel-dns.com." "" ;;
-    *)                     ok "$host → $target (migrated)" ;;
-  esac
+# --- email: Resend lives on send.* and resend._domainkey, NOT the apex -------
+head_ "Email (Resend)"
+
+mx=$("${DIG[@]}" MX "send.$DOMAIN" | tr '\n' ' ')
+case "$mx" in
+  *feedback-smtp*) ok "send MX -> $mx" ;;
+  *)               bad "send MX" "10 feedback-smtp.us-east-1.amazonses.com." "$mx" ;;
+esac
+
+spf=$("${DIG[@]}" TXT "send.$DOMAIN" | tr -d '"')
+case "$spf" in
+  *"include:amazonses.com"*) ok "send SPF present" ;;
+  *)                         bad "send SPF" "v=spf1 include:amazonses.com ~all" "$spf" ;;
+esac
+
+dkim=$("${DIG[@]}" TXT "resend._domainkey.$DOMAIN" | tr -d '"')
+case "$dkim" in
+  *IDAQAB) ok "DKIM present and terminates correctly (${#dkim} chars)" ;;
+  "")      bad "DKIM missing" "p=MIGf...IDAQAB" "" ;;
+  *)       bad "DKIM looks truncated" "a key ending IDAQAB" "${dkim: -24}" ;;
+esac
+
+# --- wildcard-served hosts: must resolve, however they get there ------------
+head_ "Wildcard-served hosts (www, posture, nido)"
+
+for host in www posture nido; do
+  got=$("${DIG[@]}" A "$host.$DOMAIN" | head -1)
+  cn=$("${DIG[@]}" CNAME "$host.$DOMAIN")
+  if [ -n "$cn" ]; then ok "$host -> $cn (explicit)"
+  elif [ -n "$got" ]; then ok "$host -> $got"
+  else bad "$host does not resolve" "an address" "nothing — wildcard dropped without a replacement?"; fi
 done
-
-sob=$("${DIG[@]}" CNAME "sologbjor.$DOMAIN")
-[ -n "$sob" ] && ok "sologbjor → $sob" || bad "sologbjor has no CNAME" "sol-og-bjor.pages.dev." ""
-
-# --- things that must NOT exist -------------------------------------------
-head_ "Absences"
-
-mx=$("${DIG[@]}" MX "$DOMAIN" | tr '\n' ' ')
-[ -z "$mx" ] && ok "no MX records (correct — there is no email on this domain)" \
-             || bad "unexpected MX records appeared" "nothing" "$mx"
-
-wild=$("${DIG[@]}" A "definitely-not-real-$RANDOM.$DOMAIN" | tr '\n' ' ')
-[ -z "$wild" ] && ok "wildcard is gone — unknown hosts return NXDOMAIN" \
-               || bad "a wildcard is still answering" "NXDOMAIN" "$wild"
 
 # --- live HTTP (only meaningful once NS has propagated) --------------------
 if [ -z "$NS" ]; then
@@ -69,7 +95,7 @@ if [ -z "$NS" ]; then
     *)                   bad "www redirects somewhere unexpected" "https://$DOMAIN/" "$redir" ;;
   esac
 
-  for host in posture nido sologbjor; do
+  for host in posture nido sologbjor craft writing; do
     c=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "https://$host.$DOMAIN/" || echo 000)
     [ "$c" = "200" ] && ok "$host serves (200)" || bad "$host" "200" "$c"
   done
