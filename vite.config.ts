@@ -24,6 +24,8 @@ const STATIC_PATHS = [
   "/about",
   "/baby",
   "/blog",
+  "/chroncal/privacy",
+  "/chroncal/terms",
   "/learnings",
   "/notes",
   "/now",
