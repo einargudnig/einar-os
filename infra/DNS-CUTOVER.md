@@ -180,9 +180,19 @@ auto-verifies, which is exactly the crutch being removed.
 
 ### 05 — Move Worker secrets · **you**
 
-These live on Vercel and are not in `.env.local`. Everything degrades
-gracefully without them, so this is not a blocker — but the contact form is
-user-visible.
+Everything degrades gracefully without these, so none of them block the
+cutover. Values are **not** recoverable from Vercel, so have them to hand:
+
+- `LIFEOS_API_URL` and `LIFEOS_WEB_TOKEN` are stored there as write-only
+  *Secret*-type variables. `vercel env pull` returns `[SENSITIVE]` placeholders
+  and the dashboard will not reveal them either.
+- `RESEND_API_KEY` was **never set on Vercel at all**. The contact form has been
+  answering 503 in production since before this migration — verified 2026-09-22
+  against `www.einargudni.com/api/contact`. Issue a fresh key at
+  <https://resend.com/api-keys>; there is nothing to carry over.
+
+`NEXT_PUBLIC_CONVEX_URL` *is* readable and has already been carried across as
+the build-time `VITE_CONVEX_URL`.
 
 ```bash
 bunx wrangler secret put RESEND_API_KEY
