@@ -1,8 +1,6 @@
-"use client";
-
 import { Github, Mail, Twitter } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link } from "@/components/ui/link";
+import { useRouterState } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { KeyboardHint } from "@/components/keyboard-hint";
 
@@ -19,7 +17,7 @@ const navItems = {
 };
 
 export function Navbar() {
-  const pathname = usePathname();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
     <nav className="mx-auto w-full space-y-8 print:space-y-6">

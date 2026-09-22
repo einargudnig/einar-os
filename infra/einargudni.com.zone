@@ -1,0 +1,44 @@
+; einargudni.com — records to import into Cloudflare (DNS > Records > Import)
+;
+; Verified against ns2.vercel-dns.com on 2026-09-14 by classifying every name:
+; a host is EXPLICIT if it has a CNAME, or an A that differs from the wildcard's
+; answer (216.150.x.x). "Returns a Vercel 404" proves nothing — the wildcard
+; answers every name, so a 404 is what a *missing* record looks like too.
+;
+; Not expressible in a zone file, do separately:
+;   - apex + www + posture + nido  -> see the wildcard note below
+;   - proxy status (orange/grey)   -> set by hand after import
+;
+; THE WILDCARD IS LOAD-BEARING. www, posture and nido have no records of their
+; own; they resolve only through `*` and are routed by Host header at Vercel.
+; Either keep the wildcard, or give each of those three an explicit record
+; before dropping it. Dropping it blind takes down the main site and both apps.
+
+$ORIGIN einargudni.com.
+$TTL 300
+
+; --- apps on Vercel, explicit A records (legacy anycast IP) ----------------
+craft           300  IN  A      76.76.21.21
+writing         300  IN  A      76.76.21.21
+
+; --- apps elsewhere --------------------------------------------------------
+learning        300  IN  A      66.241.124.56          ; Fly.io
+learnings       300  IN  CNAME  remix-workbook.fly.dev.
+coolify         300  IN  A      37.27.184.91           ; Hetzner, self-hosted
+
+; --- already on Cloudflare Pages ------------------------------------------
+sologbjor       300  IN  CNAME  sol-og-bjor.pages.dev.
+
+; --- Resend email. Not on the apex, which is why an apex-only MX/TXT check
+; --- wrongly reads as "this domain has no email". Losing these breaks DKIM
+; --- and SPF for the contact form's own sending.
+send            300  IN  MX     10 feedback-smtp.us-east-1.amazonses.com.
+send            300  IN  TXT    "v=spf1 include:amazonses.com ~all"
+resend._domainkey 300 IN TXT    "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCtw/Uu5q6LnG6awwgvHQ7W5NqqptFbekke6/GGAjMae3ttqLMujzOfPLKWcsQcjzdrIIs6vScDn6Lutai/6E/gIRU543g8UuIy/Odn2UdHB/FCMY9ZWBITTA633qJ1qmth8a0QMi3zWuARk8iiWXK3zQyZFG+sK1aURraA60cPMwIDAQAB"
+
+; --- certificate authority authorisation ----------------------------------
+; letsencrypt.org and pki.goog are the two issuers Cloudflare Universal SSL
+; uses, so these carry across unchanged and certs provision without edits.
+@               300  IN  CAA  0 issue "letsencrypt.org"
+@               300  IN  CAA  0 issue "pki.goog"
+@               300  IN  CAA  0 issue "sectigo.com"

@@ -1,13 +1,17 @@
-"use client";
-
 import { ConvexProvider, ConvexReactClient } from "convex/react";
+import type { ReactNode } from "react";
 
-const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+let client: ConvexReactClient | undefined;
 
-export function ConvexClientProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const getConvexClient = () => {
+  const url = import.meta.env.VITE_CONVEX_URL as string | undefined;
+  if (!url) return undefined;
+  client ??= new ConvexReactClient(url);
+  return client;
+};
+
+export function ConvexClientProvider({ children }: { children: ReactNode }) {
+  const convex = getConvexClient();
+  if (!convex) return <>{children}</>;
   return <ConvexProvider client={convex}>{children}</ConvexProvider>;
 }

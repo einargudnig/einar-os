@@ -1,9 +1,7 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { codeToHtml } from "shiki";
+import { highlight } from "@/lib/highlighter";
 import {
   ChevronLeft,
   ChevronRight,
@@ -216,11 +214,11 @@ export function CompilerVisualizer() {
           };
         });
 
-        const html = await codeToHtml(displayCode, {
-          lang: stage.output ? "javascript" : "typescript",
-          theme: "catppuccin-mocha",
-          decorations,
-        });
+        const html = await highlight(
+          displayCode,
+          stage.output ? "javascript" : "typescript",
+          { decorations },
+        );
         setHighlightedCode(html);
       } catch (error) {
         console.error("Failed to highlight code:", error);

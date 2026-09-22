@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { projectIcons } from "@/components/project-icons";
 import { ArrowTopRightIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
+import { Link } from "@/components/ui/link";
 
 export interface Project {
   title: string;

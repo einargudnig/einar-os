@@ -51,7 +51,10 @@ const mean = (values: number[]) => values.reduce((sum, v) => sum + v, 0) / value
 // Samples come back ordered by insert id, not timestamp — a backfill would put them out
 // of order — so pick the newest by ts rather than trusting position.
 const newest = (rows: Sample[]): Sample | undefined =>
-  rows.reduce<Sample | undefined>((best, row) => (!best || row.ts > best.ts ? row : best), undefined);
+  rows.reduce<Sample | undefined>(
+    (best, row) => (!best || row.ts > best.ts ? row : best),
+    undefined,
+  );
 
 // en-CA formats as YYYY-MM-DD. Days are bucketed in the *server's* timezone, which on
 // Vercel is UTC and on my Mac is local — enough to shift a late-night sample by a day,
@@ -69,14 +72,18 @@ const groupByDay = (rows: Sample[]) => {
   return days;
 };
 
+type CfRequestInit = RequestInit & { cf: Record<string, unknown> };
+
 const request = async <T>(baseUrl: string, token: string | undefined, path: string): Promise<T> => {
   const response = await fetch(`${baseUrl}${path}`, {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
-    next: { revalidate: REVALIDATE_SECONDS },
-  });
+    // Next's `next.revalidate` has no equivalent on Workers; Cloudflare caches
+    // the subrequest instead.
+    cf: { cacheTtl: REVALIDATE_SECONDS, cacheEverything: true },
+  } as CfRequestInit);
   if (!response.ok) throw new Error(`life-os ${path} → ${response.status}`);
-  const { data } = await response.json();
-  return data as T;
+  const { data } = (await response.json()) as { data: T };
+  return data;
 };
 
 const samplesSince = (baseUrl: string, token: string | undefined, metric: string, from: number) =>
@@ -142,14 +149,14 @@ const fetchLive = async (baseUrl: string, token: string | undefined): Promise<Wh
       ...(latestHrv ? { hrv: Math.round(latestHrv.value) } : {}),
       ...(latestRhr ? { rhr: Math.round(latestRhr.value) } : {}),
     },
-    ...(latestSleepPerformance ?
-      {
-        sleep: {
-          performance: Math.round(latestSleepPerformance.value),
-          ...(latestSleepHours ? { hours: round(latestSleepHours.value, 2) } : {}),
-        },
-      }
-    : {}),
+    ...(latestSleepPerformance
+      ? {
+          sleep: {
+            performance: Math.round(latestSleepPerformance.value),
+            ...(latestSleepHours ? { hours: round(latestSleepHours.value, 2) } : {}),
+          },
+        }
+      : {}),
     ...(latestStrain ? { strain: round(latestStrain.value, 1) } : {}),
     trends: {
       days: TREND_DAYS,

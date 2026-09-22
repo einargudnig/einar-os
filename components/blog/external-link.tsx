@@ -1,5 +1,5 @@
 import { ArrowTopRightIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
+import { Link } from "@/components/ui/link";
 
 export function ExternalLink({
   href,
