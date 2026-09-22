@@ -1,53 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# einar-os
 
-## Getting Started
+My personal site — [einargudni.com](https://einargudni.com).
 
-First, run the development server:
+Bun 1.4 + Vite 8 + [TanStack Start](https://tanstack.com/start) (Router and
+Query) on React 19, deployed to Cloudflare Workers. Content is Markdown and MDX
+processed by [Velite](https://velite.js.org); styling is Tailwind v4 with Radix
+primitives.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install
+bun run dev      # velite --watch alongside vite, on http://localhost:5173
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Script            | What it does                                              |
+| ----------------- | --------------------------------------------------------- |
+| `bun run dev`     | Dev server, with velite watching `content/`               |
+| `bun run build`   | velite → OG images → `vite build` (prerenders every page) |
+| `bun run preview` | Serve the built worker locally                            |
+| `bun run deploy`  | Build, then `wrangler deploy`                             |
+| `bun run check`   | oxlint + `tsc --noEmit`                                   |
+| `bun run format`  | oxfmt                                                     |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How it fits together
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Content.** `content/posts/`, `content/learnings/` and `content/deep-dives/`
+are validated by `velite.config.ts` into typed collections under `.velite/`,
+importable as `@/.velite`. Velite runs at build time, so `.velite/` has to
+exist before `vite build` — both `dev` and `build` invoke it.
 
-## Contact form
+MDX compiles to real ES modules via `@mdx-js/rollup`, and `components/mdx-content.tsx`
+resolves each one from an `import.meta.glob` map keyed by velite's `path`.
+Velite's own `s.mdx()` is deliberately unused: it emits a JS string that has to
+be `eval`'d, and workerd forbids code generation from strings.
 
-The "Work with me" section on the home page posts to `app/api/contact/route.ts`,
-which relays the message over the [Resend](https://resend.com) API.
+**Routing.** File-based under `src/routes/`, with the route tree generated into
+`src/routeTree.gen.ts` (gitignored). `src/routes/__root.tsx` holds the document
+shell; `src/start.ts` holds request middleware for `Accept: text/markdown`
+content negotiation. A `[.]` in a filename escapes a literal dot, so
+`src/routes/[.]well-known/api-catalog.ts` serves `/.well-known/api-catalog`.
 
-Copy `.env.example` to `.env.local` (and set the same vars in Vercel):
+**Prerendering.** Every page is listed explicitly in `vite.config.ts` rather
+than crawled. Link-crawling misses unlinked entries and fails the build on a
+dead link inside post content. Adding a static route means adding its path to
+`STATIC_PATHS` there.
 
-- `RESEND_API_KEY` — required, from https://resend.com/api-keys
-- `CONTACT_TO_EMAIL` — optional, defaults to `einargudnig@gmail.com`
-- `CONTACT_FROM_EMAIL` — optional, defaults to `onboarding@resend.dev`
+**OG images** are generated at build time by `scripts/generate-og.mjs` (satori +
+resvg) into `public/og/`. They can't be made per-request: `@resvg/resvg-js` is a
+native addon that won't load in workerd.
 
-Resend's default sender only delivers to the address that owns the Resend
-account, which is enough to receive enquiries. Verify a domain and point
-`CONTACT_FROM_EMAIL` at it (e.g. `hello@einargudni.com`) for proper
-deliverability. Without `RESEND_API_KEY` the form stays visible but replies
-with a message pointing people at the mailto link.
+## Deployment
 
-## Learn More
+Cloudflare Workers, configured in `wrangler.jsonc`. Pages prerender to
+`dist/client` and are served by the assets binding. `assets.run_worker_first`
+covers `/`, `/blog/*` and `/deep-dive/*` so the markdown-negotiation middleware
+sees those requests — keep that list and the matcher in `src/start.ts` in sync.
 
-To learn more about Next.js, take a look at the following resources:
+`autoSubfolderIndex: false` keeps URLs slash-free (`/blog/tmux`, not
+`/blog/tmux/`), matching the sitemap and existing inbound links.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+DNS lives in `infra/` — `DNS-CUTOVER.md` is the runbook, `einargudni.com.zone`
+the importable record set, and `scripts/verify-dns.sh` checks the zone before or
+after a nameserver flip.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Environment variables
 
-## Deploy on Vercel
+Two kinds, set in different places. Every one degrades gracefully — none will
+fail a build or a request.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Build-time** (`VITE_`-prefixed, inlined into the bundle, so they must be set
+when `vite build` runs):
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Variable          | If missing                                                                                                                         |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `VITE_CONVEX_URL` | `/baby` renders without live vote data                                                                                             |
+| `VITE_CF_IMAGES`  | Images served untransformed. Set to `1` only after enabling Image Transformations on the zone, or every `/cdn-cgi/image/` URL 404s |
+
+**Runtime** (Worker secrets — `wrangler secret put NAME`; locally, `.env` from
+`.env.example`, or `.dev.vars`, which wins when both exist):
+
+| Variable                             | If missing                                           |
+| ------------------------------------ | ---------------------------------------------------- |
+| `RESEND_API_KEY`                     | Contact form returns 503 pointing at the mailto link |
+| `LIFEOS_API_URL`, `LIFEOS_WEB_TOKEN` | Whoop numbers fall back to `data/whoop/latest.json`  |
+| `CONTACT_TO_EMAIL`                   | Defaults to `einargudnig@gmail.com`                  |
+| `CONTACT_FROM_EMAIL`                 | Defaults to `onboarding@resend.dev`                  |
+
+The contact form on the home page posts to `src/routes/api/contact.ts`, which
+relays over [Resend](https://resend.com). Resend's default sender only delivers
+to the address owning the account, which is enough to receive enquiries; verify
+a domain and point `CONTACT_FROM_EMAIL` at it for real deliverability.
